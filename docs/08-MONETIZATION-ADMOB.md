@@ -1,0 +1,163 @@
+# 08 — Monetization & AdMob
+
+**Model:** Free with ads → Pro subscription (hybrid).
+**Reality check:** India e CPC/eCPM kom. Tai **volume + retention + Pro conversion** — tin-tai lagbe. Ads ke user experience nষ্ট korte debe na, karon retention gelе revenue o gelo.
+
+---
+
+## 1. Revenue model
+
+| Stream | Share of revenue (target) | Notes |
+|---|---|---|
+| AdMob banner + native | 55% | Steady, low value per user |
+| AdMob interstitial | 15% | Max 1/session |
+| AdMob rewarded | 10% | High eCPM, user-initiated |
+| Pro subscription | 20% (grows with retention) | Highest LTV |
+
+**Target after 6 months (25k installs, ~8k MAU, ~2.5k DAU):**
+
+```
+Banner/native : 2500 DAU × 2.2 imp × ₹18 eCPM ÷ 1000  ≈ ₹99/day
+Interstitial  : 2500 × 0.45 imp × ₹55 eCPM ÷ 1000     ≈ ₹62/day
+Rewarded      : 2500 × 0.20 imp × ₹95 eCPM ÷ 1000     ≈ ₹48/day
+                                                       ─────────
+Ads subtotal                                           ≈ ₹209/day  (₹6.3k/mo)
+Pro (2.5% of 8k MAU = 200 subs × ₹99 blended ARPU)     ≈ ₹19,800/mo
+                                                       ─────────
+Total                                                  ≈ ₹26k/month
+```
+**Takeaway:** Pro is worth ~3× the ads. Ads keep free tier alive; Pro pays the bills. Don't over-optimize banner placement at the cost of retention.
+
+> eCPM numbers are indicative India ranges — measure in AdMob, don't plan on them.
+
+## 2. Ad unit inventory
+
+| Ad unit name (AdMob) | Format | Placement | Screen |
+|---|---|---|---|
+| `ss_home_banner` | Anchored adaptive banner | Below hero money card | S-09 |
+| `ss_budget_native` | Native (medium) | In-feed after 3rd budget row | S-14 |
+| `ss_accounts_banner` | Anchored adaptive banner | Bottom | S-16 |
+| `ss_insights_banner` | Anchored adaptive banner | Very bottom, after all charts | S-17 |
+| `ss_recurring_native` | Native (small) | In-feed | S-19 |
+| `ss_session_interstitial` | Interstitial | Home→Insights nav, max 1/session | global |
+| `ss_rewarded_export` | Rewarded | "Watch ad → 1 free PDF export" | S-23 |
+| `ss_rewarded_pro_trial` | Rewarded | "Watch ad → 24h Pro features" | S-17 Pro-locked block |
+
+## 3. Placement rules (policy + UX contract)
+
+### ❌ NEVER
+| Rule | Why |
+|---|---|
+| No ads on onboarding, language, permission screens (S-02…S-08) | Play policy + it kills permission grant rate |
+| No ads on Add/Edit transaction (S-12) | Accidental clicks → invalid traffic → account strike |
+| No ads on transaction list/detail (S-10, S-11) | Same + destroys the core UX |
+| No ads inside the paywall (S-22) | Policy: no ads on a screen selling ad-removal |
+| No ad docked above bottom nav | Misclick zone |
+| No interstitial on app open / on cold start | Policy + instant uninstall |
+| No interstitial before a data-entry screen | User intent destruction |
+| No ad refresh faster than 60s | Policy |
+| No custom targeting from financial data | Hard policy violation |
+
+### ✅ ALWAYS
+- Reserved height container (`AdSlot`) → **zero layout shift**
+- Label "Sponsored" / "বিজ্ঞাপন" on every native unit
+- `AdSlot` renders a graceful `SizedBox.shrink()` if ad fails to load — **never a red box or a gap**
+- Pro users: `AdSlot` returns `SizedBox.shrink()` at the provider level (one switch, no per-screen code)
+- Test with AdMob **test IDs** until release; live IDs only in release build flavor
+
+## 4. Interstitial frequency governor
+
+```dart
+// lib/ads/ad_gate.dart
+class AdGate {
+  static const _minSessionsBetween = 1;      // max 1 per session
+  static const _minSecondsBetween  = 240;    // 4 min floor
+  static const _allowedTriggers = {AdTrigger.homeToInsights};
+
+  bool canShow(AdTrigger t) =>
+      !pro &&
+      _allowedTriggers.contains(t) &&
+      _shownThisSession == 0 &&
+      now.difference(_lastShownAt).inSeconds > _minSecondsBetween;
+}
+```
+**Show only after the destination screen is built** (never mid-transition).
+
+## 5. Rewarded ads — the India sweet spot
+
+Indian users won't pay ₹99 easily, but they *will* watch a 30s ad for value. Two offers:
+
+| Offer | Trigger | Cap |
+|---|---|---|
+| **24h Pro taste** | Tap a Pro-locked insight | 1/day |
+| **1 free PDF export** | Export screen | 2/day |
+
+Rewarded is **always opt-in** with a clear label: *"বিজ্ঞাপন দেখে ২৪ ঘণ্টার জন্য Pro ব্যবহার করুন"*. Never auto-play. Never after the user already paid.
+
+## 6. Pro tiers
+
+| Plan | Price | Positioning |
+|---|---|---|
+| Monthly | **₹99** | default |
+| Yearly | **₹699** | ⭐ anchor — "৪২% সাশ্রয়" (₹58/mo) |
+| Lifetime | **₹1,499** | limited-time launch offer |
+
+**Pro features**
+- সব বিজ্ঞাপন সরান
+- ভবিষ্যৎ খরচের পূর্বাভাস (forecast/projection)
+- কাস্টম তারিখ রেঞ্জ + PDF statement
+- সীমাহীন বাজেট ও কাস্টম ক্যাটাগরি
+- এনক্রিপ্টেড Google Drive auto-backup
+
+**Billing:** `in_app_purchase` → Play Billing · server-side verification **na** (no server!) → rely on Play's local `purchaseStream` + `restorePurchases()`. Accept the small risk; document it.
+**Trial:** 7 days free on yearly. Reminder notification 1 day before charge (Play handles email; app also shows a local reminder).
+**Restore:** mandatory button on paywall + in Settings.
+**Never:** countdown timers, fake discounts, hidden price, blocking core features (tracking is **free forever**).
+
+## 7. Implementation notes
+
+```dart
+// lib/ads/ad_slot.dart  — one wrapper every screen uses
+class AdSlot extends ConsumerWidget {
+  final AdFormat format;          // banner | native | rewarded
+  final String unitId;            // from AdIds (flavor-aware)
+  @override
+  Widget build(context, ref) {
+    if (ref.watch(proProvider)) return const SizedBox.shrink();
+    return SizedBox(
+      height: format == AdFormat.banner ? 56 : 120,   // reserved → no CLS
+      child: MobileAdWidget(unitId: unitId),
+    );
+  }
+}
+```
+**Packages:** `google_mobile_ads` (+ `flutter_native_admob`/custom platform view for native) · `in_app_purchase`.
+**Consent:** Google **UMP SDK** (`ConsentForm`) shown before the first ad request for EEA/UK; India gets the standard flow.
+**App ID:** `AndroidManifest.xml` `<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID">`. Test ID during dev: `ca-app-pub-3940256099942544~3347511713`.
+**ATT:** iOS n/a for v1 (Android-first). Keep the door open.
+
+## 8. Ads + performance budget
+
+| Constraint | Value |
+|---|---|
+| Ad SDK init | **after** first frame (`WidgetsBinding.addPostFrameCallback`) — never on splash |
+| Ad load | async, non-blocking; UI never waits for an ad |
+| Memory | native ads released on dispose; no preloading more than 1 unit ahead |
+| Battery | no ad refresh < 60s |
+| Offline | `AdSlot` shows nothing; app fully usable (offline-first by design) |
+
+## 9. Policy-risk watchlist (review before each release)
+
+- [ ] No ad on any screen that also has a permission CTA
+- [ ] No ad inside paywall
+- [ ] All native ads labelled
+- [ ] No financial data in any `AdRequest` — audit every call site
+- [ ] `AdSlot` returns nothing for Pro — verified by test
+- [ ] Interstitial governor unit-tested (max 1/session)
+- [ ] Data Safety declares advertising ID collection
+- [ ] Test IDs never shipped to production (flavor check in CI)
+
+## 10. Metrics to instrument (local counter, no analytics SDK for v1)
+
+`ads_shown_total` · `ads_shown_by_unit` · `interstitial_gate_blocks` · `rewarded_completed` · `paywall_views` · `paywall_conversions` · `pro_active_days`.
+**Do not** add Firebase Analytics in v1 — it complicates the "no data leaves the phone" promise. Local counters + Play Console stats are enough until v2, when an explicit opt-in analytics toggle can be added.

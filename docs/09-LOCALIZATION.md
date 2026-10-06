@@ -1,0 +1,167 @@
+# 09 — Localization (English · हिन्दी · বাংলা)
+
+**Rule:** kono hardcoded user-facing string nei. Sob `.arb` file e.
+
+---
+
+## 1. Setup
+
+```yaml
+# pubspec.yaml
+flutter:
+  generate: true          # enables flutter gen-l10n
+  assets:
+    - assets/3d/
+  fonts:
+    - family: Manrope
+      fonts: [{asset: assets/fonts/Manrope-Regular.ttf, weight: 400}, ...]
+    - family: NotoSansBengali
+      fonts: [{asset: assets/fonts/NotoSansBengali-Regular.ttf, weight: 400}, ...]
+    - family: NotoSansDevanagari
+      fonts: [{asset: assets/fonts/NotoSansDevanagari-Regular.ttf, weight: 400}, ...]
+```
+
+```yaml
+# l10n.yaml
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+```
+
+**Files**
+```
+lib/l10n/app_en.arb   ← template + descriptions
+lib/l10n/app_hi.arb
+lib/l10n/app_bn.arb
+```
+
+```dart
+MaterialApp(
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: const [Locale('en'), Locale('hi'), Locale('bn')],
+  locale: ref.watch(localeProvider),   // null = follow device
+)
+```
+
+**Font fallback:** Bengali text auto-uses `NotoSansBengali`. Don't force one font for all scripts — set `fontFamilyFallback`.
+
+## 2. Key strings (starter set)
+
+| Key | English | हिन्दी | বাংলা |
+|---|---|---|---|
+| `appTagline` | Your money's story | आपके पैसे की कहानी | তোমার টাকার গল্প |
+| `navHome` | Home | होम | হোম |
+| `navTransactions` | Transactions | लेन-देन | লেনদেন |
+| `navInsights` | Insights | विश्लेषण | বিশ্লেষণ |
+| `navSettings` | Settings | सेटिंग्स | সেটিংস |
+| `thisMonthSpend` | Spent this month | इस महीने का खर्च | এই মাসে খরচ |
+| `income` | Income | आय | আয় |
+| `remaining` | Left | बचा | বাকি |
+| `vsLastMonth` | vs last month | पिछले महीने से | গত মাসের চেয়ে |
+| `addExpense` | Add expense | खर्च जोड़ें | খরচ যোগ করুন |
+| `addIncome` | Add income | आय जोड़ें | আয় যোগ করুন |
+| `category` | Category | श्रेणी | ক্যাটাগরি |
+| `account` | Account | खाता | অ্যাকাউন্ট |
+| `note` | Note | नोट | নোট |
+| `save` | Save | सहेजें | সেভ করুন |
+| `delete` | Delete | हटाएँ | মুছুন |
+| `edit` | Edit | संपादित करें | এডিট করুন |
+| `budget` | Budget | बजट | বাজেট |
+| `spent` | Spent | खर्च | খরচ হয়েছে |
+| `left` | Left | बचा | বাকি |
+| `overBudget` | Over budget | बजट से ज़्यादा | বাজেট ছাড়িয়ে গেছে |
+| `topMerchants` | Top merchants | मुख्य दुकानें | মূল দোকান |
+| `search` | Search | खोजें | খুঁজুন |
+| `settingsLanguage` | Language | भाषा | ভাষা |
+| `permSmsTitle` | Allow reading bank SMS | बैंक SMS पढ़ने की अनुमति | ব্যাংকের SMS পড়ার অনুমতি |
+| `permSmsWhy` | We only read bank transaction alerts. Never OTP or personal messages. | हम केवल बैंक लेन-देन की सूचना पढ़ते हैं। OTP या निजी संदेश कभी नहीं। | আমরা শুধু ব্যাংকের লেনদেনের SMS দেখি। OTP বা ব্যক্তিগত message কখনো পড়ি না। |
+| `permAllow` | Allow | अनुमति दें | অনুমতি দিন |
+| `permNoThanks` | I'll enter manually | मैं खुद लिखूँगा | নিজে নিজে লিখব |
+| `privacyTitle` | Your data never leaves this phone | आपका डेटा इस फ़ोन से बाहर नहीं जाता | তোমার ডেটা এই ফোন ছাড়ে না |
+| `proTitle` | SpendStory Pro | SpendStory Pro | SpendStory Pro |
+| `proAdsFree` | No ads | कोई विज्ञापन नहीं | কোনো বিজ্ঞাপন নেই |
+| `proForecast` | Spend forecast | खर्च का अनुमान | ভবিষ্যৎ খরচের পূর্বাভাস |
+| `restorePurchase` | Restore purchase | खरीद वापस लाएँ | কেনা ফিরিয়ে আনুন |
+| `deleteAllData` | Delete all data | सारा डेटा मिटाएँ | সব ডেটা মুছুন |
+
+**Category names** table er modhye 3 column e already ache (`categories.nameEn/Hi/Bn`).
+
+**Number formatting** — use `intl` with `NumberFormat.currency(locale: ..., symbol: '₹')`. Bengali locale e Bengali digits option: `NumberFormat.decimalPattern('bn')` → ১২,৪৮০. **Default = Latin digits** (users expect ₹1,240), but add a Settings toggle "বাংলা সংখ্যা দেখাও".
+
+## 3. Translation rules
+
+| Rule | Why |
+|---|---|
+| Translate **meaning**, not words | "Left" → বাকি (not বাম) |
+| Money words stay natural | খরচ / আয় / জমা — everyday language, not banker-speak |
+| Keep it short — Bengali strings are ~1.3× longer than English | UI must survive 40% expansion; test with `bn` before layout freeze |
+| English tech terms ok when universal | "UPI", "SMS", "OTP", "Pro", "Google Drive" — transliterate, don't invent |
+| Formality: **তুমি** (not আপনি) in Bengali, **आप** in Hindi | Target user 22–40, app is friendly not formal. Keep consistent everywhere. |
+| No machine translation shipped raw | Human review pass for all 3 languages before release |
+
+## 4. Store listing copy (3 languages)
+
+**English**
+```
+Title (27)   : SpendStory: Expense Tracker
+Short (78)   : Auto-track expenses from bank SMS & UPI. Bangla, Hindi, English. No signup, no bank login.
+```
+
+**हिन्दी**
+```
+Title (25)   : SpendStory: खर्चा ट्रैकर
+Short (74)   : बैंक SMS और UPI से खर्च का ऑटो हिसाब। हिन्दी, बांग्ला, अंग्रेज़ी में। कोई साइनअप नहीं।
+```
+
+**বাংলা**
+```
+Title (29)   : SpendStory: খরচের হিসাব
+Short (76)   : ব্যাংক SMS ও UPI থেকে খরচের অটো হিসাব। বাংলা, হিন্দি, ইংরেজিতে। কোনো সাইনআপ নেই।
+```
+
+**Long description — opening paragraph MUST lead with the SMS feature** (Play policy requirement):
+
+> **English:** SpendStory reads your bank transaction SMS alerts and payment notifications and turns them into a clean expense list — automatically. No manual typing, no bank login, no signup. Everything stays on your phone: there is no server, no cloud, and no account. Available in English, Hindi and Bengali.
+
+> **বাংলা:** SpendStory তোমার ব্যাংকের লেনদেনের SMS আর পেমেন্ট notification পড়ে নিজেই খরচের তালিকা বানিয়ে দেয় — একদম অটোমেটিক। নিজে লিখতে হবে না, ব্যাংক লগইন লাগবে না, সাইনআপ নেই। সব কিছু তোমার ফোনেই থাকে — কোনো সার্ভার নেই, ক্লাউড নেই, অ্যাকাউন্ট নেই। বাংলা, হিন্দি আর ইংরেজিতে।
+
+Then: feature sections · privacy section · how-permissions-work section · FAQ (12 questions targeting long-tail search: "খরচের হিসাব অ্যাপ", "বাজেট অ্যাপ বাংলা", "UPI ট্র্যাকার", "expense tracker without bank login", "बिना बैंक लॉगिन खर्चा ट्रैकर").
+
+**Keyword targets**
+| Locale | Primary | Secondary |
+|---|---|---|
+| en-IN | expense tracker, money manager | upi tracker, budget app, spend tracker |
+| hi | खर्चा ट्रैकर, खर्च का हिसाब | पैसे का हिसाब, बजट ऐप, मनी मैनेजर |
+| bn | খরচের হিসাব, খরচের অ্যাপ | হিসাব খাতা, বাজেট অ্যাপ, টাকার হিসাব, UPI ট্র্যাকার |
+
+## 5. What's-new files (Play release notes)
+
+`distribution/whatsnew/` — seeded by the installer.
+| File | Action |
+|---|---|
+| `whatsnew-en-US` | ✅ exists — edit per release |
+| `whatsnew-bn-BD` | ⚠️ **rename to `whatsnew-bn-IN`** (our target is West Bengal) |
+| `whatsnew-hi-IN` | ➕ **create** (missing) |
+
+**Create now:** `whatsnew-hi-IN` + `whatsnew-bn-IN`, delete `whatsnew-bn-BD`.
+
+```
+whatsnew-en-US: "First release: automatic expense tracking from bank SMS & UPI, 3 languages, offline & private."
+whatsnew-hi-IN: "पहला रिलीज़: बैंक SMS और UPI से ऑटो खर्च ट्रैकिंग, तीन भाषाएँ, पूरी तरह ऑफ़लाइन।"
+whatsnew-bn-IN: "প্রথম রিলিজ: ব্যাংক SMS ও UPI থেকে অটো খরচ ট্র্যাকিং, তিনটি ভাষা, সম্পূর্ণ অফলাইন।"
+```
+
+## 6. Testing
+
+```dart
+// test/l10n/l10n_test.dart
+test('all locales have every key', () {
+  final en = json.decode(File('lib/l10n/app_en.arb').readAsStringSync());
+  for (final f in ['app_hi.arb', 'app_bn.arb']) {
+    final other = json.decode(File('lib/l10n/$f').readAsStringSync());
+    final missing = en.keys.where((k) => !k.startsWith('@') && !other.containsKey(k));
+    expect(missing, isEmpty, reason: '$f missing: $missing');
+  }
+});
+```
+Plus: golden test at `bn` locale (longest strings) for Home, Tx list, Paywall — catches overflow before users see it.
