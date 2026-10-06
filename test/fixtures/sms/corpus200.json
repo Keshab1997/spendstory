@@ -1,0 +1,2802 @@
+[
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "VM-BANDHN",
+    "body": "Rs.1,499.00 debited from A/c XX2249 on 30-08-26 to VPA phonepe@ybl (UPI Ref 905330480010). Avl Bal Rs.2,386.16",
+    "smsAtIso": "2026-08-30T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 149900,
+      "merchant": "PhonePe",
+      "mode": "upi",
+      "accountLast4": "2249",
+      "dateIso": "2026-08-30"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "AX-ICICIB",
+    "body": "Rs.12,500.00 debited from A/c XX1093 on 14-08-26 to PhonePe via UPI (Ref 194987065769). Avl Bal Rs.95709.15",
+    "smsAtIso": "2026-08-14T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "PhonePe",
+      "mode": "upi",
+      "accountLast4": "1093",
+      "dateIso": "2026-08-14"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "BM-KOTAKB",
+    "body": "INR 1,499.00 debited from A/c XX8920 on 26-08-2026 at PVR. Avl Bal INR 1348.72",
+    "smsAtIso": "2026-08-26T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 149900,
+      "merchant": "PVR",
+      "mode": "other",
+      "accountLast4": "8920",
+      "dateIso": "2026-08-26"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "VK-HDFCBK",
+    "body": "Rs.500.00 spent on your HDFC Bank Card ending 9957 at Nykaa on 07-08-26.",
+    "smsAtIso": "2026-08-07T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "Nykaa",
+      "mode": "card",
+      "accountLast4": "9957",
+      "dateIso": "2026-08-07"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "TM-AXISBK",
+    "body": "Your HDFC Bank Credit Card XX5732 has been debited with Rs.1,50,000.00 on 15-08-26 at Bata. Avl limit Rs.6,743.06",
+    "smsAtIso": "2026-08-15T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "Bata",
+      "mode": "card",
+      "accountLast4": "5732",
+      "dateIso": "2026-08-15"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "AD-YESBNK",
+    "body": "Rs.25,000.00 withdrawn from A/c XX7472 at ATM on 18-09-26. Avl Bal Rs.9,661.49",
+    "smsAtIso": "2026-09-18T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "7472",
+      "dateIso": "2026-09-18"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "VM-IDFCBK",
+    "body": "Rs.25,000.00 debited from A/c XX7093 on 12-08-26 to Priya Sen via NEFT. Avl Bal Rs.8,386.44",
+    "smsAtIso": "2026-08-12T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": "Priya Sen",
+      "mode": "netbanking",
+      "accountLast4": "7093",
+      "dateIso": "2026-08-12"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "AD-CANBNK",
+    "body": "Rs.1,499.00 credited to your A/c XX6704 on 22-09-26 by salary transfer. Avl Bal Rs.31468.59",
+    "smsAtIso": "2026-09-22T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 149900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "6704",
+      "dateIso": "2026-09-22"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "BM-HDFCBK",
+    "body": "INR 2,499.00 credited to A/c XX7812 on 07-09-2026 towards FD Interest. Avl Bal INR 7,930.06",
+    "smsAtIso": "2026-09-07T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 249900,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "7812",
+      "dateIso": "2026-09-07"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "AX-KOTAKB",
+    "body": "Rs.1,240.00 credited to A/c XX9836 on 18-08-26 from Blinkit Refund. Avl Bal Rs.1,731.13",
+    "smsAtIso": "2026-08-18T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 124000,
+      "merchant": "Blinkit",
+      "mode": "other",
+      "accountLast4": "9836",
+      "dateIso": "2026-08-18"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "BM-BANDHN",
+    "body": "Rs.25,000.00 credited to A/c XX5262 on 01-08-26 from VPA airtel@ybl (UPI Ref 154618405085). Avl Bal Rs.3,220.07",
+    "smsAtIso": "2026-08-01T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 2500000,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "5262",
+      "dateIso": "2026-08-01"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "TM-UNIONB",
+    "body": "Rs.1,50,000.00 debited from Paytm Wallet on 24-08-26 for Mobile Recharge. Avl Bal Rs.7,503.46",
+    "smsAtIso": "2026-08-24T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-08-24"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "TM-SBIINB",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ১২০০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-08-04T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-08-04"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "VK-CANBNK",
+    "body": "आपके खाते से ₹899.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-05"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "TM-KOTAKB",
+    "body": "Rs.1,50,000.00 debited from your account 462198445 on 23-08-26 to Bajaj Finserv EMI. Avl Bal Rs.8395.07",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "8445",
+      "dateIso": "2026-08-23"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "AD-BANDHN",
+    "body": "Rs.8,000.00 spent on your card ending 3843 at Nykaa on 21-09-26.",
+    "smsAtIso": "2026-09-21T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 800000,
+      "merchant": "Nykaa",
+      "mode": "card",
+      "accountLast4": "3843",
+      "dateIso": "2026-09-21"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "VM-CANBNK",
+    "body": "Rs.4,500.00 debited from A/c XX4947 on 06-SEP-2026 to VPA swiggy@ybl. Avl Bal Rs.79093.37",
+    "smsAtIso": "2026-09-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Swiggy",
+      "mode": "upi",
+      "accountLast4": "4947",
+      "dateIso": "2026-09-06"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "AX-KOTAKB",
+    "body": "Rs.500.00 debited from A/c XX4535 on 02AUG26 to Pantaloons. Avl Bal Rs.85172.51",
+    "smsAtIso": "2026-08-02T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "Pantaloons",
+      "mode": "other",
+      "accountLast4": "4535",
+      "dateIso": "2026-08-02"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "BM-UNIONB",
+    "body": "Rs 2,499.00 debited from A/c XX6982 on 01-10-26 towards House Rent. Avl Bal Rs 5,687.87",
+    "smsAtIso": "2026-10-01T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "6982",
+      "dateIso": "2026-10-01"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "TM-SBIINB",
+    "body": "Rs.199.00 debited from A/c XX3360 on 26-09-26 towards Apollo. Avl Bal Rs.87936.87",
+    "smsAtIso": "2026-09-26T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": "Apollo",
+      "mode": "other",
+      "accountLast4": "3360",
+      "dateIso": "2026-09-26"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "AD-UNIONB",
+    "body": "Rs.150 debited from A/c XX8854 on 29-09-26 to VPA zepto@ybl (UPI Ref 191224170678). Avl Bal Rs.3,125.62",
+    "smsAtIso": "2026-09-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": "Zepto",
+      "mode": "upi",
+      "accountLast4": "8854",
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "BM-KOTAKB",
+    "body": "Rs.450 debited from A/c XX1477 on 01-10-26 to Blinkit via UPI (Ref 417698942006). Avl Bal Rs.1,795.38",
+    "smsAtIso": "2026-10-01T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 45000,
+      "merchant": "Blinkit",
+      "mode": "upi",
+      "accountLast4": "1477",
+      "dateIso": "2026-10-01"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "TM-CANBNK",
+    "body": "INR 1,240.00 debited from A/c XX3562 on 27-08-2026 at BookMyShow. Avl Bal INR 61135.54",
+    "smsAtIso": "2026-08-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "BookMyShow",
+      "mode": "other",
+      "accountLast4": "3562",
+      "dateIso": "2026-08-27"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "TM-YESBNK",
+    "body": "Rs.250.50 spent on your IDFC FIRST Bank Card ending 3874 at PVR on 27-08-26.",
+    "smsAtIso": "2026-08-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": "PVR",
+      "mode": "card",
+      "accountLast4": "3874",
+      "dateIso": "2026-08-27"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "AD-BANDHN",
+    "body": "Your Bank of Baroda Credit Card XX9975 has been debited with Rs.1200.00 on 29-08-26 at BookMyShow. Avl limit Rs.4,414.91",
+    "smsAtIso": "2026-08-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": "BookMyShow",
+      "mode": "card",
+      "accountLast4": "9975",
+      "dateIso": "2026-08-29"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "VM-ICICIB",
+    "body": "Rs.8,000.00 withdrawn from A/c XX7743 at ATM on 03-08-26. Avl Bal Rs.36547.02",
+    "smsAtIso": "2026-08-03T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 800000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "7743",
+      "dateIso": "2026-08-03"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "VK-AXISBK",
+    "body": "Rs.500.00 debited from A/c XX5149 on 29-09-26 to Priya Sen via NEFT. Avl Bal Rs.33783.70",
+    "smsAtIso": "2026-09-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "Priya Sen",
+      "mode": "netbanking",
+      "accountLast4": "5149",
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "VK-IDFCBK",
+    "body": "Rs.450 credited to your A/c XX9997 on 02-10-26 by salary transfer. Avl Bal Rs.50991.09",
+    "smsAtIso": "2026-10-02T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 45000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "9997",
+      "dateIso": "2026-10-02"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "VK-IDFCBK",
+    "body": "INR 2,00,000.00 credited to A/c XX8099 on 30-09-2026 towards FD Interest. Avl Bal INR 8,622.87",
+    "smsAtIso": "2026-09-30T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 20000000,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "8099",
+      "dateIso": "2026-09-30"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "TM-CANBNK",
+    "body": "Rs.12,500.00 credited to A/c XX9347 on 24-08-26 from Jio Refund. Avl Bal Rs.8,595.36",
+    "smsAtIso": "2026-08-24T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 1250000,
+      "merchant": "Jio",
+      "mode": "other",
+      "accountLast4": "9347",
+      "dateIso": "2026-08-24"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "AX-BOBSMS",
+    "body": "Rs.150 credited to A/c XX3452 on 31-08-26 from VPA bigbasket@ybl (UPI Ref 525185861116). Avl Bal Rs.9,637.52",
+    "smsAtIso": "2026-08-31T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 15000,
+      "merchant": "BigBasket",
+      "mode": "upi",
+      "accountLast4": "3452",
+      "dateIso": "2026-08-31"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "AX-BANDHN",
+    "body": "Rs.199.00 debited from Paytm Wallet on 20-09-26 for Mobile Recharge. Avl Bal Rs.94775.22",
+    "smsAtIso": "2026-09-20T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-09-20"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "VM-ICICIB",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ১,২০,০০০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-08-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-08-29"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "TM-IDFCBK",
+    "body": "आपके खाते से ₹2,499.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-13T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-13"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "AD-AXISBK",
+    "body": "Rs.25,000.00 debited from your account 524516365 on 22-08-26 to Bajaj Finserv EMI. Avl Bal Rs.1,503.14",
+    "smsAtIso": "2026-08-22T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "6365",
+      "dateIso": "2026-08-22"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "AX-HDFCBK",
+    "body": "Rs.250.50 spent on your card ending 5555 at Pantaloons on 16-09-26.",
+    "smsAtIso": "2026-09-16T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": "Pantaloons",
+      "mode": "card",
+      "accountLast4": "5555",
+      "dateIso": "2026-09-16"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "TM-BANDHN",
+    "body": "Rs.1,50,000.00 debited from A/c XX6896 on 05-SEP-2026 to VPA blinkit@ybl. Avl Bal Rs.4,423.49",
+    "smsAtIso": "2026-09-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "Blinkit",
+      "mode": "upi",
+      "accountLast4": "6896",
+      "dateIso": "2026-09-05"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "AX-HDFCBK",
+    "body": "Rs.1,24,000.00 debited from A/c XX3820 on 10SEP26 to Bata. Avl Bal Rs.77755.02",
+    "smsAtIso": "2026-09-10T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12400000,
+      "merchant": "Bata",
+      "mode": "other",
+      "accountLast4": "3820",
+      "dateIso": "2026-09-10"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "VM-BOBSMS",
+    "body": "Rs 12,500.00 debited from A/c XX5358 on 06-10-26 towards House Rent. Avl Bal Rs 7,131.97",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "5358",
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "TM-FEDBNK",
+    "body": "Rs.2,499.00 debited from A/c XX1847 on 02-08-26 towards Pantaloons. Avl Bal Rs.18336.55",
+    "smsAtIso": "2026-08-02T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "Pantaloons",
+      "mode": "other",
+      "accountLast4": "1847",
+      "dateIso": "2026-08-02"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "BM-INDBNK",
+    "body": "Rs.250.50 debited from A/c XX6826 on 23-08-26 to VPA airtel@ybl (UPI Ref 893182691498). Avl Bal Rs.3,412.72",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "6826",
+      "dateIso": "2026-08-23"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "VM-AXISBK",
+    "body": "Rs.75.50 debited from A/c XX8676 on 10-08-26 to Swiggy via UPI (Ref 987194604871). Avl Bal Rs.7,133.68",
+    "smsAtIso": "2026-08-10T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 7550,
+      "merchant": "Swiggy",
+      "mode": "upi",
+      "accountLast4": "8676",
+      "dateIso": "2026-08-10"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "AD-UNIONB",
+    "body": "INR 4,500.00 debited from A/c XX8409 on 20-09-2026 at Decathlon. Avl Bal INR 2,500.88",
+    "smsAtIso": "2026-09-20T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Decathlon",
+      "mode": "other",
+      "accountLast4": "8409",
+      "dateIso": "2026-09-20"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "BM-PNBSMS",
+    "body": "Rs.150 spent on your Indian Bank Card ending 4654 at Myntra on 21-09-26.",
+    "smsAtIso": "2026-09-21T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": "Myntra",
+      "mode": "card",
+      "accountLast4": "4654",
+      "dateIso": "2026-09-21"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "BM-PNBSMS",
+    "body": "Your IDFC FIRST Bank Credit Card XX4435 has been debited with Rs.899.00 on 02-10-26 at Bata. Avl limit Rs.1975.55",
+    "smsAtIso": "2026-10-02T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89900,
+      "merchant": "Bata",
+      "mode": "card",
+      "accountLast4": "4435",
+      "dateIso": "2026-10-02"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "VK-ICICIB",
+    "body": "Rs.250.50 withdrawn from A/c XX4241 at ATM on 18-08-26. Avl Bal Rs.34820.00",
+    "smsAtIso": "2026-08-18T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "4241",
+      "dateIso": "2026-08-18"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "TM-YESBNK",
+    "body": "Rs.999.99 debited from A/c XX5496 on 05-10-26 to Ramesh Kumar via NEFT. Avl Bal Rs.46694.32",
+    "smsAtIso": "2026-10-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "Ramesh Kumar",
+      "mode": "netbanking",
+      "accountLast4": "5496",
+      "dateIso": "2026-10-05"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "TM-BANDHN",
+    "body": "Rs.1,24,000.00 credited to your A/c XX8644 on 01-08-26 by salary transfer. Avl Bal Rs.31175.28",
+    "smsAtIso": "2026-08-01T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 12400000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "8644",
+      "dateIso": "2026-08-01"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "VK-ICICIB",
+    "body": "INR 150 credited to A/c XX6463 on 04-08-2026 towards FD Interest. Avl Bal INR 7,165.55",
+    "smsAtIso": "2026-08-04T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 15000,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "6463",
+      "dateIso": "2026-08-04"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "VM-IDFCBK",
+    "body": "Rs.25,000.00 credited to A/c XX8052 on 14-09-26 from Rapido Refund. Avl Bal Rs.4,193.69",
+    "smsAtIso": "2026-09-14T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 2500000,
+      "merchant": "Rapido",
+      "mode": "other",
+      "accountLast4": "8052",
+      "dateIso": "2026-09-14"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "VM-YESBNK",
+    "body": "Rs.2,00,000.00 credited to A/c XX7296 on 20-09-26 from VPA airtel@ybl (UPI Ref 314198696470). Avl Bal Rs.7864.96",
+    "smsAtIso": "2026-09-20T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 20000000,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "7296",
+      "dateIso": "2026-09-20"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "AD-YESBNK",
+    "body": "Rs.899.00 debited from Paytm Wallet on 06-09-26 for Mobile Recharge. Avl Bal Rs.8001.99",
+    "smsAtIso": "2026-09-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89900,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-09-06"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "VM-YESBNK",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ২৫,০০০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-09-07T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-07"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "TM-AXISBK",
+    "body": "आपके खाते से ₹150 डेबिट हुए हैं।",
+    "smsAtIso": "2026-08-01T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-08-01"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "VK-IDFCBK",
+    "body": "Rs.450 debited from your account 779353496 on 03-08-26 to Bajaj Finserv EMI. Avl Bal Rs.16672.87",
+    "smsAtIso": "2026-08-03T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 45000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "3496",
+      "dateIso": "2026-08-03"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "AD-BOBSMS",
+    "body": "Rs.250.50 spent on your card ending 9486 at KFC on 18-09-26.",
+    "smsAtIso": "2026-09-18T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": "KFC",
+      "mode": "card",
+      "accountLast4": "9486",
+      "dateIso": "2026-09-18"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "VM-AXISBK",
+    "body": "Rs.320.00 debited from A/c XX9635 on 29-AUG-2026 to VPA rapido@ybl. Avl Bal Rs.6,998.66",
+    "smsAtIso": "2026-08-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 32000,
+      "merchant": "Rapido",
+      "mode": "upi",
+      "accountLast4": "9635",
+      "dateIso": "2026-08-29"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "BM-YESBNK",
+    "body": "Rs.8,000.00 debited from A/c XX4708 on 10SEP26 to Nykaa. Avl Bal Rs.9625.36",
+    "smsAtIso": "2026-09-10T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 800000,
+      "merchant": "Nykaa",
+      "mode": "other",
+      "accountLast4": "4708",
+      "dateIso": "2026-09-10"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "AD-BANDHN",
+    "body": "Rs 2,499.00 debited from A/c XX3483 on 29-09-26 towards House Rent. Avl Bal Rs 7,569.37",
+    "smsAtIso": "2026-09-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "3483",
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "TM-KOTAKB",
+    "body": "Rs.1,20,000.00 debited from A/c XX5101 on 15-09-26 towards Nykaa. Avl Bal Rs.49693.26",
+    "smsAtIso": "2026-09-15T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": "Nykaa",
+      "mode": "other",
+      "accountLast4": "5101",
+      "dateIso": "2026-09-15"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "AX-ICICIB",
+    "body": "Rs.45,000.00 debited from A/c XX6161 on 28-08-26 to VPA zomato@ybl (UPI Ref 426052379320). Avl Bal Rs.12658.61",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 4500000,
+      "merchant": "Zomato",
+      "mode": "upi",
+      "accountLast4": "6161",
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "AD-ICICIB",
+    "body": "Rs.25,000.00 debited from A/c XX2938 on 08-08-26 to Paytm via UPI (Ref 993904019834). Avl Bal Rs.32852.88",
+    "smsAtIso": "2026-08-08T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": "Paytm",
+      "mode": "upi",
+      "accountLast4": "2938",
+      "dateIso": "2026-08-08"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "VM-IDFCBK",
+    "body": "INR 8,000.00 debited from A/c XX4527 on 03-10-2026 at Apollo. Avl Bal INR 6097.77",
+    "smsAtIso": "2026-10-03T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 800000,
+      "merchant": "Apollo",
+      "mode": "other",
+      "accountLast4": "4527",
+      "dateIso": "2026-10-03"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "AD-INDBNK",
+    "body": "Rs.45,000.00 spent on your Punjab National Bank Card ending 8542 at Apollo on 23-09-26.",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 4500000,
+      "merchant": "Apollo",
+      "mode": "card",
+      "accountLast4": "8542",
+      "dateIso": "2026-09-23"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "VK-KOTAKB",
+    "body": "Your Punjab National Bank Credit Card XX6484 has been debited with Rs.1,240.00 on 05-10-26 at PVR. Avl limit Rs.35099.95",
+    "smsAtIso": "2026-10-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "PVR",
+      "mode": "card",
+      "accountLast4": "6484",
+      "dateIso": "2026-10-05"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "TM-UNIONB",
+    "body": "Rs.4,500.00 withdrawn from A/c XX3912 at ATM on 03-08-26. Avl Bal Rs.5,524.22",
+    "smsAtIso": "2026-08-03T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "3912",
+      "dateIso": "2026-08-03"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "TM-FEDBNK",
+    "body": "Rs.4,500.00 debited from A/c XX7243 on 09-08-26 to Amit Das via NEFT. Avl Bal Rs.7,295.16",
+    "smsAtIso": "2026-08-09T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Amit Das",
+      "mode": "netbanking",
+      "accountLast4": "7243",
+      "dateIso": "2026-08-09"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "TM-HDFCBK",
+    "body": "Rs.2,499.00 credited to your A/c XX6293 on 16-08-26 by salary transfer. Avl Bal Rs.99495.80",
+    "smsAtIso": "2026-08-16T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 249900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "6293",
+      "dateIso": "2026-08-16"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "VM-INDBNK",
+    "body": "INR 150 credited to A/c XX8605 on 23-08-2026 towards FD Interest. Avl Bal INR 53506.10",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 15000,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "8605",
+      "dateIso": "2026-08-23"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "VK-YESBNK",
+    "body": "Rs.899.00 credited to A/c XX4236 on 03-09-26 from Blinkit Refund. Avl Bal Rs.14093.45",
+    "smsAtIso": "2026-09-03T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 89900,
+      "merchant": "Blinkit",
+      "mode": "other",
+      "accountLast4": "4236",
+      "dateIso": "2026-09-03"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "TM-BANDHN",
+    "body": "Rs.12,500.00 credited to A/c XX7825 on 26-08-26 from VPA airtel@ybl (UPI Ref 471706414537). Avl Bal Rs.7,709.87",
+    "smsAtIso": "2026-08-26T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 1250000,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "7825",
+      "dateIso": "2026-08-26"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "TM-BANDHN",
+    "body": "Rs.1,240.00 debited from Paytm Wallet on 15-09-26 for Mobile Recharge. Avl Bal Rs.7,569.86",
+    "smsAtIso": "2026-09-15T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-09-15"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "BM-CANBNK",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ৩২০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-08-15T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 32000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-08-15"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "TM-PNBSMS",
+    "body": "आपके खाते से ₹150 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-25T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-25"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "AD-CANBNK",
+    "body": "Rs.199.00 debited from your account 280262340 on 27-09-26 to Bajaj Finserv EMI. Avl Bal Rs.1,538.57",
+    "smsAtIso": "2026-09-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "2340",
+      "dateIso": "2026-09-27"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "TM-INDBNK",
+    "body": "Rs.12,500.00 spent on your card ending 7086 at DMart on 29-09-26.",
+    "smsAtIso": "2026-09-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "DMart",
+      "mode": "card",
+      "accountLast4": "7086",
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "BM-HDFCBK",
+    "body": "Rs.1,24,000.00 debited from A/c XX9897 on 22-AUG-2026 to VPA bigbasket@ybl. Avl Bal Rs.69991.92",
+    "smsAtIso": "2026-08-22T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12400000,
+      "merchant": "BigBasket",
+      "mode": "upi",
+      "accountLast4": "9897",
+      "dateIso": "2026-08-22"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "AX-BOBSMS",
+    "body": "Rs.1,240.00 debited from A/c XX8427 on 14SEP26 to Myntra. Avl Bal Rs.9,655.82",
+    "smsAtIso": "2026-09-14T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "Myntra",
+      "mode": "other",
+      "accountLast4": "8427",
+      "dateIso": "2026-09-14"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "BM-SBIINB",
+    "body": "Rs 500.00 debited from A/c XX2480 on 27-09-26 towards House Rent. Avl Bal Rs 5,574.08",
+    "smsAtIso": "2026-09-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "2480",
+      "dateIso": "2026-09-27"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "VK-ICICIB",
+    "body": "Rs.1,499.00 debited from A/c XX2747 on 25-09-26 towards Myntra. Avl Bal Rs.72437.89",
+    "smsAtIso": "2026-09-25T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 149900,
+      "merchant": "Myntra",
+      "mode": "other",
+      "accountLast4": "2747",
+      "dateIso": "2026-09-25"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "VK-YESBNK",
+    "body": "Rs.1,240.00 debited from A/c XX1476 on 27-09-26 to VPA jio@ybl (UPI Ref 751549161638). Avl Bal Rs.3,160.26",
+    "smsAtIso": "2026-09-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "Jio",
+      "mode": "upi",
+      "accountLast4": "1476",
+      "dateIso": "2026-09-27"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "TM-CANBNK",
+    "body": "Rs.4,500.00 debited from A/c XX7366 on 23-09-26 to Airtel via UPI (Ref 379768129597). Avl Bal Rs.53737.74",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "7366",
+      "dateIso": "2026-09-23"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "AD-BANDHN",
+    "body": "INR 899.00 debited from A/c XX1625 on 02-08-2026 at Pantaloons. Avl Bal INR 21515.13",
+    "smsAtIso": "2026-08-02T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89900,
+      "merchant": "Pantaloons",
+      "mode": "other",
+      "accountLast4": "1625",
+      "dateIso": "2026-08-02"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "TM-YESBNK",
+    "body": "Rs.500.00 spent on your Union Bank of India Card ending 5556 at Myntra on 03-09-26.",
+    "smsAtIso": "2026-09-03T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "Myntra",
+      "mode": "card",
+      "accountLast4": "5556",
+      "dateIso": "2026-09-03"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "VK-IDFCBK",
+    "body": "Your Union Bank of India Credit Card XX3570 has been debited with Rs.4,500.00 on 23-09-26 at KFC. Avl limit Rs.24627.62",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "KFC",
+      "mode": "card",
+      "accountLast4": "3570",
+      "dateIso": "2026-09-23"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "VK-YESBNK",
+    "body": "Rs.45,000.00 withdrawn from A/c XX8609 at ATM on 15-08-26. Avl Bal Rs.33314.92",
+    "smsAtIso": "2026-08-15T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 4500000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "8609",
+      "dateIso": "2026-08-15"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "AD-PNBSMS",
+    "body": "Rs.250.50 debited from A/c XX8238 on 07-08-26 to Suman Ghosh via NEFT. Avl Bal Rs.89743.28",
+    "smsAtIso": "2026-08-07T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": "Suman Ghosh",
+      "mode": "netbanking",
+      "accountLast4": "8238",
+      "dateIso": "2026-08-07"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "VK-IDFCBK",
+    "body": "Rs.250.50 credited to your A/c XX8137 on 23-08-26 by salary transfer. Avl Bal Rs.47677.39",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 25050,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "8137",
+      "dateIso": "2026-08-23"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "BM-UNIONB",
+    "body": "INR 450 credited to A/c XX2581 on 23-08-2026 towards FD Interest. Avl Bal INR 63885.38",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 45000,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "2581",
+      "dateIso": "2026-08-23"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "AD-HDFCBK",
+    "body": "Rs.999.99 credited to A/c XX3716 on 24-09-26 from Jio Refund. Avl Bal Rs.4,863.40",
+    "smsAtIso": "2026-09-24T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 99999,
+      "merchant": "Jio",
+      "mode": "other",
+      "accountLast4": "3716",
+      "dateIso": "2026-09-24"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.320.00 credited to A/c XX9360 on 18-08-26 from VPA airtel@ybl (UPI Ref 812313722201). Avl Bal Rs.51132.93",
+    "smsAtIso": "2026-08-18T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 32000,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "9360",
+      "dateIso": "2026-08-18"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "TM-IDFCBK",
+    "body": "Rs.2,499.00 debited from Paytm Wallet on 27-08-26 for Mobile Recharge. Avl Bal Rs.3194.33",
+    "smsAtIso": "2026-08-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-08-27"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "VM-CANBNK",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ১,৪৯৯.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-09-17T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 149900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-17"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "AX-PNBSMS",
+    "body": "आपके खाते से ₹1200.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-08-16T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-08-16"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "VK-BOBSMS",
+    "body": "Rs.12,500.00 debited from your account 943637581 on 10-08-26 to Bajaj Finserv EMI. Avl Bal Rs.84929.66",
+    "smsAtIso": "2026-08-10T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "7581",
+      "dateIso": "2026-08-10"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "AX-BOBSMS",
+    "body": "Rs.1,50,000.00 spent on your card ending 3937 at PVR on 30-09-26.",
+    "smsAtIso": "2026-09-30T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "PVR",
+      "mode": "card",
+      "accountLast4": "3937",
+      "dateIso": "2026-09-30"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "TM-IDFCBK",
+    "body": "Rs.45,000.00 debited from A/c XX6898 on 06-SEP-2026 to VPA paytm@paytm. Avl Bal Rs.4,763.22",
+    "smsAtIso": "2026-09-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 4500000,
+      "merchant": "Paytm",
+      "mode": "upi",
+      "accountLast4": "6898",
+      "dateIso": "2026-09-06"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "VK-BANDHN",
+    "body": "Rs.2,499.00 debited from A/c XX2220 on 26AUG26 to Nykaa. Avl Bal Rs.81510.03",
+    "smsAtIso": "2026-08-26T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "Nykaa",
+      "mode": "other",
+      "accountLast4": "2220",
+      "dateIso": "2026-08-26"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "BM-CANBNK",
+    "body": "Rs 45,000.00 debited from A/c XX2736 on 15-09-26 towards House Rent. Avl Bal Rs 8,842.63",
+    "smsAtIso": "2026-09-15T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 4500000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "2736",
+      "dateIso": "2026-09-15"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "AD-CANBNK",
+    "body": "Rs.500.00 debited from A/c XX7715 on 06-08-26 towards Bata. Avl Bal Rs.63836.04",
+    "smsAtIso": "2026-08-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "Bata",
+      "mode": "other",
+      "accountLast4": "7715",
+      "dateIso": "2026-08-06"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "BM-AXISBK",
+    "body": "Rs.8,000.00 debited from A/c XX4307 on 16-09-26 to VPA rapido@ybl (UPI Ref 228388515525). Avl Bal Rs.6,411.66",
+    "smsAtIso": "2026-09-16T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 800000,
+      "merchant": "Rapido",
+      "mode": "upi",
+      "accountLast4": "4307",
+      "dateIso": "2026-09-16"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "AD-ICICIB",
+    "body": "Rs.1,20,000.00 debited from A/c XX1306 on 07-08-26 to Zomato via UPI (Ref 331766050395). Avl Bal Rs.52070.25",
+    "smsAtIso": "2026-08-07T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": "Zomato",
+      "mode": "upi",
+      "accountLast4": "1306",
+      "dateIso": "2026-08-07"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "VM-IDFCBK",
+    "body": "INR 1,499.00 debited from A/c XX7666 on 20-09-2026 at Myntra. Avl Bal INR 78587.48",
+    "smsAtIso": "2026-09-20T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 149900,
+      "merchant": "Myntra",
+      "mode": "other",
+      "accountLast4": "7666",
+      "dateIso": "2026-09-20"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "AD-HDFCBK",
+    "body": "Rs.320.00 spent on your Bank of Baroda Card ending 6724 at Decathlon on 13-09-26.",
+    "smsAtIso": "2026-09-13T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 32000,
+      "merchant": "Decathlon",
+      "mode": "card",
+      "accountLast4": "6724",
+      "dateIso": "2026-09-13"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "VK-INDBNK",
+    "body": "Your Union Bank of India Credit Card XX6462 has been debited with Rs.12,500.00 on 09-09-26 at DMart. Avl limit Rs.17247.30",
+    "smsAtIso": "2026-09-09T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "DMart",
+      "mode": "card",
+      "accountLast4": "6462",
+      "dateIso": "2026-09-09"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "AX-BOBSMS",
+    "body": "Rs.1,20,000.00 withdrawn from A/c XX8806 at ATM on 25-09-26. Avl Bal Rs.42065.06",
+    "smsAtIso": "2026-09-25T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "8806",
+      "dateIso": "2026-09-25"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "TM-ICICIB",
+    "body": "Rs.2,499.00 debited from A/c XX4176 on 10-08-26 to Deepa Sharma via NEFT. Avl Bal Rs.67915.64",
+    "smsAtIso": "2026-08-10T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "Deepa Sharma",
+      "mode": "netbanking",
+      "accountLast4": "4176",
+      "dateIso": "2026-08-10"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "AD-CANBNK",
+    "body": "Rs.500.00 credited to your A/c XX8050 on 06-09-26 by salary transfer. Avl Bal Rs.3,461.42",
+    "smsAtIso": "2026-09-06T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 50000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "8050",
+      "dateIso": "2026-09-06"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "AX-YESBNK",
+    "body": "INR 45,000.00 credited to A/c XX4846 on 03-09-2026 towards FD Interest. Avl Bal INR 88124.93",
+    "smsAtIso": "2026-09-03T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 4500000,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "4846",
+      "dateIso": "2026-09-03"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "BM-SBIINB",
+    "body": "Rs.75.50 credited to A/c XX6255 on 10-08-26 from BigBasket Refund. Avl Bal Rs.78725.94",
+    "smsAtIso": "2026-08-10T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 7550,
+      "merchant": "BigBasket",
+      "mode": "other",
+      "accountLast4": "6255",
+      "dateIso": "2026-08-10"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "BM-KOTAKB",
+    "body": "Rs.8,000.00 credited to A/c XX6263 on 28-09-26 from VPA blinkit@ybl (UPI Ref 263057323168). Avl Bal Rs.3,396.29",
+    "smsAtIso": "2026-09-28T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 800000,
+      "merchant": "Blinkit",
+      "mode": "upi",
+      "accountLast4": "6263",
+      "dateIso": "2026-09-28"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "VM-BANDHN",
+    "body": "Rs.4,500.00 debited from Paytm Wallet on 06-10-26 for Mobile Recharge. Avl Bal Rs.9,566.09",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "BM-KOTAKB",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ৪৫০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-08-26T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 45000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-08-26"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "VM-ICICIB",
+    "body": "आपके खाते से ₹75.50 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-24T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 7550,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-24"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "AX-BOBSMS",
+    "body": "Rs.1200.00 debited from your account 109497338 on 06-10-26 to Bajaj Finserv EMI. Avl Bal Rs.62297.68",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "7338",
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "VK-FEDBNK",
+    "body": "Rs.199.00 spent on your card ending 2866 at Pantaloons on 13-08-26.",
+    "smsAtIso": "2026-08-13T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": "Pantaloons",
+      "mode": "card",
+      "accountLast4": "2866",
+      "dateIso": "2026-08-13"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "TM-YESBNK",
+    "body": "Rs.320.00 debited from A/c XX9576 on 01-SEP-2026 to VPA jio@ybl. Avl Bal Rs.66862.85",
+    "smsAtIso": "2026-09-01T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 32000,
+      "merchant": "Jio",
+      "mode": "upi",
+      "accountLast4": "9576",
+      "dateIso": "2026-09-01"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "VM-INDBNK",
+    "body": "Rs.999.99 debited from A/c XX8245 on 22AUG26 to Nykaa. Avl Bal Rs.9,697.78",
+    "smsAtIso": "2026-08-22T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "Nykaa",
+      "mode": "other",
+      "accountLast4": "8245",
+      "dateIso": "2026-08-22"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "VM-INDBNK",
+    "body": "Rs 12,500.00 debited from A/c XX2404 on 27-08-26 towards House Rent. Avl Bal Rs 7,181.72",
+    "smsAtIso": "2026-08-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "2404",
+      "dateIso": "2026-08-27"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "TM-INDBNK",
+    "body": "Rs.500.00 debited from A/c XX5011 on 30-08-26 towards BookMyShow. Avl Bal Rs.49502.54",
+    "smsAtIso": "2026-08-30T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "BookMyShow",
+      "mode": "other",
+      "accountLast4": "5011",
+      "dateIso": "2026-08-30"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "TM-BOBSMS",
+    "body": "Rs.1,24,000.00 debited from A/c XX7534 on 24-09-26 to VPA swiggy@ybl (UPI Ref 992701833905). Avl Bal Rs.7,144.31",
+    "smsAtIso": "2026-09-24T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12400000,
+      "merchant": "Swiggy",
+      "mode": "upi",
+      "accountLast4": "7534",
+      "dateIso": "2026-09-24"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "VM-PNBSMS",
+    "body": "Rs.500.00 debited from A/c XX9149 on 24-09-26 to BigBasket via UPI (Ref 465719370853). Avl Bal Rs.1,203.63",
+    "smsAtIso": "2026-09-24T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "BigBasket",
+      "mode": "upi",
+      "accountLast4": "9149",
+      "dateIso": "2026-09-24"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "TM-BANDHN",
+    "body": "INR 1,24,000.00 debited from A/c XX8973 on 03-08-2026 at KFC. Avl Bal INR 7,677.34",
+    "smsAtIso": "2026-08-03T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12400000,
+      "merchant": "KFC",
+      "mode": "other",
+      "accountLast4": "8973",
+      "dateIso": "2026-08-03"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "TM-CANBNK",
+    "body": "Rs.199.00 spent on your Union Bank of India Card ending 1488 at KFC on 28-08-26.",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": "KFC",
+      "mode": "card",
+      "accountLast4": "1488",
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "AD-HDFCBK",
+    "body": "Your Bank of Baroda Credit Card XX4471 has been debited with Rs.12,500.00 on 09-08-26 at KFC. Avl limit Rs.67645.37",
+    "smsAtIso": "2026-08-09T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "KFC",
+      "mode": "card",
+      "accountLast4": "4471",
+      "dateIso": "2026-08-09"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "VM-INDBNK",
+    "body": "Rs.899.00 withdrawn from A/c XX2329 at ATM on 23-09-26. Avl Bal Rs.14956.83",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89900,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "2329",
+      "dateIso": "2026-09-23"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "TM-BANDHN",
+    "body": "Rs.250.50 debited from A/c XX9179 on 07-09-26 to Priya Sen via NEFT. Avl Bal Rs.49743.28",
+    "smsAtIso": "2026-09-07T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": "Priya Sen",
+      "mode": "netbanking",
+      "accountLast4": "9179",
+      "dateIso": "2026-09-07"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "BM-SBIINB",
+    "body": "Rs.999.99 credited to your A/c XX6787 on 10-08-26 by salary transfer. Avl Bal Rs.2,816.93",
+    "smsAtIso": "2026-08-10T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 99999,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "6787",
+      "dateIso": "2026-08-10"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "TM-UNIONB",
+    "body": "INR 1,20,000.00 credited to A/c XX7840 on 09-08-2026 towards FD Interest. Avl Bal INR 85506.47",
+    "smsAtIso": "2026-08-09T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 12000000,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "7840",
+      "dateIso": "2026-08-09"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "AX-KOTAKB",
+    "body": "Rs.4,500.00 credited to A/c XX2756 on 28-08-26 from PhonePe Refund. Avl Bal Rs.8642.25",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 450000,
+      "merchant": "PhonePe",
+      "mode": "other",
+      "accountLast4": "2756",
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "AX-BOBSMS",
+    "body": "Rs.199.00 credited to A/c XX8820 on 03-09-26 from VPA airtel@ybl (UPI Ref 659663566068). Avl Bal Rs.6,144.37",
+    "smsAtIso": "2026-09-03T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 19900,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "8820",
+      "dateIso": "2026-09-03"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "AD-KOTAKB",
+    "body": "Rs.250.50 debited from Paytm Wallet on 25-08-26 for Mobile Recharge. Avl Bal Rs.55401.08",
+    "smsAtIso": "2026-08-25T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 25050,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-08-25"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "AD-YESBNK",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ১২,৫০০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-09-24T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-24"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "TM-UNIONB",
+    "body": "आपके खाते से ₹1,50,000.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "BM-UNIONB",
+    "body": "Rs.150 debited from your account 633436299 on 06-10-26 to Bajaj Finserv EMI. Avl Bal Rs.80724.44",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "6299",
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "AD-SBIINB",
+    "body": "Rs.4,500.00 spent on your card ending 5593 at Nykaa on 30-08-26.",
+    "smsAtIso": "2026-08-30T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Nykaa",
+      "mode": "card",
+      "accountLast4": "5593",
+      "dateIso": "2026-08-30"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "BM-PNBSMS",
+    "body": "Rs.1200.00 debited from A/c XX9483 on 07-SEP-2026 to VPA jio@ybl. Avl Bal Rs.35409.87",
+    "smsAtIso": "2026-09-07T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": "Jio",
+      "mode": "upi",
+      "accountLast4": "9483",
+      "dateIso": "2026-09-07"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "AX-BANDHN",
+    "body": "Rs.1,499.00 debited from A/c XX3108 on 10AUG26 to Pantaloons. Avl Bal Rs.25622.41",
+    "smsAtIso": "2026-08-10T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 149900,
+      "merchant": "Pantaloons",
+      "mode": "other",
+      "accountLast4": "3108",
+      "dateIso": "2026-08-10"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "AD-CANBNK",
+    "body": "Rs 75.50 debited from A/c XX6251 on 01-10-26 towards House Rent. Avl Bal Rs 4,480.87",
+    "smsAtIso": "2026-10-01T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 7550,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "6251",
+      "dateIso": "2026-10-01"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "VM-INDBNK",
+    "body": "Rs.4,500.00 debited from A/c XX3953 on 12-08-26 towards Nykaa. Avl Bal Rs.8,286.70",
+    "smsAtIso": "2026-08-12T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Nykaa",
+      "mode": "other",
+      "accountLast4": "3953",
+      "dateIso": "2026-08-12"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "VM-FEDBNK",
+    "body": "Rs.75.50 debited from A/c XX9581 on 04-09-26 to VPA zomato@ybl (UPI Ref 136151363241). Avl Bal Rs.78446.98",
+    "smsAtIso": "2026-09-04T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 7550,
+      "merchant": "Zomato",
+      "mode": "upi",
+      "accountLast4": "9581",
+      "dateIso": "2026-09-04"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "BM-BOBSMS",
+    "body": "Rs.1,20,000.00 debited from A/c XX6022 on 08-08-26 to Spotify via UPI (Ref 632584871547). Avl Bal Rs.62423.80",
+    "smsAtIso": "2026-08-08T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": "Spotify",
+      "mode": "upi",
+      "accountLast4": "6022",
+      "dateIso": "2026-08-08"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "BM-INDBNK",
+    "body": "INR 12,500.00 debited from A/c XX6748 on 24-09-2026 at Bata. Avl Bal INR 62892.97",
+    "smsAtIso": "2026-09-24T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1250000,
+      "merchant": "Bata",
+      "mode": "other",
+      "accountLast4": "6748",
+      "dateIso": "2026-09-24"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "VK-BANDHN",
+    "body": "Rs.999.99 spent on your Indian Bank Card ending 6744 at DMart on 05-08-26.",
+    "smsAtIso": "2026-08-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "DMart",
+      "mode": "card",
+      "accountLast4": "6744",
+      "dateIso": "2026-08-05"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "AD-ICICIB",
+    "body": "Your Federal Bank Credit Card XX7094 has been debited with Rs.999.99 on 28-08-26 at BookMyShow. Avl limit Rs.55415.95",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "BookMyShow",
+      "mode": "card",
+      "accountLast4": "7094",
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "AX-HDFCBK",
+    "body": "Rs.199.00 withdrawn from A/c XX2818 at ATM on 27-09-26. Avl Bal Rs.4,844.90",
+    "smsAtIso": "2026-09-27T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "2818",
+      "dateIso": "2026-09-27"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "BM-AXISBK",
+    "body": "Rs.25,000.00 debited from A/c XX7651 on 09-08-26 to Deepa Sharma via NEFT. Avl Bal Rs.2,616.80",
+    "smsAtIso": "2026-08-09T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": "Deepa Sharma",
+      "mode": "netbanking",
+      "accountLast4": "7651",
+      "dateIso": "2026-08-09"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "TM-BOBSMS",
+    "body": "Rs.199.00 credited to your A/c XX7123 on 30-09-26 by salary transfer. Avl Bal Rs.9,440.94",
+    "smsAtIso": "2026-09-30T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 19900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "7123",
+      "dateIso": "2026-09-30"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "VK-YESBNK",
+    "body": "INR 75.50 credited to A/c XX4325 on 03-10-2026 towards FD Interest. Avl Bal INR 7,146.38",
+    "smsAtIso": "2026-10-03T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 7550,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "4325",
+      "dateIso": "2026-10-03"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "BM-IDFCBK",
+    "body": "Rs.899.00 credited to A/c XX5696 on 28-08-26 from Netflix Refund. Avl Bal Rs.74740.24",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 89900,
+      "merchant": "Netflix",
+      "mode": "other",
+      "accountLast4": "5696",
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "VM-IDFCBK",
+    "body": "Rs.12,500.00 credited to A/c XX5817 on 28-08-26 from VPA airtel@ybl (UPI Ref 181641924831). Avl Bal Rs.21601.80",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 1250000,
+      "merchant": "Airtel",
+      "mode": "upi",
+      "accountLast4": "5817",
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "AD-IDFCBK",
+    "body": "Rs.1,50,000.00 debited from Paytm Wallet on 18-08-26 for Mobile Recharge. Avl Bal Rs.60080.78",
+    "smsAtIso": "2026-08-18T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-08-18"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "VM-CANBNK",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ২,৪৯৯.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-08-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-08-29"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "VK-SBIINB",
+    "body": "आपके खाते से ₹8,000.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 800000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-23"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "VM-KOTAKB",
+    "body": "Rs.450 debited from your account 181648973 on 23-09-26 to Bajaj Finserv EMI. Avl Bal Rs.56574.34",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 45000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "8973",
+      "dateIso": "2026-09-23"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "BM-BANDHN",
+    "body": "Rs.1,50,000.00 spent on your card ending 3736 at Pantaloons on 26-09-26.",
+    "smsAtIso": "2026-09-26T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "Pantaloons",
+      "mode": "card",
+      "accountLast4": "3736",
+      "dateIso": "2026-09-26"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "VK-PNBSMS",
+    "body": "Rs.4,500.00 debited from A/c XX2525 on 13-SEP-2026 to VPA phonepe@ybl. Avl Bal Rs.3,948.68",
+    "smsAtIso": "2026-09-13T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "PhonePe",
+      "mode": "upi",
+      "accountLast4": "2525",
+      "dateIso": "2026-09-13"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "AD-PNBSMS",
+    "body": "Rs.1,240.00 debited from A/c XX1312 on 16AUG26 to Apollo. Avl Bal Rs.50619.88",
+    "smsAtIso": "2026-08-16T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "Apollo",
+      "mode": "other",
+      "accountLast4": "1312",
+      "dateIso": "2026-08-16"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "BM-YESBNK",
+    "body": "Rs 4,500.00 debited from A/c XX7552 on 06-08-26 towards House Rent. Avl Bal Rs 3,385.68",
+    "smsAtIso": "2026-08-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "7552",
+      "dateIso": "2026-08-06"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.1,499.00 debited from A/c XX5816 on 13-09-26 towards Myntra. Avl Bal Rs.7,234.33",
+    "smsAtIso": "2026-09-13T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 149900,
+      "merchant": "Myntra",
+      "mode": "other",
+      "accountLast4": "5816",
+      "dateIso": "2026-09-13"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "VM-FEDBNK",
+    "body": "Rs.1200.00 debited from A/c XX9783 on 23-09-26 to VPA swiggy@ybl (UPI Ref 571477549931). Avl Bal Rs.4,383.01",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": "Swiggy",
+      "mode": "upi",
+      "accountLast4": "9783",
+      "dateIso": "2026-09-23"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "BM-INDBNK",
+    "body": "Rs.1,50,000.00 debited from A/c XX8224 on 30-08-26 to Zomato via UPI (Ref 483223082834). Avl Bal Rs.8,931.85",
+    "smsAtIso": "2026-08-30T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "Zomato",
+      "mode": "upi",
+      "accountLast4": "8224",
+      "dateIso": "2026-08-30"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "TM-YESBNK",
+    "body": "INR 4,500.00 debited from A/c XX9962 on 23-08-2026 at Apollo. Avl Bal INR 8,995.12",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Apollo",
+      "mode": "other",
+      "accountLast4": "9962",
+      "dateIso": "2026-08-23"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "AX-KOTAKB",
+    "body": "Rs.1,20,000.00 spent on your Canara Bank Card ending 5403 at PVR on 08-08-26.",
+    "smsAtIso": "2026-08-08T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": "PVR",
+      "mode": "card",
+      "accountLast4": "5403",
+      "dateIso": "2026-08-08"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "BM-FEDBNK",
+    "body": "Your Kotak Mahindra Bank Credit Card XX7883 has been debited with Rs.199.00 on 03-10-26 at Nykaa. Avl limit Rs.7365.13",
+    "smsAtIso": "2026-10-03T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": "Nykaa",
+      "mode": "card",
+      "accountLast4": "7883",
+      "dateIso": "2026-10-03"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "VK-YESBNK",
+    "body": "Rs.1,20,000.00 withdrawn from A/c XX3432 at ATM on 05-09-26. Avl Bal Rs.5,626.15",
+    "smsAtIso": "2026-09-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "3432",
+      "dateIso": "2026-09-05"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "TM-SBIINB",
+    "body": "Rs.500.00 debited from A/c XX2892 on 05-10-26 to Priya Sen via NEFT. Avl Bal Rs.5,740.60",
+    "smsAtIso": "2026-10-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "Priya Sen",
+      "mode": "netbanking",
+      "accountLast4": "2892",
+      "dateIso": "2026-10-05"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "BM-CANBNK",
+    "body": "Rs.899.00 credited to your A/c XX4642 on 04-10-26 by salary transfer. Avl Bal Rs.18222.70",
+    "smsAtIso": "2026-10-04T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 89900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "4642",
+      "dateIso": "2026-10-04"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "AD-BOBSMS",
+    "body": "INR 999.99 credited to A/c XX3272 on 02-08-2026 towards FD Interest. Avl Bal INR 6,763.99",
+    "smsAtIso": "2026-08-02T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 99999,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "3272",
+      "dateIso": "2026-08-02"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "VK-YESBNK",
+    "body": "Rs.4,500.00 credited to A/c XX1807 on 11-09-26 from Zepto Refund. Avl Bal Rs.18491.88",
+    "smsAtIso": "2026-09-11T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 450000,
+      "merchant": "Zepto",
+      "mode": "other",
+      "accountLast4": "1807",
+      "dateIso": "2026-09-11"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "VK-SBIINB",
+    "body": "Rs.8,000.00 credited to A/c XX2362 on 22-08-26 from VPA swiggy@ybl (UPI Ref 290460306677). Avl Bal Rs.9,327.70",
+    "smsAtIso": "2026-08-22T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 800000,
+      "merchant": "Swiggy",
+      "mode": "upi",
+      "accountLast4": "2362",
+      "dateIso": "2026-08-22"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "AX-HDFCBK",
+    "body": "Rs.999.99 debited from Paytm Wallet on 28-08-26 for Mobile Recharge. Avl Bal Rs.9,420.98",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "AD-BANDHN",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ৪,৫০০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "VK-SBIINB",
+    "body": "आपके खाते से ₹4,500.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-21T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-21"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "AD-PNBSMS",
+    "body": "Rs.450 debited from your account 339549171 on 24-08-26 to Bajaj Finserv EMI. Avl Bal Rs.28855.86",
+    "smsAtIso": "2026-08-24T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 45000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "9171",
+      "dateIso": "2026-08-24"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "TM-INDBNK",
+    "body": "Rs.999.99 spent on your card ending 1183 at Starbucks on 18-09-26.",
+    "smsAtIso": "2026-09-18T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "Starbucks",
+      "mode": "card",
+      "accountLast4": "1183",
+      "dateIso": "2026-09-18"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "BM-BANDHN",
+    "body": "Rs.899.00 debited from A/c XX1124 on 20-AUG-2026 to VPA paytm@paytm. Avl Bal Rs.70425.08",
+    "smsAtIso": "2026-08-20T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89900,
+      "merchant": "Paytm",
+      "mode": "upi",
+      "accountLast4": "1124",
+      "dateIso": "2026-08-20"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "TM-HDFCBK",
+    "body": "Rs.25,000.00 debited from A/c XX2823 on 11AUG26 to PVR. Avl Bal Rs.6,187.77",
+    "smsAtIso": "2026-08-11T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": "PVR",
+      "mode": "other",
+      "accountLast4": "2823",
+      "dateIso": "2026-08-11"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "AD-AXISBK",
+    "body": "Rs 1,240.00 debited from A/c XX7940 on 02-09-26 towards House Rent. Avl Bal Rs 45084.57",
+    "smsAtIso": "2026-09-02T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "7940",
+      "dateIso": "2026-09-02"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "VK-FEDBNK",
+    "body": "Rs.2,499.00 debited from A/c XX4035 on 29-08-26 towards Bata. Avl Bal Rs.75901.02",
+    "smsAtIso": "2026-08-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "Bata",
+      "mode": "other",
+      "accountLast4": "4035",
+      "dateIso": "2026-08-29"
+    }
+  },
+  {
+    "note": "UPI debit to a merchant VPA",
+    "sender": "BM-BOBSMS",
+    "body": "Rs.999.99 debited from A/c XX2149 on 06-10-26 to VPA blinkit@ybl (UPI Ref 472385565865). Avl Bal Rs.7,594.71",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "Blinkit",
+      "mode": "upi",
+      "accountLast4": "2149",
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "UPI debit naming the merchant",
+    "sender": "AD-HDFCBK",
+    "body": "Rs.1,20,000.00 debited from A/c XX6851 on 01-09-26 to Zepto via UPI (Ref 111836811499). Avl Bal Rs.46245.61",
+    "smsAtIso": "2026-09-01T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12000000,
+      "merchant": "Zepto",
+      "mode": "upi",
+      "accountLast4": "6851",
+      "dateIso": "2026-09-01"
+    }
+  },
+  {
+    "note": "card-style spend written with INR",
+    "sender": "TM-FEDBNK",
+    "body": "INR 320.00 debited from A/c XX2963 on 06-10-2026 at Decathlon. Avl Bal INR 93215.57",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 32000,
+      "merchant": "Decathlon",
+      "mode": "other",
+      "accountLast4": "2963",
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "card spend with 'ending NNNN'",
+    "sender": "BM-FEDBNK",
+    "body": "Rs.1,50,000.00 spent on your Bank of Baroda Card ending 7413 at DMart on 14-08-26.",
+    "smsAtIso": "2026-08-14T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000000,
+      "merchant": "DMart",
+      "mode": "card",
+      "accountLast4": "7413",
+      "dateIso": "2026-08-14"
+    }
+  },
+  {
+    "note": "'Credit Card ... has been debited' must stay an expense",
+    "sender": "TM-AXISBK",
+    "body": "Your Union Bank of India Credit Card XX7529 has been debited with Rs.150 on 02-10-26 at Decathlon. Avl limit Rs.3,285.80",
+    "smsAtIso": "2026-10-02T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": "Decathlon",
+      "mode": "card",
+      "accountLast4": "7529",
+      "dateIso": "2026-10-02"
+    }
+  },
+  {
+    "note": "ATM withdrawal — no merchant",
+    "sender": "AD-IDFCBK",
+    "body": "Rs.150 withdrawn from A/c XX9633 at ATM on 05-10-26. Avl Bal Rs.5,370.74",
+    "smsAtIso": "2026-10-05T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "9633",
+      "dateIso": "2026-10-05"
+    }
+  },
+  {
+    "note": "NEFT transfer to a person",
+    "sender": "AD-HDFCBK",
+    "body": "Rs.450 debited from A/c XX1075 on 20-09-26 to Ramesh Kumar via NEFT. Avl Bal Rs.2,799.25",
+    "smsAtIso": "2026-09-20T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 45000,
+      "merchant": "Ramesh Kumar",
+      "mode": "netbanking",
+      "accountLast4": "1075",
+      "dateIso": "2026-09-20"
+    }
+  },
+  {
+    "note": "salary credit",
+    "sender": "BM-UNIONB",
+    "body": "Rs.1,240.00 credited to your A/c XX1812 on 22-08-26 by salary transfer. Avl Bal Rs.98067.50",
+    "smsAtIso": "2026-08-22T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 124000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "1812",
+      "dateIso": "2026-08-22"
+    }
+  },
+  {
+    "note": "FD interest credit",
+    "sender": "BM-BANDHN",
+    "body": "INR 1,499.00 credited to A/c XX2072 on 30-08-2026 towards FD Interest. Avl Bal INR 38248.78",
+    "smsAtIso": "2026-08-30T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 149900,
+      "merchant": "FD Interest",
+      "mode": "other",
+      "accountLast4": "2072",
+      "dateIso": "2026-08-30"
+    }
+  },
+  {
+    "note": "refund credit from a merchant",
+    "sender": "VK-ICICIB",
+    "body": "Rs.1200.00 credited to A/c XX3016 on 06-09-26 from Zepto Refund. Avl Bal Rs.5,532.50",
+    "smsAtIso": "2026-09-06T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 120000,
+      "merchant": "Zepto",
+      "mode": "other",
+      "accountLast4": "3016",
+      "dateIso": "2026-09-06"
+    }
+  },
+  {
+    "note": "UPI credit from a merchant VPA",
+    "sender": "AD-PNBSMS",
+    "body": "Rs.25,000.00 credited to A/c XX9162 on 18-09-26 from VPA blinkit@ybl (UPI Ref 5732676406). Avl Bal Rs.5,344.85",
+    "smsAtIso": "2026-09-18T13:00:00Z",
+    "expect": {
+      "direction": "income",
+      "amountPaise": 2500000,
+      "merchant": "Blinkit",
+      "mode": "upi",
+      "accountLast4": "9162",
+      "dateIso": "2026-09-18"
+    }
+  },
+  {
+    "note": "wallet debit for a recharge",
+    "sender": "BM-IDFCBK",
+    "body": "Rs.25,000.00 debited from Paytm Wallet on 08-08-26 for Mobile Recharge. Avl Bal Rs.50119.17",
+    "smsAtIso": "2026-08-08T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-08-08"
+    }
+  },
+  {
+    "note": "Bengali alert with Bengali numerals",
+    "sender": "AD-AXISBK",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ১২০০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-09-21T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-21"
+    }
+  },
+  {
+    "note": "Hindi alert",
+    "sender": "AX-PNBSMS",
+    "body": "आपके खाते से ₹2,499.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-09-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "unmasked account number, EMI merchant",
+    "sender": "AD-BANDHN",
+    "body": "Rs.899.00 debited from your account 899705944 on 28-08-26 to Bajaj Finserv EMI. Avl Bal Rs.4,266.55",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89900,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "5944",
+      "dateIso": "2026-08-28"
+    }
+  },
+  {
+    "note": "short card phrasing",
+    "sender": "AD-BOBSMS",
+    "body": "Rs.1200.00 spent on your card ending 5283 at Bata on 29-08-26.",
+    "smsAtIso": "2026-08-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": "Bata",
+      "mode": "card",
+      "accountLast4": "5283",
+      "dateIso": "2026-08-29"
+    }
+  },
+  {
+    "note": "dd-MMM-yyyy date",
+    "sender": "VM-YESBNK",
+    "body": "Rs.1,240.00 debited from A/c XX5894 on 29-SEP-2026 to VPA swiggy@ybl. Avl Bal Rs.1,882.98",
+    "smsAtIso": "2026-09-29T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "Swiggy",
+      "mode": "upi",
+      "accountLast4": "5894",
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "07OCT26-style compact date",
+    "sender": "VK-YESBNK",
+    "body": "Rs.1200.00 debited from A/c XX2292 on 02SEP26 to KFC. Avl Bal Rs.1,884.27",
+    "smsAtIso": "2026-09-02T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": "KFC",
+      "mode": "other",
+      "accountLast4": "2292",
+      "dateIso": "2026-09-02"
+    }
+  },
+  {
+    "note": "rent with lakh-grouped amount",
+    "sender": "VM-INDBNK",
+    "body": "Rs 1200.00 debited from A/c XX5346 on 23-08-26 towards House Rent. Avl Bal Rs 9,816.68",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 120000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "5346",
+      "dateIso": "2026-08-23"
+    }
+  },
+  {
+    "note": "'towards <merchant>' phrasing",
+    "sender": "VM-AXISBK",
+    "body": "Rs.8,000.00 debited from A/c XX8962 on 28-08-26 towards Myntra. Avl Bal Rs.91350.55",
+    "smsAtIso": "2026-08-28T13:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 800000,
+      "merchant": "Myntra",
+      "mode": "other",
+      "accountLast4": "8962",
+      "dateIso": "2026-08-28"
+    }
+  }
+]

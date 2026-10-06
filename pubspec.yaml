@@ -58,3 +58,10 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   drift_dev: ^2.21.0
   build_runner: ^2.4.13
+
+  # Pinned deliberately. build_runner 2.16.1 *declares* support for analyzer
+  # 13.3–15 but its source does not compile against 14.x (`contextFeatures`
+  # was removed from AnalysisOptionsImpl). 13.3.x is the newest analyzer that
+  # satisfies both build_runner and drift_dev, so codegen runs here. This is a
+  # codegen-only pin: it has no effect on the shipped app.
+  analyzer: 13.3.0

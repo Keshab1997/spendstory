@@ -1,0 +1,422 @@
+[
+  {
+    "note": "otp_with_amount",
+    "sender": "VM-SBIINB",
+    "body": "OTP 838107 for your txn of Rs 1,499.00 at Myntra. Do not share.",
+    "smsAtIso": "2026-09-09T13:00:00Z",
+    "expectReject": "otp"
+  },
+  {
+    "note": "balance_only",
+    "sender": "BM-AXISBK",
+    "body": "Your A/c XX6678 Avl Bal is Rs.49833.75 as on 04-09-26.",
+    "smsAtIso": "2026-09-04T13:00:00Z",
+    "expectReject": "balance_only"
+  },
+  {
+    "note": "cashback_offer",
+    "sender": "BM-AXISBK",
+    "body": "Get Rs.1,50,000.00 cashback on your next 3 transactions. Offer valid till 03-09-26. T&C apply.",
+    "smsAtIso": "2026-09-03T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "statement_ready",
+    "sender": "AX-YESBNK",
+    "body": "Your Bandhan Bank Credit Card statement for AUG-2026 is ready. Total due Rs 4,500.00. Minimum due Rs 620.",
+    "smsAtIso": "2026-08-13T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "kyc_nudge",
+    "sender": "BM-HDFCBK",
+    "body": "Dear Customer, complete your KYC to continue using your account. Visit branch or click here: bit.ly/xyz",
+    "smsAtIso": "2026-08-26T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "preapproved_loan",
+    "sender": "VM-BAJAJF",
+    "body": "Pre-approved personal loan of Rs 25,000.00 at 10.5%. Apply now! Offer expires soon.",
+    "smsAtIso": "2026-08-11T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "personal_number",
+    "sender": "+919821110331",
+    "body": "Bhai 1499 taka pathiye de, kal ferot debo.",
+    "smsAtIso": "2026-08-01T13:00:00Z",
+    "expectReject": "unknown_sender"
+  },
+  {
+    "note": "missed_call",
+    "sender": "VM-FEDBNK",
+    "body": "Missed call alert from 9816341986. Your credit card bill due is Rs 25,000.00.",
+    "smsAtIso": "2026-08-06T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "future_mandate",
+    "sender": "TM-ICICIB",
+    "body": "Rs 1200.00 will be debited on 26-08-26 as per e-mandate for Netflix.",
+    "smsAtIso": "2026-08-26T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "order_shipped",
+    "sender": "TM-AMAZONP",
+    "body": "Your order of Rs 1,499.00 has been shipped. Track at bit.ly/x",
+    "smsAtIso": "2026-08-07T13:00:00Z",
+    "expectReject": "no_signal"
+  },
+  {
+    "note": "promo_credited",
+    "sender": "BM-PNBSMS",
+    "body": "Congratulations! Rs 8,000.00 credited as part of our welcome offer. Apply now.",
+    "smsAtIso": "2026-09-30T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "unknown_sender_code",
+    "sender": "DM-SBIINBSPAM",
+    "body": "Rs.1200.00 debited from A/c XX2343 on 08-09-26. Avl Bal Rs.8,579.93",
+    "smsAtIso": "2026-09-08T13:00:00Z",
+    "expectReject": "unknown_sender"
+  },
+  {
+    "note": "otp_with_account",
+    "sender": "TM-KOTAKB",
+    "body": "298302 is the verification code for your A/c XX7429. Never share it.",
+    "smsAtIso": "2026-09-05T13:00:00Z",
+    "expectReject": "otp"
+  },
+  {
+    "note": "scratch_card",
+    "sender": "VK-IDFCBK",
+    "body": "You have won a scratch card worth Rs 899.00! Click here to claim. T&C apply.",
+    "smsAtIso": "2026-08-31T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "insurance_offer",
+    "sender": "VM-HDFCBK",
+    "body": "Protect your family with our insurance plan at just Rs 499/month. Apply now.",
+    "smsAtIso": "2026-09-23T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "bill_reminder",
+    "sender": "BM-AXISBK",
+    "body": "Your electricity bill of Rs 199.00 is due on 01-10-26. Pay now to avoid disconnection.",
+    "smsAtIso": "2026-10-01T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "otp_with_amount",
+    "sender": "VK-SBIINB",
+    "body": "OTP 958076 for your txn of Rs 999.99 at Myntra. Do not share.",
+    "smsAtIso": "2026-09-09T13:00:00Z",
+    "expectReject": "otp"
+  },
+  {
+    "note": "balance_only",
+    "sender": "AX-PNBSMS",
+    "body": "Your A/c XX2162 Avl Bal is Rs.5,548.10 as on 28-09-26.",
+    "smsAtIso": "2026-09-28T13:00:00Z",
+    "expectReject": "balance_only"
+  },
+  {
+    "note": "cashback_offer",
+    "sender": "TM-KOTAKB",
+    "body": "Get Rs.1,240.00 cashback on your next 3 transactions. Offer valid till 28-09-26. T&C apply.",
+    "smsAtIso": "2026-09-28T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "statement_ready",
+    "sender": "VM-YESBNK",
+    "body": "Your Union Bank of India Credit Card statement for AUG-2026 is ready. Total due Rs 45,000.00. Minimum due Rs 620.",
+    "smsAtIso": "2026-08-19T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "kyc_nudge",
+    "sender": "TM-BANDHN",
+    "body": "Dear Customer, complete your KYC to continue using your account. Visit branch or click here: bit.ly/xyz",
+    "smsAtIso": "2026-09-15T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "preapproved_loan",
+    "sender": "AX-BAJAJF",
+    "body": "Pre-approved personal loan of Rs 320.00 at 10.5%. Apply now! Offer expires soon.",
+    "smsAtIso": "2026-09-17T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "personal_number",
+    "sender": "+919893786775",
+    "body": "Bhai 1000 taka pathiye de, kal ferot debo.",
+    "smsAtIso": "2026-08-31T13:00:00Z",
+    "expectReject": "unknown_sender"
+  },
+  {
+    "note": "missed_call",
+    "sender": "BM-PNBSMS",
+    "body": "Missed call alert from 9868719070. Your credit card bill due is Rs 45,000.00.",
+    "smsAtIso": "2026-08-08T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "future_mandate",
+    "sender": "VM-FEDBNK",
+    "body": "Rs 1,24,000.00 will be debited on 30-09-26 as per e-mandate for Netflix.",
+    "smsAtIso": "2026-09-30T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "order_shipped",
+    "sender": "VM-AMAZONP",
+    "body": "Your order of Rs 1,50,000.00 has been shipped. Track at bit.ly/x",
+    "smsAtIso": "2026-08-21T13:00:00Z",
+    "expectReject": "no_signal"
+  },
+  {
+    "note": "promo_credited",
+    "sender": "VM-PNBSMS",
+    "body": "Congratulations! Rs 320.00 credited as part of our welcome offer. Apply now.",
+    "smsAtIso": "2026-09-25T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "unknown_sender_code",
+    "sender": "DM-KOTAKBSPAM",
+    "body": "Rs.1,20,000.00 debited from A/c XX9949 on 06-10-26. Avl Bal Rs.44306.64",
+    "smsAtIso": "2026-10-06T13:00:00Z",
+    "expectReject": "unknown_sender"
+  },
+  {
+    "note": "otp_with_account",
+    "sender": "AD-CANBNK",
+    "body": "837906 is the verification code for your A/c XX2063. Never share it.",
+    "smsAtIso": "2026-09-10T13:00:00Z",
+    "expectReject": "otp"
+  },
+  {
+    "note": "scratch_card",
+    "sender": "AX-INDBNK",
+    "body": "You have won a scratch card worth Rs 12,500.00! Click here to claim. T&C apply.",
+    "smsAtIso": "2026-09-05T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "insurance_offer",
+    "sender": "AD-YESBNK",
+    "body": "Protect your family with our insurance plan at just Rs 499/month. Apply now.",
+    "smsAtIso": "2026-09-14T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "bill_reminder",
+    "sender": "AX-YESBNK",
+    "body": "Your electricity bill of Rs 8,000.00 is due on 26-09-26. Pay now to avoid disconnection.",
+    "smsAtIso": "2026-09-26T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "otp_with_amount",
+    "sender": "BM-PNBSMS",
+    "body": "OTP 456540 for your txn of Rs 899.00 at Myntra. Do not share.",
+    "smsAtIso": "2026-09-22T13:00:00Z",
+    "expectReject": "otp"
+  },
+  {
+    "note": "balance_only",
+    "sender": "TM-KOTAKB",
+    "body": "Your A/c XX2188 Avl Bal is Rs.69205.32 as on 01-10-26.",
+    "smsAtIso": "2026-10-01T13:00:00Z",
+    "expectReject": "balance_only"
+  },
+  {
+    "note": "cashback_offer",
+    "sender": "VM-INDBNK",
+    "body": "Get Rs.1,50,000.00 cashback on your next 3 transactions. Offer valid till 21-09-26. T&C apply.",
+    "smsAtIso": "2026-09-21T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "statement_ready",
+    "sender": "AX-YESBNK",
+    "body": "Your Yes Bank Credit Card statement for AUG-2026 is ready. Total due Rs 45,000.00. Minimum due Rs 620.",
+    "smsAtIso": "2026-08-02T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "kyc_nudge",
+    "sender": "AX-PNBSMS",
+    "body": "Dear Customer, complete your KYC to continue using your account. Visit branch or click here: bit.ly/xyz",
+    "smsAtIso": "2026-10-03T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "preapproved_loan",
+    "sender": "AD-BAJAJF",
+    "body": "Pre-approved personal loan of Rs 25,000.00 at 10.5%. Apply now! Offer expires soon.",
+    "smsAtIso": "2026-08-15T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "personal_number",
+    "sender": "+919886417546",
+    "body": "Bhai 76 taka pathiye de, kal ferot debo.",
+    "smsAtIso": "2026-10-04T13:00:00Z",
+    "expectReject": "unknown_sender"
+  },
+  {
+    "note": "missed_call",
+    "sender": "AD-FEDBNK",
+    "body": "Missed call alert from 9816220925. Your credit card bill due is Rs 75.50.",
+    "smsAtIso": "2026-09-19T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "future_mandate",
+    "sender": "TM-SBIINB",
+    "body": "Rs 500.00 will be debited on 16-08-26 as per e-mandate for Netflix.",
+    "smsAtIso": "2026-08-16T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "order_shipped",
+    "sender": "VK-AMAZONP",
+    "body": "Your order of Rs 2,00,000.00 has been shipped. Track at bit.ly/x",
+    "smsAtIso": "2026-08-21T13:00:00Z",
+    "expectReject": "no_signal"
+  },
+  {
+    "note": "promo_credited",
+    "sender": "TM-BANDHN",
+    "body": "Congratulations! Rs 25,000.00 credited as part of our welcome offer. Apply now.",
+    "smsAtIso": "2026-08-12T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "unknown_sender_code",
+    "sender": "DM-FEDBNKSPAM",
+    "body": "Rs.45,000.00 debited from A/c XX8336 on 13-08-26. Avl Bal Rs.10884.79",
+    "smsAtIso": "2026-08-13T13:00:00Z",
+    "expectReject": "unknown_sender"
+  },
+  {
+    "note": "otp_with_account",
+    "sender": "AX-FEDBNK",
+    "body": "751681 is the verification code for your A/c XX4418. Never share it.",
+    "smsAtIso": "2026-08-23T13:00:00Z",
+    "expectReject": "otp"
+  },
+  {
+    "note": "scratch_card",
+    "sender": "AD-ICICIB",
+    "body": "You have won a scratch card worth Rs 12,500.00! Click here to claim. T&C apply.",
+    "smsAtIso": "2026-08-31T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "insurance_offer",
+    "sender": "VK-KOTAKB",
+    "body": "Protect your family with our insurance plan at just Rs 499/month. Apply now.",
+    "smsAtIso": "2026-08-15T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "bill_reminder",
+    "sender": "AX-UNIONB",
+    "body": "Your electricity bill of Rs 1,499.00 is due on 05-08-26. Pay now to avoid disconnection.",
+    "smsAtIso": "2026-08-05T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "otp_with_amount",
+    "sender": "AX-YESBNK",
+    "body": "OTP 743015 for your txn of Rs 8,000.00 at Myntra. Do not share.",
+    "smsAtIso": "2026-09-15T13:00:00Z",
+    "expectReject": "otp"
+  },
+  {
+    "note": "balance_only",
+    "sender": "VK-IDFCBK",
+    "body": "Your A/c XX6519 Avl Bal is Rs.7,740.46 as on 16-09-26.",
+    "smsAtIso": "2026-09-16T13:00:00Z",
+    "expectReject": "balance_only"
+  },
+  {
+    "note": "cashback_offer",
+    "sender": "VK-KOTAKB",
+    "body": "Get Rs.500.00 cashback on your next 3 transactions. Offer valid till 21-08-26. T&C apply.",
+    "smsAtIso": "2026-08-21T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "statement_ready",
+    "sender": "VK-INDBNK",
+    "body": "Your ICICI Bank Credit Card statement for SEP-2026 is ready. Total due Rs 4,500.00. Minimum due Rs 620.",
+    "smsAtIso": "2026-09-02T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "kyc_nudge",
+    "sender": "AX-ICICIB",
+    "body": "Dear Customer, complete your KYC to continue using your account. Visit branch or click here: bit.ly/xyz",
+    "smsAtIso": "2026-10-04T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "preapproved_loan",
+    "sender": "TM-BAJAJF",
+    "body": "Pre-approved personal loan of Rs 500.00 at 10.5%. Apply now! Offer expires soon.",
+    "smsAtIso": "2026-08-26T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "personal_number",
+    "sender": "+919862181278",
+    "body": "Bhai 199 taka pathiye de, kal ferot debo.",
+    "smsAtIso": "2026-09-13T13:00:00Z",
+    "expectReject": "unknown_sender"
+  },
+  {
+    "note": "missed_call",
+    "sender": "TM-INDBNK",
+    "body": "Missed call alert from 9834196256. Your credit card bill due is Rs 25,000.00.",
+    "smsAtIso": "2026-09-14T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "future_mandate",
+    "sender": "AD-BANDHN",
+    "body": "Rs 150 will be debited on 08-09-26 as per e-mandate for Netflix.",
+    "smsAtIso": "2026-09-08T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "order_shipped",
+    "sender": "AD-AMAZONP",
+    "body": "Your order of Rs 45,000.00 has been shipped. Track at bit.ly/x",
+    "smsAtIso": "2026-09-18T13:00:00Z",
+    "expectReject": "no_signal"
+  },
+  {
+    "note": "promo_credited",
+    "sender": "VK-AXISBK",
+    "body": "Congratulations! Rs 1,240.00 credited as part of our welcome offer. Apply now.",
+    "smsAtIso": "2026-08-08T13:00:00Z",
+    "expectReject": "non_transaction"
+  },
+  {
+    "note": "unknown_sender_code",
+    "sender": "DM-ICICIBSPAM",
+    "body": "Rs.8,000.00 debited from A/c XX1928 on 08-08-26. Avl Bal Rs.48669.90",
+    "smsAtIso": "2026-08-08T13:00:00Z",
+    "expectReject": "unknown_sender"
+  }
+]

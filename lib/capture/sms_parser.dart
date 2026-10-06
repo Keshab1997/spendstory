@@ -111,7 +111,19 @@ const List<String> _nonTxMarkers = <String>[
   'click here',
   't&c apply',
   'terms apply',
+  'pay now',
+  'avoid disconnection',
+  'claim now',
 ];
+
+/// Promotional copy that names an account-looking token is still just an ad.
+/// Real transaction alerts always reference the account, card or VPA they
+/// concern (or quote a balance); marketing copy essentially never does.
+final RegExp _hasAccountContext = RegExp(
+  r'a\/c|\bac\b|\bacct\b|\baccount\b|\bcard\b|\bvpa\b|\bupi\b|'
+  r'\bwallet\b|@',
+  caseSensitive: false,
+);
 
 /// Future-tense notices ("Rs 999 will be debited on 15-10-26") announce a
 /// payment that has *not happened yet*. Parsing them as a completed expense
@@ -246,6 +258,12 @@ class SmsParser {
   }) {
     // ① OTP / credential guard — before anything else touches the message.
     if (isOtpOrCredential(body)) {
+      // The body is dropped either way, but when the sender is not a bank at
+      // all the honest reason for the local parse log is "unknown sender".
+      // A personal SMS must never be filed as a credential message.
+      if (allowlist.lookup(sender) == null) {
+        return const ParseOutcome.rejected(ParseRejection.unknownSender);
+      }
       return const ParseOutcome.rejected(ParseRejection.otp);
     }
 
@@ -287,6 +305,17 @@ class SmsParser {
       if (lower.contains(marker)) {
         return const ParseOutcome.rejected(ParseRejection.nonTransaction);
       }
+    }
+
+    // ③b marketing guard. "Congratulations! Rs 2,000 credited as part of our
+    // welcome offer" uses a real verb but is still an advertisement; the tell is
+    // that it never mentions an account, card, VPA or balance. Bank alerts
+    // always do. See `docs/06-SMS-PARSING.md` §4.
+    final marketing = _nonTxMarkers.any(lower.contains);
+    if (marketing &&
+        !_hasAccountContext.hasMatch(lower) &&
+        !_balanceMarkers.any(lower.contains)) {
+      return const ParseOutcome.rejected(ParseRejection.nonTransaction);
     }
 
     // Direction: whichever verb appears first wins, which is what keeps
@@ -347,6 +376,13 @@ class SmsParser {
     final direction = (debitAt >= 0 && (creditAt < 0 || debitAt < creditAt))
         ? TxnDirection.expense
         : TxnDirection.income;
+
+    // Same marketing guard as the SMS path: a payment-app notification that is
+    // really an ad must not become a transaction.
+    if (_nonTxMarkers.any(lower.contains) &&
+        !_hasAccountContext.hasMatch(lower)) {
+      return const ParseOutcome.rejected(ParseRejection.nonTransaction);
+    }
 
     final amountPaise = _extractAmount(combined);
     if (amountPaise == null || amountPaise <= 0) {

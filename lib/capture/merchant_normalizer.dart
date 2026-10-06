@@ -231,7 +231,9 @@ String? _leftmostKnown(String key) {
   String? best;
   var bestAt = -1;
   for (final k in _canonical.keys) {
-    if (k.length < 4) continue;
+    // Three characters is the floor: `jio`, `ola`, `sbi` are real brands, and
+    // the whole-word test below is what stops `lic` firing on "Delicious".
+    if (k.length < 3) continue;
     final at = _wordIndexOf(key, k);
     if (at < 0) continue;
     if (best == null ||

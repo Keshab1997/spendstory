@@ -397,6 +397,19 @@ class RuleEngine {
     MerchantRule(pattern: 'policybazaar', categoryKey: Cat.emi),
     MerchantRule(pattern: 'credit card payment', categoryKey: Cat.emi),
 
+    // ---- wallets and payment rails ----
+    // These arrive as the *merchant* when a wallet is the counterparty. They
+    // carry no spending intent, so they land in "Other" rather than being
+    // guessed into a real category.
+    MerchantRule(pattern: 'paytm', categoryKey: Cat.otherExpense),
+    MerchantRule(pattern: 'phonepe', categoryKey: Cat.otherExpense),
+    MerchantRule(pattern: 'google pay', categoryKey: Cat.otherExpense),
+    MerchantRule(pattern: 'gpay', categoryKey: Cat.otherExpense),
+    MerchantRule(pattern: 'cred', categoryKey: Cat.otherExpense),
+    MerchantRule(pattern: 'mobikwik', categoryKey: Cat.otherExpense),
+    MerchantRule(pattern: 'freecharge', categoryKey: Cat.otherExpense),
+    MerchantRule(pattern: 'amazon pay', categoryKey: Cat.otherExpense),
+
     // ---- ATM & cash ----
     MerchantRule(pattern: 'withdrawn', categoryKey: Cat.otherExpense),
     MerchantRule(pattern: 'cash withdrawal', categoryKey: Cat.otherExpense),
