@@ -8,16 +8,16 @@
 ///    the ledger, and a crash mid-write must not corrupt the database.
 /// 3. Seeding runs once, outside the migration, so a re-install with a restored
 ///    backup never duplicates the built-in rules.
+///
+/// The *connection* is supplied by the platform through a conditional import,
+/// because the web build has no file system and no SQLite. See
+/// `connection_io.dart` / `connection_web.dart`.
 library;
 
-import 'dart:io';
-
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
 import '../capture/sender_allowlist.dart';
+import 'connection_io.dart' if (dart.library.js_interop) 'connection_web.dart';
 import 'seed.dart';
 import 'tables.dart';
 
@@ -41,16 +41,13 @@ class AppDb extends _$AppDb {
 
   /// In-memory database for tests. Every test gets a clean slate, and nothing
   /// touches the file system.
-  factory AppDb.memory() => AppDb(NativeDatabase.memory());
+  factory AppDb.memory() => AppDb(openMemoryConnection());
 
   /// The real thing: a file in the app's private documents directory.
-  factory AppDb.open() => AppDb(_openConnection());
-
-  static QueryExecutor _openConnection() => LazyDatabase(() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dir.path, 'spendstory.sqlite'));
-    return NativeDatabase.createInBackground(file);
-  });
+  ///
+  /// Only legal where [hasDatabaseSupport] is true — on web, `providers.dart`
+  /// serves the demo ledger instead.
+  factory AppDb.open() => AppDb(openAppConnection());
 
   @override
   int get schemaVersion => 1;

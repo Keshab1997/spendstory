@@ -65,14 +65,31 @@ Check per change: `python3 tool/preflight.py` · Dart edit hole: `flutter test t
 
 ## 🔜 Batch 3 — Design system + shell
 
-- [ ] **T-201** `lib/ui/tokens.dart` — colors, gradients, spacing, radius, typography (from `02`)
-- [ ] **T-202** Fonts bundled — Manrope + Noto Sans Bengali/Devanagari → `assets/fonts/`
-- [ ] **T-203** `SsScaffold` + `GlassCard` + `SsButton`
-- [ ] **T-204** `MoneyText` (tabular, sign color, 3-lang format)
-- [ ] **T-205** `HeroIllustration` + `EmptyState` + `AdSlot` (returns nothing for Pro)
-- [ ] **T-206** `BudgetBar` + `DonutChart` + `CategoryChip`
-- [ ] **T-207** `lib/app/router.dart` per `04-NAVIGATION.md` + `MainShell` (4-tab bottom nav)
-- [ ] **T-208** `test/app/router_test.dart` — first-run vs returning redirect
+- [x] **T-201** `lib/ui/tokens.dart` — colors, gradients, spacing, radius, typography (from `02`)
+- [x] **T-202** Fonts bundled — Manrope + Noto Sans Bengali/Devanagari → `assets/fonts/`
+- [x] **T-203** `SsScaffold` + `GlassCard` + `SsButton`
+- [x] **T-204** `MoneyText` (tabular, sign color, 3-lang format)
+- [x] **T-205** `HeroIllustration` + `EmptyState` + `AdSlot` (returns nothing for Pro)
+- [x] **T-206** `BudgetBar` + `DonutChart` + `CategoryChip`
+- [x] **T-207** `lib/app/router.dart` per `04-NAVIGATION.md` + `MainShell` (4-tab bottom nav)
+- [x] **T-208** `test/app/router_test.dart` — first-run vs returning redirect
+
+---
+
+**Delivered (Batch 3):**
+- `lib/ui/tokens.dart` — `SsColors` as a `ThemeExtension` (both brightnesses, verified different by test), spacing, radius, shadow, type scale with tabular figures
+- `lib/ui/theme.dart` — two `ThemeData`, Material 3 base with the colour scheme, text theme, chip/sheet/input shapes all overridden
+- `lib/ui/components/` — `SsScaffold`, `SsCard`, `GlassCard`, `SectionHeader`, `HeroIllustration`, `EmptyState`, `SsActionButton`, `SsIconButton`, `QuickAction`, `StatPill`, `SettingTile`, `SsSegmented`, `MoneyText`, `MoneyDelta`, `BudgetBar`, `DonutChart`, `MiniBars`, `TxRow`, `CategoryAvatar`, `CategoryChip`, `DayHeader`, `SsBadge`, `AdSlot`
+- `lib/app/` — `router.dart` (guard + tabs + all 23 routes resolving), `main_shell.dart` (floating glass nav), `providers.dart` (database-or-demo seam), `app.dart`
+- Screens live now: Splash, Language, Home, Transactions, Insights, Settings, Pro paywall, plus honest placeholders for S-11/13/14/16/18 with the batch that will fill them
+- **Bundled fonts** — Manrope + Noto Sans Bengali + Noto Sans Devanagari in `assets/fonts/`, no network fetch
+- **Web preview works**: `DemoLedger` supplies six months of deterministic trilingual demo data on platforms with no database, behind a visible "ওয়েব প্রিভিউ" banner. Nothing fake is ever presented as the user's own money.
+- **Bengali/Hindi numerals** — `₹১৪,০৯০` and `৪৭%`, not `₹14,090`
+- **Ad slots reserved** at the exact sizes from `docs/08`, never above the bottom nav, hidden for Pro
+
+**Bugs found and fixed while building it (all now covered by `test/app/render_smoke_test.dart`):**
+1. Six real `RenderFlex` overflows at 360×640 and at text scale 1.3 — hero header, stat pills, budget labels, plan badge, pro hero, button label
+2. `MiniBars` used `1 << 62` as a clamp bound. Fine on the Dart VM, **32-bit in JavaScript**, so the widget threw at build time — visible in the web preview only as a blank rectangle where the chart should be, and invisible to `flutter test` because that runs on the VM. Found by reading the browser console on a *profile* build.
 
 ---
 

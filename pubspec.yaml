@@ -35,8 +35,9 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  # --- state / di ---
+  # --- state / di + navigation ---
   flutter_riverpod: ^2.6.1
+  go_router: ^18.0.0
 
   # --- persistence ---
   drift: ^2.21.0
@@ -65,3 +66,43 @@ dev_dependencies:
   # satisfies both build_runner and drift_dev, so codegen runs here. This is a
   # codegen-only pin: it has no effect on the shipped app.
   analyzer: 13.3.0
+
+flutter:
+  uses-material-design: true
+
+  # 3D illustrations (T-051). Dark-bg set ships first; the light variants are
+  # T-059 and will land in assets/3d/light/ without a widget change.
+  assets:
+    - assets/3d/
+
+  # Bundled, never fetched. An on-device, offline-first app must not depend on
+  # fonts.googleapis.com at runtime — see docs/02-DESIGN-SYSTEM.md §3.
+  fonts:
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope-VariableFont_wght.ttf
+          weight: 400
+        - asset: assets/fonts/Manrope-VariableFont_wght.ttf
+          weight: 500
+        - asset: assets/fonts/Manrope-VariableFont_wght.ttf
+          weight: 600
+        - asset: assets/fonts/Manrope-VariableFont_wght.ttf
+          weight: 700
+        - asset: assets/fonts/Manrope-VariableFont_wght.ttf
+          weight: 800
+    - family: NotoSansBengali
+      fonts:
+        - asset: assets/fonts/NotoSansBengali-VariableFont_wght.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansBengali-VariableFont_wght.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansBengali-VariableFont_wght.ttf
+          weight: 700
+    - family: NotoSansDevanagari
+      fonts:
+        - asset: assets/fonts/NotoSansDevanagari-VariableFont_wght.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansDevanagari-VariableFont_wght.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansDevanagari-VariableFont_wght.ttf
+          weight: 700

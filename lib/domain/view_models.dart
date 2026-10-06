@@ -1,0 +1,240 @@
+/// UI-facing view models.
+///
+/// The widgets never touch Drift rows or `ParsedTxn` directly. They read these,
+/// which means the same screen renders identically whether the data came from
+/// the on-device database (mobile) or the bundled demo ledger (the web preview,
+/// until a web database is wired up).
+library;
+
+import 'dart:ui' show Color;
+
+import '../capture/rule_engine.dart';
+import '../data/db.dart';
+import 'models.dart';
+
+/// One row of the ledger, as the UI needs it.
+class TxnView {
+  const TxnView({
+    required this.id,
+    required this.amountPaise,
+    required this.direction,
+    required this.occurredAtMs,
+    this.merchant,
+    this.categoryId,
+    this.mode = PaymentMode.other,
+    this.source = 'manual',
+    this.note,
+    this.rawText,
+  });
+
+  final String id;
+  final int amountPaise;
+  final TxnDirection direction;
+  final int occurredAtMs;
+  final String? merchant;
+  final String? categoryId;
+  final PaymentMode mode;
+  final String source;
+  final String? note;
+  final String? rawText;
+
+  factory TxnView.fromRow(TxnRow row) => TxnView(
+    id: row.id,
+    amountPaise: row.amountPaise,
+    direction: TxnDirection.fromWire(row.direction) ?? TxnDirection.expense,
+    occurredAtMs: row.occurredAt,
+    merchant: row.merchant,
+    categoryId: row.categoryId,
+    mode: PaymentMode.fromWire(row.mode),
+    source: row.source,
+    note: row.note,
+    rawText: row.rawText,
+  );
+
+  bool get isIncome => direction == TxnDirection.income;
+
+  /// Where the row came from, in words the user understands. Shown on the detail
+  /// screen — the trust-building "this is not a mystery number" line.
+  String get sourceLabel => switch (source) {
+    'auto_sms' => 'SMS থেকে স্বয়ংক্রিয়',
+    'auto_notif' => 'নোটিফিকেশন থেকে স্বয়ংক্রিয়',
+    'recurring' => 'নিয়মিত পেমেন্ট',
+    _ => 'নিজে যোগ করা',
+  };
+}
+
+/// A category with its three localized names already resolved.
+class CategoryView {
+  const CategoryView({
+    required this.id,
+    required this.kind,
+    required this.nameEn,
+    required this.nameHi,
+    required this.nameBn,
+    required this.icon,
+    required this.colorHex,
+    this.monthlyCapPaise,
+  });
+
+  final String id;
+  final TxnDirection kind;
+  final String nameEn;
+  final String nameHi;
+  final String nameBn;
+  final String icon;
+  final String colorHex;
+  final int? monthlyCapPaise;
+
+  /// The display name for the active language code (`en` | `hi` | `bn`).
+  String label([String locale = 'bn']) => switch (locale) {
+    'en' => nameEn,
+    'hi' => nameHi,
+    _ => nameBn,
+  };
+
+  Color get color => colorFromHex(colorHex);
+
+  factory CategoryView.fromRow(CategoryRow row) => CategoryView(
+    id: row.id,
+    kind: TxnDirection.fromWire(row.kind) ?? TxnDirection.expense,
+    nameEn: row.nameEn,
+    nameHi: row.nameHi,
+    nameBn: row.nameBn,
+    icon: row.icon,
+    colorHex: row.colorHex,
+    monthlyCapPaise: row.monthlyCapPaise,
+  );
+}
+
+/// `#RRGGBB` → a `Color`, without importing Flutter into the domain layer's
+/// callers. Kept here because view models are already UI-facing.
+Color colorFromHex(String hex) {
+  final cleaned = hex.replaceAll('#', '').trim();
+  final value = int.tryParse(cleaned, radix: 16);
+  if (value == null) return const Color(0xFF6C4CF1);
+  return Color(cleaned.length <= 6 ? 0xFF000000 | value : value);
+}
+
+/// Money in and out for a period, plus the budget it is measured against.
+class PeriodTotals {
+  const PeriodTotals({
+    required this.incomePaise,
+    required this.expensePaise,
+    this.budgetPaise,
+  });
+
+  final int incomePaise;
+  final int expensePaise;
+  final int? budgetPaise;
+
+  int get netPaise => incomePaise - expensePaise;
+
+  double get spentRatio => budgetPaise == null || budgetPaise == 0
+      ? 0
+      : (expensePaise / budgetPaise!).clamp(0.0, 2.0);
+
+  /// The forecast for the end of the period, at the current daily burn rate.
+  /// Null when there is not enough of the period elapsed to be meaningful.
+  int? forecastExpense({required int elapsedDays, required int totalDays}) {
+    if (elapsedDays < 3 || totalDays <= 0) return null;
+    final perDay = expensePaise / elapsedDays;
+    return (perDay * totalDays).round();
+  }
+}
+
+/// Aggregates a list of transactions for the home hero card and Insights.
+class LedgerSummary {
+  const LedgerSummary({
+    required this.incomePaise,
+    required this.expensePaise,
+    required this.byCategory,
+    required this.count,
+  });
+
+  final int incomePaise;
+  final int expensePaise;
+
+  /// categoryId → total expense paise, largest first when iterated.
+  final Map<String, int> byCategory;
+
+  final int count;
+
+  int get netPaise => incomePaise - expensePaise;
+
+  static LedgerSummary from(List<TxnView> txns, {int? fromMs, int? toMs}) {
+    var income = 0;
+    var expense = 0;
+    var count = 0;
+    final byCategory = <String, int>{};
+
+    for (final t in txns) {
+      if (fromMs != null && t.occurredAtMs < fromMs) continue;
+      if (toMs != null && t.occurredAtMs > toMs) continue;
+      count++;
+      if (t.direction == TxnDirection.income) {
+        income += t.amountPaise;
+      } else {
+        expense += t.amountPaise;
+        if (t.categoryId != null) {
+          byCategory[t.categoryId!] =
+              (byCategory[t.categoryId!] ?? 0) + t.amountPaise;
+        }
+      }
+    }
+
+    final sorted = byCategory.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    return LedgerSummary(
+      incomePaise: income,
+      expensePaise: expense,
+      byCategory: Map.fromEntries(sorted),
+      count: count,
+    );
+  }
+}
+
+/// A bank / cash / wallet account, as the UI needs it.
+///
+/// The Drift `AccountRow` cannot exist without a database, and the accounts
+/// screen has to render in demo mode too, so the UI reads this instead.
+class AccountView {
+  const AccountView({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.openingBalancePaise,
+    this.last4,
+  });
+
+  final String id;
+  final String name;
+  final String type; // bank | cash | wallet | card
+  final int openingBalancePaise;
+  final String? last4;
+
+  String get label => last4 == null ? name : '$name ••$last4';
+}
+
+/// The category ids the rule engine can emit, in the order they should be
+/// offered to the user when asking "which category was this?".
+const List<String> kCategoryPickerOrder = <String>[
+  Cat.food,
+  Cat.grocery,
+  Cat.transport,
+  Cat.bills,
+  Cat.rent,
+  Cat.health,
+  Cat.education,
+  Cat.clothing,
+  Cat.entertainment,
+  Cat.recharge,
+  Cat.emi,
+  Cat.otherExpense,
+  Cat.salary,
+  Cat.business,
+  Cat.freelance,
+  Cat.interest,
+  Cat.gift,
+  Cat.otherIncome,
+];
