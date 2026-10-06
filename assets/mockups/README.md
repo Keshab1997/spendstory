@@ -13,8 +13,8 @@ and real Indian merchants from code.
 
 ```
 mockups/
-├── light/       ☀️ default theme — 9 screens
-├── dark/        🌙 same layouts, dark token set
+├── light/       ☀️ default theme — 13 screens
+├── dark/        🌙 same layouts, dark token set — 8 screens
 └── explored/    rejected directions (kept as a record of the decision)
 ```
 
@@ -28,9 +28,19 @@ mockups/
 | `light/addtx-light.jpg` | Add / Edit transaction sheet | S-12 |
 | `light/budget-light.jpg` | Budget | S-14 |
 | `light/insights-light.jpg` | Insights & analytics | S-17 |
+| `light/txdetail-light.jpg` | Transaction detail | S-11 |
+| `light/accounts-light.jpg` | Accounts | S-16 |
+| `light/search-light.jpg` | Search & filter | S-18 |
+| `light/settings-light.jpg` | Settings | S-20 |
 | `light/paywall-light.jpg` | Pro paywall | S-22 |
 | `dark/home-dark.jpg` | Home — dark | S-09 |
 | `dark/txlist-dark.jpg` | Transactions — dark | S-10 |
+| `dark/txdetail-dark.jpg` | Transaction detail — dark | S-11 |
+| `dark/addtx-dark.jpg` | Add / Edit — dark | S-12 |
+| `dark/budget-dark.jpg` | Budget — dark | S-14 |
+| `dark/insights-dark.jpg` | Insights — dark | S-17 |
+| `dark/settings-dark.jpg` | Settings — dark | S-20 |
+| `dark/paywall-dark.jpg` | Pro paywall — dark | S-22 |
 | `explored/home-playful.jpg` | Rejected — colourful/playful | — |
 | `explored/home-minimal.jpg` | Rejected — minimal editorial | — |
 

@@ -26,8 +26,9 @@ Check per change: `python3 tool/preflight.py` · Dart edit hole: `flutter test t
 - [x] **T-054** Dark mockups ×2 — home, tx list
 - [x] **T-055** `docs/screens-board.html` — interactive light/dark board
 - [x] **T-056** `02-DESIGN-SYSTEM.md` updated — light-first tokens, dual-theme rules, addendum
-- [ ] **T-057** Remaining mockups: tx detail (light+dark), insights dark, add/edit dark, budget dark, paywall dark, settings, accounts, search, categories
-- [ ] **T-058** Light-mode 3D illustration variants → `assets/3d/light/*` (dark set → `assets/3d/dark/*`)
+- [x] **T-057** Remaining mockups — tx detail, accounts, search, settings (light) + dark set ×6 → **13 light + 8 dark = 21 screens**
+- [ ] **T-058** Still missing specs' mockups: Categories (S-13), Budget detail (S-15), Recurring (S-19), About (S-21), Export (S-23), Manual-path (S-08), Language (S-05), Onboarding 2-3, Permission notif (S-07)
+- [ ] **T-059** Light-mode 3D illustration variants → `assets/3d/light/*` (dark set → `assets/3d/dark/*`)
 
 
 ---
