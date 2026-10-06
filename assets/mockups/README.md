@@ -68,3 +68,26 @@ Interactive board → [`../../docs/screens-board.html`](../../docs/screens-board
 
 One layout, two token sets. No screen reads a hardcoded colour — everything comes from
 `Theme.of(context).extension<SsColors>()`. Golden tests render **every screen in both brightnesses**.
+
+---
+
+## `live/` — screenshots of the **running app**
+
+Not mockups. These are captured from the real Flutter build running in a browser
+via `tool/see_screen.py`-style headless capture, in Bengali, with demo data:
+
+| File | Screen |
+|---|---|
+| `final-home-light.jpg` / `final-home-dark.jpg` | S-09 Home — hero card, quick actions, budget, recent rows |
+| `final-txlist-light.jpg` / `final-txlist-dark.jpg` | S-10 Transactions — grouped by day |
+| `final-insights-light.jpg` / `final-insights-dark.jpg` | S-17 Insights — donut, ranking, six-month trend |
+| `final-settings-light.jpg` / `final-settings-dark.jpg` | S-20 Settings — theme + language switches |
+| `final-pro-light.jpg` | S-22 Pro paywall |
+
+The full board is `docs/live-app-board.html`.
+
+**Why they exist:** an AI mockup (in `light/`, `dark/`, `explored/`) shows intent;
+these show what shipped. When the two disagree, these win — and the difference is
+usually a bug. The first capture of `final-insights-light` had a blank rectangle
+where the trend chart should be, which is how the JavaScript bit-shift bug in
+`MiniBars` was found.
