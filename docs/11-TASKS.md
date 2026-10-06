@@ -18,6 +18,20 @@ Check per change: `python3 tool/preflight.py` · Dart edit hole: `flutter test t
 
 ---
 
+## ✅ Batch 1.5 — Design direction + mockups (DONE)
+
+- [x] **T-051** Home screen — 3 directions explored (light-clean / playful / minimal)
+- [x] **T-052** **Direction A "Light & Clean" LOCKED** — light-first + full dark mode
+- [x] **T-053** Light mockups ×9 — splash, onboarding, permission, home, tx list, add/edit, budget, insights, paywall
+- [x] **T-054** Dark mockups ×2 — home, tx list
+- [x] **T-055** `docs/screens-board.html` — interactive light/dark board
+- [x] **T-056** `02-DESIGN-SYSTEM.md` updated — light-first tokens, dual-theme rules, addendum
+- [ ] **T-057** Remaining mockups: tx detail (light+dark), insights dark, add/edit dark, budget dark, paywall dark, settings, accounts, search, categories
+- [ ] **T-058** Light-mode 3D illustration variants → `assets/3d/light/*` (dark set → `assets/3d/dark/*`)
+
+
+---
+
 ## 🔜 Batch 2 — Data layer + parser (no UI yet)
 
 - [ ] **T-101** Add deps: `drift`, `sqlite3_flutter_libs`, `path_provider`, `riverpod`, `uuid`, `crypto`, `intl` → `flutter pub get`

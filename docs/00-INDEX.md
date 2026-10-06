@@ -14,7 +14,7 @@
 |---|---|---|
 | 00 | `00-INDEX.md` | Ei file — master plan + screen inventory |
 | 01 | `01-PRD.md` | Product requirements, features, user stories, scope |
-| 02 | `02-DESIGN-SYSTEM.md` | Advanced 3D design language, color/type/spacing tokens, motion |
+| 02 | `02-DESIGN-SYSTEM.md` | 🅰 **Light & Clean design language (LOCKED)** — dual-theme tokens, motion |
 | 03 | `03-SCREEN-SPECS.md` | **Sob screen er detailed spec** (23 screens) |
 | 04 | `04-NAVIGATION.md` | Routes, transition, deep links, flow diagram |
 | 05 | `05-DATA-MODEL.md` | Drift schema, tables, DAOs, migrations |
@@ -25,7 +25,7 @@
 | 10 | `10-CI-RELEASE.md` | Workflows, signing secrets, Play release steps |
 | 11 | `11-TASKS.md` | **Serial task list** — kaj korার order |
 
-**Assets:** `assets/3d/` — 10 ta AI-generated 3D illustration (design language er base)
+**Assets:** `assets/3d/` — 10 ta AI-generated 3D illustration · `assets/mockups/` — design-direction mockups (light + dark)
 
 ---
 
