@@ -1,0 +1,198 @@
+[
+  {
+    "note": "HDFC UPI debit to a VPA merchant",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.1,240.00 debited from A/c XX4521 on 07-10-26 to VPA bigbasket@ybl (UPI Ref 412398765432). Avl Bal Rs.12,340.50",
+    "smsAtIso": "2026-10-07T14:42:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": "BigBasket",
+      "mode": "upi",
+      "accountLast4": "4521",
+      "dateIso": "2026-10-07"
+    }
+  },
+  {
+    "note": "ICICI credit card, POS/online spend at a merchant",
+    "sender": "AD-ICICIC",
+    "body": "Your ICICI Bank Credit Card XX9012 has been debited with Rs 2,499.00 on 06-OCT-2026 at Myntra. Avl limit Rs 1,45,000.",
+    "smsAtIso": "2026-10-06T21:10:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 249900,
+      "merchant": "Myntra",
+      "mode": "card",
+      "accountLast4": "9012",
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "SBI UPI debit, long masked account number",
+    "sender": "AX-SBIINB",
+    "body": "Rs.500.00 debited from A/c no. XXXXXXXX1234 on 05-10-26 to VPA swiggy@ybl. Avl Bal Rs.8,900.00",
+    "smsAtIso": "2026-10-05T13:05:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": "Swiggy",
+      "mode": "upi",
+      "accountLast4": "1234",
+      "dateIso": "2026-10-05"
+    }
+  },
+  {
+    "note": "ATM cash withdrawal — no merchant expected",
+    "sender": "VK-KOTAKB",
+    "body": "Rs 10,000 withdrawn from A/c XX7788 at ATM on 04-10-26. Avl Bal Rs 22,500.",
+    "smsAtIso": "2026-10-04T09:15:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 1000000,
+      "merchant": null,
+      "mode": "cash",
+      "accountLast4": "7788",
+      "dateIso": "2026-10-04"
+    }
+  },
+  {
+    "note": "NEFT to a person",
+    "sender": "VM-HDFCBK",
+    "body": "INR 25,000.00 debited from A/c XX4521 on 03-10-26 to Ramesh Kumar via NEFT. Avl Bal INR 5,000.",
+    "smsAtIso": "2026-10-03T16:30:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 2500000,
+      "merchant": "Ramesh Kumar",
+      "mode": "netbanking",
+      "accountLast4": "4521",
+      "dateIso": "2026-10-03"
+    }
+  },
+  {
+    "note": "Card spend with 'ending 4321' account phrasing",
+    "sender": "VM-AXISBK",
+    "body": "Rs.320.00 spent on your Axis Bank Card ending 4321 at BigBasket on 02-10-26.",
+    "smsAtIso": "2026-10-02T19:20:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 32000,
+      "merchant": "BigBasket",
+      "mode": "card",
+      "accountLast4": "4321",
+      "dateIso": "2026-10-02"
+    }
+  },
+  {
+    "note": "UPI person-to-person with a dotted VPA handle",
+    "sender": "AD-ICICIB",
+    "body": "Rs.150.00 debited from A/c XX3399 on 01-10-26 to VPA ramesh.kumar@okicici (UPI Ref 412398111). Avl Bal Rs.3,000.",
+    "smsAtIso": "2026-10-01T11:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 15000,
+      "merchant": "Ramesh Kumar",
+      "mode": "upi",
+      "accountLast4": "3399",
+      "dateIso": "2026-10-01"
+    }
+  },
+  {
+    "note": "Indian lakh grouping in the amount AND in the balance",
+    "sender": "VM-INDBNK",
+    "body": "Rs 1,24,000.00 debited from A/c XX1122 on 30-09-26 towards House Rent. Avl Bal Rs 2,00,000.",
+    "smsAtIso": "2026-09-30T08:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 12400000,
+      "merchant": "House Rent",
+      "mode": "other",
+      "accountLast4": "1122",
+      "dateIso": "2026-09-30"
+    }
+  },
+  {
+    "note": "Plain unmasked account number — last 4 must come from the tail",
+    "sender": "VM-PNBSMS",
+    "body": "Rs.2,000.00 debited from your account 123456789 on 29-09-26 to Bajaj Finserv EMI. Avl Bal Rs 15,000.",
+    "smsAtIso": "2026-09-29T07:45:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 200000,
+      "merchant": "Bajaj Finserv",
+      "mode": "other",
+      "accountLast4": "6789",
+      "dateIso": "2026-09-29"
+    }
+  },
+  {
+    "note": "Small UPI amount to a food VPA",
+    "sender": "VM-CANBNK",
+    "body": "Rs.75.50 debited from A/c XX5566 on 28-09-26 to VPA chai.point@ybl. Avl Bal Rs.900.",
+    "smsAtIso": "2026-09-28T17:30:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 7550,
+      "merchant": "Chai Point",
+      "mode": "upi",
+      "accountLast4": "5566",
+      "dateIso": "2026-09-28"
+    }
+  },
+  {
+    "note": "Wallet debit for a recharge",
+    "sender": "VM-YESBNK",
+    "body": "Rs.199.00 debited from Paytm Wallet on 27-09-26 for Mobile Recharge. Avl Bal Rs 450.",
+    "smsAtIso": "2026-09-27T20:05:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 19900,
+      "merchant": "Paytm",
+      "mode": "wallet",
+      "accountLast4": null,
+      "dateIso": "2026-09-27"
+    }
+  },
+  {
+    "note": "Two-word merchant must not be truncated to the first word",
+    "sender": "VM-BANDHN",
+    "body": "Rs.4,500.00 debited from A/c XX2211 on 26-09-26 to Amazon Pay. Avl Bal Rs.12,000.",
+    "smsAtIso": "2026-09-26T10:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 450000,
+      "merchant": "Amazon Pay",
+      "mode": "other",
+      "accountLast4": "2211",
+      "dateIso": "2026-09-26"
+    }
+  },
+  {
+    "note": "UPI ref number that is 5 digits must not break amount parsing",
+    "sender": "VM-UNIONB",
+    "body": "Rs.1,100.00 debited from A/c XX8899 on 25-09-26 to VPA zepto@ybl (UPI Ref 99887). Avl Bal Rs.4,000.",
+    "smsAtIso": "2026-09-25T18:20:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 110000,
+      "merchant": "Zepto",
+      "mode": "upi",
+      "accountLast4": "8899",
+      "dateIso": "2026-09-25"
+    }
+  },
+  {
+    "note": "Card spend with 'Avl limit' instead of 'Avl Bal'",
+    "sender": "VM-HDFCCC",
+    "body": "Rs.890.50 spent on HDFC Bank Credit Card XX1234 at DMart on 24-09-26. Avl limit Rs 50,000.",
+    "smsAtIso": "2026-09-24T12:40:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 89050,
+      "merchant": "DMart",
+      "mode": "card",
+      "accountLast4": "1234",
+      "dateIso": "2026-09-24"
+    }
+  }
+]

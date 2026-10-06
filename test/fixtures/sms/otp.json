@@ -1,0 +1,16 @@
+[
+  { "note": "classic OTP, spaced out", "sender": "VM-HDFCBK", "body": "123456 is your One Time Password (OTP) for HDFC Bank Net Banking. Do not share it with anyone." },
+  { "note": "OTP that also mentions a transaction amount", "sender": "VM-HDFCBK", "body": "OTP 4321 for your txn of Rs 2,499 at Myntra. Valid for 10 minutes. Do NOT share." },
+  { "note": "credit-card OTP", "sender": "AD-ICICIC", "body": "Your OTP for ICICI Bank Credit Card is 845213. Never share this code." },
+  { "note": "verification code phrasing", "sender": "VK-SBIINB", "body": "Use 556677 as verification code. Do not disclose." },
+  { "note": "one-time password spelled out", "sender": "VM-AXISBK", "body": "AXIS: Your one-time password is 112233." },
+  { "note": "Hindi OTP", "sender": "VM-HDFCBK", "body": "आपका OTP 445566 है। किसी के साथ साझा न करें।" },
+  { "note": "Bengali OTP with Bengali digits", "sender": "VM-HDFCBK", "body": "আপনার OTP হলো ৭৭৮৮৯৯। কারও সাথে শেয়ার করবেন না।" },
+  { "note": "login code", "sender": "VM-SBIINB", "body": "458792 is the login code for your SBI account. Valid for 5 mins." },
+  { "note": "MPIN", "sender": "VM-HDFCBK", "body": "Your MPIN is 1234. Never share with anyone." },
+  { "note": "CVV", "sender": "VM-HDFCCC", "body": "CVV for your new HDFC card is 345. Do not share." },
+  { "note": "bare code with no currency and no money verb", "sender": "VM-PHONEPE", "body": "Use code 998877 to verify your phone number on PhonePe." },
+  { "note": "short OTP with expiry", "sender": "AD-KOTAKB", "body": "OTP is 3344. Valid for 3 minutes. Do not share with bank staff." },
+  { "note": "authentication code", "sender": "VM-ICICIB", "body": "Your authentication code is 778899. It expires in 10 minutes." },
+  { "note": "One Time Password label", "sender": "VM-BOBSMS", "body": "One Time Password: 5566. If not requested, call 18001234." }
+]

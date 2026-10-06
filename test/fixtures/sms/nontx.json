@@ -1,0 +1,56 @@
+[
+  {
+    "note": "promotional cashback offer — mentions credit, not a transaction",
+    "sender": "VM-HDFCBK",
+    "body": "Get Rs.500 cashback on your next 3 transactions. Offer valid till 31-10-26. T&C apply.",
+    "expect": "non_transaction"
+  },
+  {
+    "note": "balance-only alert has no debit/credit verb",
+    "sender": "VM-HDFCBK",
+    "body": "Your A/c XX4521 Avl Bal is Rs.12,340.50 as on 07-10-26.",
+    "expect": "balance_only"
+  },
+  {
+    "note": "credit-card statement notice",
+    "sender": "VM-HDFCCC",
+    "body": "Your HDFC Bank Credit Card statement for Sep 2026 is ready. Total due Rs 12,340. Minimum due Rs 620.",
+    "expect": "non_transaction"
+  },
+  {
+    "note": "service SMS pointing at a link — informational, not money",
+    "sender": "VM-HDFCBK",
+    "body": "Dear Customer, complete your KYC to continue using your account. Visit branch or click here: bit.ly/xyz",
+    "expect": "non_transaction"
+  },
+  {
+    "note": "pre-approved loan marketing",
+    "sender": "VM-BAJAJF",
+    "body": "Pre-approved personal loan of Rs 5,00,000 at 10.5%. Apply now! Offer expires soon.",
+    "expect": "non_transaction"
+  },
+  {
+    "note": "personal message from a ten-digit number — not on the allowlist",
+    "sender": "+919876543210",
+    "body": "Bhai 500 taka pathiye de",
+    "expect": "unknown_sender"
+  },
+  {
+    "note": "missed-call alert that also mentions a due bill",
+    "sender": "VM-HDFCCC",
+    "body": "Missed call alert from 9876543210. Your credit card bill due is Rs 5,000.",
+    "expect": "non_transaction"
+  },
+  {
+    "note": "future-dated e-mandate notice — must NOT be recorded as a spend",
+    "sender": "VM-HDFCBK",
+    "body": "Rs 999.00 will be debited on 15-10-26 as per e-mandate for Netflix.",
+    "expect": "non_transaction"
+  },
+  {
+    "note": "order dispatch notice, no money movement yet",
+    "sender": "VM-AMAZONP",
+    "body": "Your order of Rs 1,200 has been shipped. Track at bit.ly/x",
+    "expect": "no_signal"
+  }
+]

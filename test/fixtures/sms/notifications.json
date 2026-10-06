@@ -1,0 +1,44 @@
+[
+  {
+    "note": "GPay payment notification",
+    "package": "com.google.android.apps.nbu.paisa.user",
+    "title": "Google Pay",
+    "body": "₹1,240 paid to BigBasket via UPI",
+    "expect": { "direction": "expense", "amountPaise": 124000, "merchant": "BigBasket", "mode": "upi", "parserKey": "gpay" }
+  },
+  {
+    "note": "PhonePe payment notification",
+    "package": "com.phonepe.app",
+    "title": "PhonePe",
+    "body": "You paid ₹450 to Zomato",
+    "expect": { "direction": "expense", "amountPaise": 45000, "merchant": "Zomato", "mode": "upi", "parserKey": "phonepe" }
+  },
+  {
+    "note": "Paytm payment notification",
+    "package": "net.one97.paytm",
+    "title": "Paytm",
+    "body": "₹2,000 paid to Airtel Recharge",
+    "expect": { "direction": "expense", "amountPaise": 200000, "merchant": "Airtel", "mode": "upi", "parserKey": "paytm" }
+  },
+  {
+    "note": "CRED card payment notification",
+    "package": "com.dreamplug.androidapp",
+    "title": "CRED",
+    "body": "₹1,499 paid to Myntra",
+    "expect": { "direction": "expense", "amountPaise": 149900, "merchant": "Myntra", "mode": "upi", "parserKey": "cred" }
+  },
+  {
+    "note": "incoming payment notification",
+    "package": "com.google.android.apps.nbu.paisa.user",
+    "title": "Google Pay",
+    "body": "₹5,000 received from Ramesh Kumar",
+    "expect": { "direction": "income", "amountPaise": 500000, "merchant": "Ramesh Kumar", "mode": "upi", "parserKey": "gpay" }
+  },
+  {
+    "note": "OTP arriving as a notification must be dropped",
+    "package": "com.phonepe.app",
+    "title": "PhonePe",
+    "body": "Your OTP is 123456. Do not share.",
+    "expect": "otp"
+  }
+]

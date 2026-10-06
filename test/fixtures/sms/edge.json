@@ -1,0 +1,114 @@
+[
+  {
+    "note": "Bengali message with Bengali digits and ৳ symbol",
+    "sender": "VM-HDFCBK",
+    "body": "আপনার অ্যাকাউন্ট থেকে ৳ ১,২৪০.০০ ডেবিট হয়েছে।",
+    "smsAtIso": "2026-10-07T09:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 124000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-10-07"
+    }
+  },
+  {
+    "note": "Hindi message with Devanagari-free digits and ₹ symbol",
+    "sender": "VM-HDFCBK",
+    "body": "आपके खाते से ₹2,500.00 डेबिट हुए हैं।",
+    "smsAtIso": "2026-10-06T08:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 250000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": null,
+      "dateIso": "2026-10-06"
+    }
+  },
+  {
+    "note": "two-digit year in the past must resolve to 2026",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.100.00 debited from A/c XX1122 on 01-01-26. Avl Bal Rs 900.",
+    "smsAtIso": "2026-10-07T08:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 10000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "1122",
+      "dateIso": "2026-01-01"
+    }
+  },
+  {
+    "note": "date older than 400 days must fall back to the SMS timestamp",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.500.00 debited from A/c XX1122 on 01-01-19. Avl Bal Rs 100.",
+    "smsAtIso": "2026-10-07T08:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 50000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "1122",
+      "dateIso": "2026-10-07"
+    }
+  },
+  {
+    "note": "carrier prefix, lowercase sender id",
+    "sender": "vm-hdfcbk",
+    "smsAtIso": "2026-10-07T08:00:00Z",
+    "body": "Rs.50.00 debited from A/c XX1122 on 07-10-26.",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 5000,
+      "merchant": null,
+      "mode": "other",
+      "accountLast4": "1122",
+      "dateIso": "2026-10-07"
+    }
+  },
+  {
+    "note": "no date in the body at all — use the receiver timestamp",
+    "sender": "AD-ICICIB",
+    "body": "Rs.60.00 debited from A/c XX3399 to VPA zomato@ybl.",
+    "smsAtIso": "2026-10-07T11:15:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 6000,
+      "merchant": "Zomato",
+      "mode": "upi",
+      "accountLast4": "3399",
+      "dateIso": "2026-10-07"
+    }
+  },
+  {
+    "note": "amount given as a whole rupee with no decimals",
+    "sender": "VM-KOTAKB",
+    "body": "Rs 300 debited from A/c XX7788 on 02-10-26 to VPA blinkit@ybl. Avl Bal Rs 1,000",
+    "smsAtIso": "2026-10-02T07:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 30000,
+      "merchant": "Blinkit",
+      "mode": "upi",
+      "accountLast4": "7788",
+      "dateIso": "2026-10-02"
+    }
+  },
+  {
+    "note": "amount with paise and no thousands separator",
+    "sender": "VM-IDFCBK",
+    "body": "Rs.999.99 debited from A/c XX4321 on 03-10-26 to VPA netflix@ybl. Avl Bal Rs.500.01",
+    "smsAtIso": "2026-10-03T22:00:00Z",
+    "expect": {
+      "direction": "expense",
+      "amountPaise": 99999,
+      "merchant": "Netflix",
+      "mode": "upi",
+      "accountLast4": "4321",
+      "dateIso": "2026-10-03"
+    }
+  }
+]

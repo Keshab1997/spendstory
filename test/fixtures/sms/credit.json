@@ -1,0 +1,58 @@
+[
+  {
+    "note": "Salary credit — no merchant, rule engine must fall back to raw text",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.45,000.00 credited to your A/c XX4521 on 01-10-26 by salary transfer. Avl Bal Rs.50,000.",
+    "smsAtIso": "2026-10-01T10:00:00Z",
+    "expect": { "direction": "income", "amountPaise": 4500000, "merchant": null, "mode": "other", "accountLast4": "4521", "dateIso": "2026-10-01" }
+  },
+  {
+    "note": "FD interest credit — the real merchant sits after the account number",
+    "sender": "AD-ICICIB",
+    "body": "INR 1,250.00 credited to A/c XX3399 on 30-09-26 towards FD Interest. Avl Bal INR 1,20,000.",
+    "smsAtIso": "2026-09-30T06:00:00Z",
+    "expect": { "direction": "income", "amountPaise": 125000, "merchant": "FD Interest", "mode": "other", "accountLast4": "3399", "dateIso": "2026-09-30" }
+  },
+  {
+    "note": "Refund credit — 'from <merchant> Refund'",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.1,499.00 credited to A/c XX4521 on 28-09-26 from Amazon Refund. Avl Bal Rs.3,000.",
+    "smsAtIso": "2026-09-28T15:30:00Z",
+    "expect": { "direction": "income", "amountPaise": 149900, "merchant": "Amazon", "mode": "other", "accountLast4": "4521", "dateIso": "2026-09-28" }
+  },
+  {
+    "note": "UPI refund from a merchant VPA",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.250.00 credited to A/c XX4521 on 27-09-26 from VPA swiggy@ybl (refund). Avl Bal Rs.1,000.",
+    "smsAtIso": "2026-09-27T12:00:00Z",
+    "expect": { "direction": "income", "amountPaise": 25000, "merchant": "Swiggy", "mode": "upi", "accountLast4": "4521", "dateIso": "2026-09-27" }
+  },
+  {
+    "note": "Cashback credit with no merchant at all",
+    "sender": "VM-IDFCBK",
+    "body": "Rs.75.00 credited to A/c XX4521 on 26-09-26 as cashback. Avl Bal Rs 2,000.",
+    "smsAtIso": "2026-09-26T09:00:00Z",
+    "expect": { "direction": "income", "amountPaise": 7500, "merchant": null, "mode": "other", "accountLast4": "4521", "dateIso": "2026-09-26" }
+  },
+  {
+    "note": "Freelance client payment via VPA",
+    "sender": "VM-UNIONB",
+    "body": "INR 8,000.00 credited to A/c XX8899 on 25-09-26 from VPA client.payment@okaxis (UPI Ref 77). Avl Bal INR 20,000.",
+    "smsAtIso": "2026-09-25T11:30:00Z",
+    "expect": { "direction": "income", "amountPaise": 800000, "merchant": "Client Payment", "mode": "upi", "accountLast4": "8899", "dateIso": "2026-09-25" }
+  },
+  {
+    "note": "Person-to-person credit with an unknown VPA handle",
+    "sender": "VM-INDBNK",
+    "body": "Rs.5,000.00 credited to A/c XX1122 on 24-09-26 from VPA deepa.gift@ybl. Avl Bal Rs.9,000.",
+    "smsAtIso": "2026-09-24T14:00:00Z",
+    "expect": { "direction": "income", "amountPaise": 500000, "merchant": "Deepa Gift", "mode": "upi", "accountLast4": "1122", "dateIso": "2026-09-24" }
+  },
+  {
+    "note": "Reversal of a failed transaction",
+    "sender": "VM-HDFCBK",
+    "body": "Rs.1,240.00 credited to A/c XX4521 on 23-09-26 reversal of failed transaction. Avl Bal Rs.6,000.",
+    "smsAtIso": "2026-09-23T20:00:00Z",
+    "expect": { "direction": "income", "amountPaise": 124000, "merchant": null, "mode": "other", "accountLast4": "4521", "dateIso": "2026-09-23" }
+  }
+]

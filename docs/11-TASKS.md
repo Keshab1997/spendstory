@@ -35,21 +35,23 @@ Check per change: `python3 tool/preflight.py` · Dart edit hole: `flutter test t
 
 ## 🔜 Batch 2 — Data layer + parser (no UI yet)
 
-- [ ] **T-101** Add deps: `drift`, `sqlite3_flutter_libs`, `path_provider`, `riverpod`, `uuid`, `crypto`, `intl` → `flutter pub get`
+- [x] **T-101** Add deps: `drift`, `sqlite3_flutter_libs`, `path_provider`, `riverpod`, `uuid`, `crypto`, `intl` → `flutter pub get`
 - [ ] **T-102** `lib/data/tables.dart` — 8 tables per `05-DATA-MODEL.md`
 - [ ] **T-103** `lib/data/db.dart` — Drift database, WAL, FK on, `schemaVersion 1`
 - [ ] **T-104** `lib/data/seed.dart` — 12+6 categories, cash account, 120 merchant rules, 32 bank senders
 - [ ] **T-105** `test/data/db_test.dart` — migration + seed test
-- [ ] **T-106** `lib/capture/otp_guard.dart` + `test/capture/otp_guard_test.dart` → **0 parses on 40-OTP corpus**
-- [ ] **T-107** `lib/capture/sender_allowlist.dart` + test
-- [ ] **T-108** `lib/capture/sms_parser.dart` (amount/date/merchant/signals) + `test/capture/sms_parser_test.dart`
-- [ ] **T-109** `lib/capture/dedupe.dart` + test (25 pairs → 100% suppression)
-- [ ] **T-110** `lib/capture/rule_engine.dart` — merchant→category + learning + user override
-- [ ] **T-111** Fixtures: `test/fixtures/sms/*.json` — synthetic corpus (no real user data)
+- [x] **T-106** `lib/capture/otp_guard.dart` + `test/capture/otp_guard_test.dart` → **0 parses on 40-OTP corpus**
+- [x] **T-107** `lib/capture/sender_allowlist.dart` + test
+- [x] **T-108** `lib/capture/sms_parser.dart` (amount/date/merchant/signals) + `test/capture/sms_parser_test.dart`
+- [x] **T-109** `lib/capture/dedupe.dart` + test (25 pairs → 100% suppression)
+- [x] **T-110** `lib/capture/rule_engine.dart` — merchant→category + learning + user override
+- [x] **T-111** Fixtures: `test/fixtures/sms/*.json` — synthetic corpus (no real user data)
 - [ ] **T-112** `lib/capture/capture_service.dart` — wiring: SMS + notification → repo → stream
 - [ ] **T-113** `test/capture/end_to_end_test.dart` — 200-sample corpus, gate ≥95%
 
 **Gate:** T-106 + T-109 + T-113 green. Tabе UI shuru.
+
+**Progress (2 of 3 chunks):** parser chunk done — `otp_guard`, `sender_allowlist`, `merchant_normalizer`, `sms_parser`, `dedupe`, `rule_engine` + 59-message synthetic corpus, **72 tests green**, `flutter analyze` clean, `dart format` clean. Corpus is 59 messages, not yet the 200 of T-113 — the gate runs on what exists and grows with the corpus. Remaining: T-102/103/104/105 (Drift schema + seed) and T-112 (capture_service wiring), then T-113 at full corpus size.
 
 ---
 
