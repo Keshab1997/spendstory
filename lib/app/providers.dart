@@ -104,12 +104,91 @@ final proStatusProvider = StateProvider<bool>((ref) => false);
 // data
 // -----------------------------------------------------------------------------
 
+/// Rows deleted in this session while there is **no database** — the web
+/// preview and widget tests. On a device a delete is a real soft delete in
+/// SQLite; here it is an in-memory overlay, so the screen tells the truth about
+/// what the user just did instead of pretending the bundled demo ledger is
+/// writable. Nothing in this set survives a reload, and that is correct: the
+/// preview is a preview.
+final sessionDeletedIdsProvider = StateProvider<Set<String>>(
+  (ref) => const <String>{},
+);
+
+/// The same overlay for a re-categorise: transaction id → category id.
+final sessionCategoryOverridesProvider = StateProvider<Map<String, String>>(
+  (ref) => const <String, String>{},
+);
+
 final transactionsProvider = FutureProvider<List<TxnView>>((ref) async {
   final db = ref.watch(appDbProvider);
-  if (db == null) return ref.watch(demoLedgerProvider).transactions;
-  final rows = await TxRepo(db).recent(limit: 500);
-  return rows.map(TxnView.fromRow).toList();
+  final deleted = ref.watch(sessionDeletedIdsProvider);
+  final recategorised = ref.watch(sessionCategoryOverridesProvider);
+
+  final base = db == null
+      ? ref.watch(demoLedgerProvider).transactions
+      : (await TxRepo(db).recent(limit: 500)).map(TxnView.fromRow).toList();
+
+  if (deleted.isEmpty && recategorised.isEmpty) return base;
+  return <TxnView>[
+    for (final t in base)
+      if (!deleted.contains(t.id))
+        if (recategorised.containsKey(t.id))
+          t.copyWith(categoryId: recategorised[t.id])
+        else
+          t,
+  ];
 });
+
+/// Every write the transaction list can perform, in one place.
+///
+/// Two backends, one contract: with a database the change is persisted through
+/// [TxRepo] (soft delete, so Undo is real rather than a re-insert); without one
+/// it lands in the session overlays above. Callers never branch on which.
+class TxActions {
+  const TxActions(this._ref);
+
+  final Ref _ref;
+
+  Future<void> delete(String id) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionDeletedIdsProvider.notifier)
+          .update((ids) => <String>{...ids, id});
+      return;
+    }
+    await TxRepo(db).softDelete(id);
+    _ref.invalidate(transactionsProvider);
+  }
+
+  /// Undo. The row was never actually removed, so this restores it rather than
+  /// writing a new one — the id, the raw SMS and the capture history survive.
+  Future<void> restore(String id) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionDeletedIdsProvider.notifier)
+          .update((ids) => <String>{...ids}..remove(id));
+      return;
+    }
+    await TxRepo(db).restore(id);
+    _ref.invalidate(transactionsProvider);
+  }
+
+  Future<void> setCategory(String id, String categoryId) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionCategoryOverridesProvider.notifier)
+          .update((map) => <String, String>{...map, id: categoryId});
+      return;
+    }
+    await TxRepo(db).updateManual(id, categoryId: categoryId);
+    _ref.invalidate(transactionsProvider);
+  }
+}
+
+final txActionsProvider = Provider<TxActions>((ref) => TxActions(ref));
 
 final categoriesProvider = FutureProvider<List<CategoryView>>((ref) async {
   final db = ref.watch(appDbProvider);

@@ -54,6 +54,23 @@ class TxnView {
 
   bool get isIncome => direction == TxnDirection.income;
 
+  /// Only the fields the UI is allowed to change without going through the
+  /// capture pipeline. Used by the session overlay that backs a re-categorise
+  /// in the web preview, where there is no database to write to.
+  TxnView copyWith({String? categoryId, String? merchant, String? note}) =>
+      TxnView(
+        id: id,
+        amountPaise: amountPaise,
+        direction: direction,
+        occurredAtMs: occurredAtMs,
+        merchant: merchant ?? this.merchant,
+        categoryId: categoryId ?? this.categoryId,
+        mode: mode,
+        source: source,
+        note: note ?? this.note,
+        rawText: rawText,
+      );
+
   /// Where the row came from, in words the user understands. Shown on the detail
   /// screen — the trust-building "this is not a mystery number" line.
   String sourceLabel([String locale = 'bn']) =>

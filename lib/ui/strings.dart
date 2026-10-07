@@ -33,6 +33,15 @@ class SsStrings {
 
   String get appName => this['appName'];
   String get txTitle => this['txTitle'];
+  String get txFilterAll => this['txFilterAll'];
+  String get txDelete => this['txDelete'];
+  String get txRecategorise => this['txRecategorise'];
+  String get txPickCategory => this['txPickCategory'];
+  String get txDeleted => this['txDeleted'];
+  String get txUndo => this['txUndo'];
+  String get txSwipeHint => this['txSwipeHint'];
+  String get txMonthEmptyTitle => this['txMonthEmptyTitle'];
+  String get txMonthEmptyBody => this['txMonthEmptyBody'];
   String get insights => this['insights'];
   String get settings => this['settings'];
   String get accounts => this['accounts'];
@@ -264,6 +273,15 @@ const Map<String, String> _en = <String, String>{
   'notFoundTitle': 'Page not found',
   'notFoundSubtitle': '404',
   'notFoundBody': 'Return to Home from Settings.',
+  'txFilterAll': 'All',
+  'txDelete': 'Delete',
+  'txRecategorise': 'Change category',
+  'txPickCategory': 'Which category?',
+  'txDeleted': 'Deleted',
+  'txUndo': 'Undo',
+  'txSwipeHint': 'Swipe a row — left to delete, right to change its category.',
+  'txMonthEmptyTitle': 'Nothing in this month',
+  'txMonthEmptyBody': 'Pick another month, or clear the filter.',
   'planMonthly': 'Monthly',
   'planYearly': 'Yearly',
   'planLifetime': 'Lifetime',
@@ -442,6 +460,16 @@ const Map<String, String> _hi = <String, String>{
   'notFoundTitle': 'पेज नहीं मिला',
   'notFoundSubtitle': '404',
   'notFoundBody': 'सेटिंग्स से होम पर लौटें।',
+  'txFilterAll': 'सभी',
+  'txDelete': 'मिटाएँ',
+  'txRecategorise': 'श्रेणी बदलें',
+  'txPickCategory': 'कौन सी श्रेणी?',
+  'txDeleted': 'मिटा दिया',
+  'txUndo': 'वापस लाएँ',
+  'txSwipeHint':
+      'पंक्ति खिसकाएँ — बाएँ मिटाने के लिए, दाएँ श्रेणी बदलने के लिए।',
+  'txMonthEmptyTitle': 'इस महीने कुछ नहीं',
+  'txMonthEmptyBody': 'दूसरा महीना चुनें, या फ़िल्टर हटाएँ।',
   'planMonthly': 'मासिक',
   'planYearly': 'सालाना',
   'planLifetime': 'लाइफ़टाइम',
@@ -618,6 +646,15 @@ const Map<String, String> _bn = <String, String>{
   'notFoundTitle': 'পাতা খুঁজে পাওয়া গেল না',
   'notFoundSubtitle': '404',
   'notFoundBody': 'সেটিংস থেকে হোমে ফিরে যান।',
+  'txFilterAll': 'সব',
+  'txDelete': 'মুছুন',
+  'txRecategorise': 'ক্যাটাগরি বদলান',
+  'txPickCategory': 'কোন ক্যাটাগরি?',
+  'txDeleted': 'মুছে ফেলা হয়েছে',
+  'txUndo': 'ফিরিয়ে আনুন',
+  'txSwipeHint': 'সারি সোয়াইপ করুন — বাঁয়ে মুছতে, ডানে ক্যাটাগরি বদলাতে।',
+  'txMonthEmptyTitle': 'এই মাসে কিছু নেই',
+  'txMonthEmptyBody': 'অন্য মাস বাছুন, বা ফিল্টার সরান।',
   'planMonthly': 'মাসিক',
   'planYearly': 'বার্ষিক',
   'planLifetime': 'লাইফটাইম',
