@@ -204,14 +204,11 @@ String dayLabel(int ms, {String locale = 'bn', int? nowMs}) {
 /// "অক্টোবর ২০২৬" — the home month selector.
 String monthLabel(int ms, {String locale = 'bn'}) {
   final d = DateTime.fromMillisecondsSinceEpoch(ms);
-  final months = switch (locale) {
-    'en' => _monthsFullBn,
-    'hi' => _monthsFullHi,
-    _ => _monthsFullBn,
+  final name = switch (locale) {
+    'en' => '${_monthsFullEn(d.month)} ${d.year}',
+    'hi' => '${_monthsFullHi[d.month - 1]} ${d.year}',
+    _ => '${_monthsFullBn[d.month - 1]} ${d.year}',
   };
-  final name = locale == 'en'
-      ? '${_monthsFullEn(d.month)} ${d.year}'
-      : '${months[d.month - 1]} ${d.year}';
   return localizeDigits(name, locale);
 }
 
