@@ -15,10 +15,10 @@ Everything stays on your phone.
 
 | | |
 |---|---|
-| **Phase** | Foundation complete — docs + design system + assets |
+| **Phase** | Batches 1–4 complete — data layer + SMS parser, design system + shell, onboarding + permissions |
 | **Package** | `com.keshabstudios.spendstory` |
 | **Flutter** | 3.47.6 stable · Dart 3.13.5 |
-| **Next** | Batch 2 — data layer + SMS parser → `docs/11-TASKS.md` |
+| **Next** | Batch 5 — core app: Home done (T-401), transactions list next → `docs/11-TASKS.md` |
 
 ## Documentation
 
