@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ui/screens/categories_screen.dart';
 import '../ui/screens/coming_soon_screen.dart';
 import '../ui/screens/home_screen.dart';
 import '../ui/screens/insights_screen.dart';
@@ -25,6 +26,9 @@ import '../ui/screens/permission_sms_screen.dart';
 import '../ui/screens/pro_screen.dart';
 import '../ui/screens/settings_screen.dart';
 import '../ui/screens/splash_screen.dart';
+import '../ui/screens/search_screen.dart';
+import '../ui/screens/tx_detail_screen.dart';
+import '../ui/screens/tx_edit_screen.dart';
 import '../ui/screens/tx_list_screen.dart';
 import 'main_shell.dart';
 import 'providers.dart';
@@ -125,13 +129,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: '/transactions',
                 builder: (context, state) => const TxListScreen(),
                 routes: <RouteBase>[
+                  // Static before dynamic: otherwise ':id' swallows 'edit'
+                  // and the add screen becomes a transaction called "edit".
+                  GoRoute(
+                    path: 'edit',
+                    builder: (context, state) => const TxEditScreen(),
+                  ),
                   GoRoute(
                     path: ':id',
-                    builder: (context, state) => const ComingSoonScreen(
-                      titleKey: 'transactionDetailTitle',
-                      subtitleKey: 'transactionDetailSubtitle',
-                      bodyKey: 'transactionDetailBody',
-                    ),
+                    builder: (context, state) =>
+                        TxDetailScreen(id: state.pathParameters['id']!),
                   ),
                 ],
               ),
@@ -175,19 +182,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/categories',
-        builder: (context, state) => const ComingSoonScreen(
-          titleKey: 'categories',
-          subtitleKey: 'categoryPageSubtitle',
-          bodyKey: 'categoryPageBody',
-        ),
+        builder: (context, state) => const CategoriesScreen(),
       ),
       GoRoute(
         path: '/search',
-        builder: (context, state) => const ComingSoonScreen(
-          titleKey: 'search',
-          subtitleKey: 'searchPageSubtitle',
-          bodyKey: 'searchPageBody',
-        ),
+        builder: (context, state) => const SearchScreen(),
       ),
       GoRoute(
         path: '/pro',
