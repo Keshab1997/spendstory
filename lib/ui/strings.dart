@@ -62,6 +62,47 @@ class SsStrings {
   String get budget => this['budget'];
   String get categories => this['categories'];
   String get reports => this['reports'];
+  String get obNext => this['obNext'];
+  String get obBack => this['obBack'];
+  String get obSkip => this['obSkip'];
+  String get obStart => this['obStart'];
+  String get permAllow => this['permAllow'];
+  String get permNotNow => this['permNotNow'];
+  String get permDenied => this['permDenied'];
+  String get permWebNote => this['permWebNote'];
+  String get manualLink => this['manualLink'];
+  String get permTitle => this['permTitle'];
+  String get permWhy => this['permWhy'];
+  String get permReads => this['permReads'];
+  String get permReadsBody => this['permReadsBody'];
+  String get permNever => this['permNever'];
+  String get permNeverBody => this['permNeverBody'];
+  String get notifTitle => this['notifTitle'];
+  String get notifWhy => this['notifWhy'];
+  String get notifOn => this['notifOn'];
+  String get notifOff => this['notifOff'];
+  String get notifApps => this['notifApps'];
+  String get notifOnlyThese => this['notifOnlyThese'];
+  String get notifOpen => this['notifOpen'];
+  String get notifSkip => this['notifSkip'];
+  String get notifContinue => this['notifContinue'];
+  String get notifManualHint => this['notifManualHint'];
+  String get manualTitle => this['manualTitle'];
+  String get manualBody => this['manualBody'];
+  String get manualP1 => this['manualP1'];
+  String get manualP1Body => this['manualP1Body'];
+  String get manualP2 => this['manualP2'];
+  String get manualP2Body => this['manualP2Body'];
+  String get manualP3 => this['manualP3'];
+  String get manualP3Body => this['manualP3Body'];
+  String get manualStart => this['manualStart'];
+  String get manualBack => this['manualBack'];
+  String get ob1Title => this['ob1Title'];
+  String get ob1Body => this['ob1Body'];
+  String get ob2Title => this['ob2Title'];
+  String get ob2Body => this['ob2Body'];
+  String get ob3Title => this['ob3Title'];
+  String get ob3Body => this['ob3Body'];
 
   /// Keys present in one language but missing in another — empty is correct.
   static List<String> get missingKeys {
@@ -79,6 +120,57 @@ class SsStrings {
 }
 
 const Map<String, String> _en = <String, String>{
+  "ob1Title": "Every payment files itself",
+  "ob1Body": "SpendStory reads your bank's transaction SMS and your payment apps' notifications, and writes the expense down for you. No typing.",
+  "ob1B1": "Works with 50 bank senders",
+  "ob1B2": "Reads lakh-format amounts correctly",
+  "ob1B3": "An OTP is never read, ever",
+  "ob2Title": "See where the money goes",
+  "ob2Body": "Category by category, month by month, with the one number that changes behaviour: what is left in the budget.",
+  "ob2B1": "Category split and top merchants",
+  "ob2B2": "Monthly budget with an 80% warning",
+  "ob2B3": "Forecast for the end of the month",
+  "ob3Title": "Your data stays on your phone",
+  "ob3Body": "There is no server, no account and no sign-in. Everything is stored on this device and nowhere else.",
+  "ob3B1": "Nothing is uploaded — not one byte",
+  "ob3B2": "Delete everything, any time",
+  "ob3B3": "Works with no internet at all",
+  "obNext": "Next",
+  "obBack": "Back",
+  "obSkip": "Skip",
+  "obStart": "Get started",
+  "permTitle": "Let SpendStory read bank SMS?",
+  "permWhy": "This is how the app captures spending without you typing. Android will ask for permission in the next step.",
+  "permReads": "What it reads",
+  "permReadsBody": "Transaction alerts from banks, cards and wallets — the amount, the merchant and the date.",
+  "permNever": "What it never touches",
+  "permNeverBody": "OTPs, passwords, PINs and personal messages. OTPs are dropped before anything else looks at them, and no message is ever sent anywhere.",
+  "permAllow": "Allow reading SMS",
+  "permTryAgain": "Try again",
+  "permNotNow": "Not now",
+  "permDenied": "No problem — you can add expenses by hand, and turn this on later from Settings.",
+  "permWebNote": "On the web preview there is no Android to ask — the real prompt only appears in the phone build. Use “Not now” to carry on.",
+  "manualLink": "I would rather not give SMS access",
+  "notifTitle": "One more, and it is optional",
+  "notifWhy": "Payment apps like Google Pay and PhonePe send their own notification. With access, those are captured too — otherwise a UPI payment may be missed if the bank's SMS is delayed.",
+  "notifOn": "Notification access is on",
+  "notifOff": "Notification access is off",
+  "notifApps": "Only these six apps are ever looked at:",
+  "notifOnlyThese": "Every other notification on your phone is ignored completely. SpendStory never reads WhatsApp, email or personal messages.",
+  "notifOpen": "Open notification settings",
+  "notifSkip": "Skip this",
+  "notifContinue": "Continue",
+  "notifManualHint": "Open Settings → Notifications → Notification access, and turn on SpendStory.",
+  "manualTitle": "Use it by hand",
+  "manualBody": "Perfectly fine — the ledger, budgets and insights all work with expenses you enter yourself. You can switch capture on later from Settings.",
+  "manualP1": "Add in three taps",
+  "manualP1Body": "Amount, category, done.",
+  "manualP2": "Everything still works",
+  "manualP2Body": "Budgets, categories, insights, export.",
+  "manualP3": "Turn on capture later",
+  "manualP3Body": "Settings → SMS capture, any time.",
+  "manualStart": "Start using SpendStory",
+  "manualBack": "Actually, let me give SMS access",
   'appName': 'SpendStory',
   'appTagline': "Your money's story, right on your phone",
   'greeting': 'Hello',
@@ -202,6 +294,59 @@ const Map<String, String> _en = <String, String>{
 };
 
 const Map<String, String> _hi = <String, String>{
+  "ob1Title": "हर भुगतान खुद दर्ज हो जाएगा",
+  "ob1Body": "SpendStory आपके बैंक के लेन-देन SMS और पेमेंट ऐप के नोटिफ़िकेशन पढ़कर खर्च खुद लिख लेता है। टाइप करने की ज़रूरत नहीं।",
+  "ob1B1": "50 बैंक सेंडर के साथ काम करता है",
+  "ob1B2": "लाख वाले अंक सही पढ़ता है",
+  "ob1B3": "OTP कभी नहीं पढ़ता",
+  "ob2Title": "पैसा कहाँ जा रहा है, साफ़ देखें",
+  "ob2Body": "श्रेणी-दर-श्रेणी, महीने-दर-महीने — और वो एक आंकड़ा जो आदत बदलता है: बजट में कितना बचा है।",
+  "ob2B1": "श्रेणी विभाजन और टॉप दुकानें",
+  "ob2B2": "मासिक बजट, 80% पर चेतावनी",
+  "ob2B3": "महीने के अंत का अनुमान",
+  "ob3Title": "आपका डेटा फ़ोन में ही रहता है",
+  "ob3Body": "कोई सर्वर नहीं, कोई अकाउंट नहीं, कोई लॉगिन नहीं। सब कुछ इसी डिवाइस पर रहता है।",
+  "ob3B1": "कुछ भी अपलोड नहीं होता",
+  "ob3B2": "कभी भी सब मिटा दें",
+  "ob3B3": "बिना इंटरनेट भी चलता है",
+  "obNext": "आगे",
+  "obBack": "पीछे",
+  "obSkip": "छोड़ें",
+  "obStart": "शुरू करें",
+  "permTitle": "बैंक के SMS पढ़ने दें?",
+  "permWhy": "इसी से ऐप बिना टाइपिंग के खर्च दर्ज करता है। अगले स्टेप में Android अनुमति माँगेगा।",
+  "permReads": "क्या पढ़ता है",
+  "permReadsBody":
+      "बैंक, कार्ड और वॉलेट के लेन-देन अलर्ट — रकम, दुकान और तारीख़।",
+  "permNever": "क्या कभी नहीं छूता",
+  "permNeverBody": "OTP, पासवर्ड, PIN और निजी मैसेज। OTP बाक़ी सब से पहले हटा दिया जाता है, और कोई मैसेज कहीं भेजा नहीं जाता।",
+  "permAllow": "SMS पढ़ने दें",
+  "permTryAgain": "फिर कोशिश करें",
+  "permNotNow": "अभी नहीं",
+  "permDenied": "कोई बात नहीं — खर्च हाथ से जोड़ सकते हैं, और बाद में सेटिंग्स से चालू कर सकते हैं।",
+  "permWebNote": "वेब प्रीव्यू में पूछने के लिए कोई Android नहीं है — असली डायलॉग सिर्फ़ फ़ोन बिल्ड में आता है। आगे बढ़ने के लिए “अभी नहीं” दबाएँ।",
+  "manualLink": "SMS की अनुमति नहीं देना चाहता",
+  "notifTitle": "एक और, और ये ज़रूरी नहीं",
+  "notifWhy": "Google Pay और PhonePe जैसे ऐप अपना नोटिफ़िकेशन भेजते हैं। अनुमति मिलने पर वो भी दर्ज होते हैं — वरना बैंक का SMS देर से आने पर UPI भुगतान छूट सकता है।",
+  "notifOn": "नोटिफ़िकेशन एक्सेस चालू है",
+  "notifOff": "नोटिफ़िकेशन एक्सेस बंद है",
+  "notifApps": "सिर्फ़ ये छह ऐप देखे जाते हैं:",
+  "notifOnlyThese": "बाक़ी सारे नोटिफ़िकेशन पूरी तरह नज़रअंदाज़ होते हैं। WhatsApp, ईमेल या निजी मैसेज SpendStory नहीं पढ़ता।",
+  "notifOpen": "नोटिफ़िकेशन सेटिंग्स खोलें",
+  "notifSkip": "छोड़ दें",
+  "notifContinue": "आगे बढ़ें",
+  "notifManualHint":
+      "सेटिंग्स → नोटिफ़िकेशन → नोटिफ़िकेशन एक्सेस खोलकर SpendStory चालू करें।",
+  "manualTitle": "हाथ से इस्तेमाल करें",
+  "manualBody": "बिल्कुल ठीक — खाता, बजट और विश्लेषण खुद जोड़े गए खर्चों से भी पूरा चलता है। बाद में सेटिंग्स से कैप्चर चालू कर सकते हैं।",
+  "manualP1": "तीन टैप में जोड़ें",
+  "manualP1Body": "रकम, श्रेणी, हो गया।",
+  "manualP2": "सब कुछ वैसे ही चलता है",
+  "manualP2Body": "बजट, श्रेणियाँ, विश्लेषण, एक्सपोर्ट।",
+  "manualP3": "बाद में कैप्चर चालू करें",
+  "manualP3Body": "सेटिंग्स → SMS कैप्चर, कभी भी।",
+  "manualStart": "SpendStory शुरू करें",
+  "manualBack": "नहीं, SMS की अनुमति देता हूँ",
   'appName': 'SpendStory',
   'appTagline': 'आपके पैसों की कहानी, आपके फ़ोन पर',
   'greeting': 'नमस्ते',
@@ -327,6 +472,58 @@ const Map<String, String> _hi = <String, String>{
 };
 
 const Map<String, String> _bn = <String, String>{
+  "ob1Title": "প্রতিটা খরচ নিজে থেকে জমা হবে",
+  "ob1Body": "SpendStory আপনার ব্যাঙ্কের লেনদেন SMS আর পেমেন্ট অ্যাপের নোটিফিকেশন পড়ে খরচ নিজেই লিখে রাখে। টাইপ করার দরকার নেই।",
+  "ob1B1": "৫০টি ব্যাঙ্ক সেন্ডার সাপোর্ট করে",
+  "ob1B2": "লাখ-ফরম্যাটের অঙ্কও ঠিক পড়ে",
+  "ob1B3": "OTP কখনো পড়ে না, একবারও না",
+  "ob2Title": "টাকা কোথায় যাচ্ছে, স্পষ্ট দেখুন",
+  "ob2Body": "ক্যাটাগরি ধরে, মাস ধরে — আর সেই একটা সংখ্যা যা অভ্যাস বদলায়: বাজেটে কত বাকি।",
+  "ob2B1": "ক্যাটাগরি ভাগ আর টপ দোকান",
+  "ob2B2": "মাসিক বাজেট, ৮০% এ সতর্কতা",
+  "ob2B3": "মাস শেষে কত হবে তার পূর্বাভাস",
+  "ob3Title": "আপনার ডেটা ফোনেই থাকে",
+  "ob3Body": "কোনো সার্ভার নেই, কোনো অ্যাকাউন্ট নেই, কোনো লগইন নেই। সব এই ডিভাইসেই জমা থাকে।",
+  "ob3B1": "একটা বাইটও কোথাও যায় না",
+  "ob3B2": "যেকোনো সময় সব মুছে ফেলুন",
+  "ob3B3": "ইন্টারনেট ছাড়াও চলে",
+  "obNext": "পরেরটা",
+  "obBack": "পিছনে",
+  "obSkip": "এড়িয়ে যান",
+  "obStart": "শুরু করুন",
+  "permTitle": "ব্যাঙ্কের SMS পড়ার অনুমতি দেবেন?",
+  "permWhy": "এই ভাবেই অ্যাপটা আপনাকে দিয়ে কিছু টাইপ না করিয়েই খরচ জমা করে। পরের ধাপে Android অনুমতি চাইবে।",
+  "permReads": "কী পড়ে",
+  "permReadsBody": "ব্যাঙ্ক, কার্ড আর ওয়ালেটের লেনদেন অ্যালার্ট — টাকার অঙ্ক, দোকান আর তারিখ।",
+  "permNever": "কী কখনো ছোঁয় না",
+  "permNeverBody": "OTP, পাসওয়ার্ড, PIN আর ব্যক্তিগত মেসেজ। OTP আর কিছু দেখার আগেই বাদ পড়ে যায়, আর কোনো মেসেজ কোথাও পাঠানো হয় না।",
+  "permAllow": "SMS পড়ার অনুমতি দিন",
+  "permTryAgain": "আবার চেষ্টা করুন",
+  "permNotNow": "এখন নয়",
+  "permDenied": "সমস্যা নেই — হাতে খরচ যোগ করতে পারবেন, আর পরে সেটিংস থেকে চালু করতে পারবেন।",
+  "permWebNote": "ওয়েব প্রিভিউতে জিজ্ঞেস করার মতো কোনো Android নেই — আসল ডায়ালগ শুধু ফোনের বিল্ডে আসে। এগিয়ে যেতে “এখন নয়” চাপুন।",
+  "manualLink": "আমি SMS-এর অনুমতি দিতে চাই না",
+  "notifTitle": "আর একটা — এটা নিতান্তই ঐচ্ছিক",
+  "notifWhy": "Google Pay, PhonePe-র মতো অ্যাপ নিজের নোটিফিকেশন পাঠায়। অনুমতি থাকলে সেগুলোও জমা হয় — নইলে ব্যাঙ্কের SMS দেরি হলে একটা UPI পেমেন্ট বাদ পড়ে যেতে পারে।",
+  "notifOn": "নোটিফিকেশন অ্যাক্সেস চালু আছে",
+  "notifOff": "নোটিফিকেশন অ্যাক্সেস বন্ধ আছে",
+  "notifApps": "শুধু এই ছয়টা অ্যাপ দেখা হয়:",
+  "notifOnlyThese": "বাকি সব নোটিফিকেশন সম্পূর্ণ উপেক্ষা করা হয়। WhatsApp, ইমেল বা ব্যক্তিগত মেসেজ SpendStory পড়ে না।",
+  "notifOpen": "নোটিফিকেশন সেটিংস খুলুন",
+  "notifSkip": "এড়িয়ে যান",
+  "notifContinue": "এগিয়ে যান",
+  "notifManualHint":
+      "সেটিংস → নোটিফিকেশন → নোটিফিকেশন অ্যাক্সেস খুলে SpendStory চালু করুন।",
+  "manualTitle": "হাতে হাতে চালান",
+  "manualBody": "একদম ঠিক আছে — খাতা, বাজেট আর বিশ্লেষণ সব নিজে যোগ করা খরচ দিয়েই পুরোপুরি চলে। পরে সেটিংস থেকে ক্যাপচার চালু করতে পারবেন।",
+  "manualP1": "তিন ট্যাপে যোগ",
+  "manualP1Body": "অঙ্ক, ক্যাটাগরি, হয়ে গেল।",
+  "manualP2": "সব কিছুই চলে",
+  "manualP2Body": "বাজেট, ক্যাটাগরি, বিশ্লেষণ, এক্সপোর্ট।",
+  "manualP3": "পরে ক্যাপচার চালু করুন",
+  "manualP3Body": "সেটিংস → SMS ক্যাপচার, যখন খুশি।",
+  "manualStart": "SpendStory শুরু করুন",
+  "manualBack": "না, আমাকে SMS-এর অনুমতি দিতে দিন",
   'appName': 'SpendStory',
   'appTagline': 'তোমার টাকার গল্প, তোমার ফোনেই',
   'greeting': 'নমস্কার',

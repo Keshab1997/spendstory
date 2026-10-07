@@ -37,17 +37,13 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   Future<void> _continue(String selected) async {
     ref.read(localeProvider.notifier).state = selected;
 
-    final db = ref.read(appDbProvider);
-    if (db != null) {
-      await db.setMeta('locale', selected);
-      // Onboarding pages land in Batch 4 (T-302/303). Until then, choosing a
-      // language is the whole first-run flow — and it is written to the database
-      // exactly as it will be afterwards.
-      await db.setMeta('onboarded', 'true');
-      ref.invalidate(bootProvider);
-    }
+    // The choice is stored immediately: if the user kills the app during
+    // onboarding, they come back to a Bengali (or Hindi, or English) app rather
+    // than to this screen. `onboarded` stays false until the flow actually ends,
+    // which is what keeps the guard honest.
+    await ref.read(appDbProvider)?.setMeta('locale', selected);
 
-    if (mounted) context.go('/home');
+    if (mounted) context.go('/onboarding/1');
   }
 
   @override
@@ -56,29 +52,44 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
     final String selected = _selected ?? ref.watch(localeProvider);
     final s = SsStrings(selected);
 
+    // The button stays pinned to the bottom and the options scroll: this is the
+    // first screen a user ever sees, and at 1.3× text scale the three cards plus
+    // the heading are taller than a 640 px phone. A plain `Spacer` in a fixed
+    // Column hides that by overflowing; scrolling the cards keeps the primary
+    // action where the thumb expects it and clips nothing.
     return SsScaffold(
       scrollable: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: SsSpace.x10),
-          Text(s['language'], style: SsText.h1),
-          const SizedBox(height: SsSpace.x2),
-          Text(
-            s['languagePrompt'],
-            style: SsText.body.copyWith(color: c.textSecondary),
-          ),
-          const SizedBox(height: SsSpace.x8),
-          for (final option in _options) ...[
-            _LanguageCard(
-              native: option.native,
-              sample: option.sample,
-              selected: selected == option.code,
-              onTap: () => setState(() => _selected = option.code),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: SsSpace.x8),
+                  Text(s['language'], style: SsText.h1),
+                  const SizedBox(height: SsSpace.x2),
+                  Text(
+                    s['languagePrompt'],
+                    style: SsText.body.copyWith(color: c.textSecondary),
+                  ),
+                  const SizedBox(height: SsSpace.x5),
+                  for (final option in _options) ...[
+                    _LanguageCard(
+                      native: option.native,
+                      sample: option.sample,
+                      selected: selected == option.code,
+                      onTap: () => setState(() => _selected = option.code),
+                    ),
+                    const SizedBox(height: SsSpace.x3),
+                  ],
+                ],
+              ),
             ),
-            const SizedBox(height: SsSpace.x3),
-          ],
-          const Spacer(),
+          ),
+          const SizedBox(height: SsSpace.x3),
           SsActionButton(
             label: s['start'],
             onPressed: () => _continue(selected),

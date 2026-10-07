@@ -18,6 +18,10 @@ import '../ui/screens/coming_soon_screen.dart';
 import '../ui/screens/home_screen.dart';
 import '../ui/screens/insights_screen.dart';
 import '../ui/screens/language_screen.dart';
+import '../ui/screens/manual_path_screen.dart';
+import '../ui/screens/onboarding_screen.dart';
+import '../ui/screens/permission_notification_screen.dart';
+import '../ui/screens/permission_sms_screen.dart';
 import '../ui/screens/pro_screen.dart';
 import '../ui/screens/settings_screen.dart';
 import '../ui/screens/splash_screen.dart';
@@ -62,7 +66,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
-      // Returning user who is sitting on a first-run screen.
+      // A returning user sitting on the splash or the language picker is sent
+      // home. The onboarding and permission screens are deliberately *not*
+      // redirected away: they are harmless to open again, and keeping them
+      // reachable is what lets the web preview be reviewed screen by screen
+      // without first wiping the app's preferences.
       if (location == '/splash' || location == '/language') return '/home';
       return null;
     },
@@ -74,6 +82,30 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/language',
         builder: (context, state) => const LanguageScreen(),
+      ),
+
+      // One route, three pages — the page number lives in the URL so a reload
+      // during onboarding lands where the user left off.
+      GoRoute(
+        path: '/onboarding/:page',
+        builder: (context, state) {
+          final raw = int.tryParse(state.pathParameters['page'] ?? '1') ?? 1;
+          return OnboardingScreen(
+            page: raw.clamp(1, OnboardingScreen.pageCount),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/permission/sms',
+        builder: (context, state) => const PermissionSmsScreen(),
+      ),
+      GoRoute(
+        path: '/permission/notification',
+        builder: (context, state) => const PermissionNotificationScreen(),
+      ),
+      GoRoute(
+        path: '/permission/manual',
+        builder: (context, state) => const ManualPathScreen(),
       ),
 
       StatefulShellRoute.indexedStack(

@@ -17,6 +17,7 @@ import '../data/connection_io.dart'
 import '../data/db.dart';
 import '../data/demo_data.dart';
 import '../data/tx_repo.dart';
+import '../platform/permissions.dart';
 import '../domain/view_models.dart';
 import '../ui/format.dart';
 import '../ui/strings.dart';
@@ -81,6 +82,12 @@ final bootProvider = FutureProvider<BootState>((ref) async {
 /// Active language: `bn` | `hi` | `en`. Switched instantly from Settings or the
 /// language screen — no restart, no reload.
 final localeProvider = StateProvider<String>((ref) => 'bn');
+
+/// How the permission screens talk to the platform. Overridden in tests, where
+/// there is no Android host to answer (see [PermissionsApi]).
+final permissionsProvider = Provider<PermissionsApi>(
+  (ref) => const DevicePermissions(),
+);
 
 final stringsProvider = Provider<SsStrings>(
   (ref) => SsStrings(ref.watch(localeProvider)),

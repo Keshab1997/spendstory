@@ -1,4 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- SpendStory's core feature is reading bank transaction alerts, which is
+         the "SMS-based money management" case Google Play explicitly allows.
+         Nothing here is used for anything else: there is no messaging, no
+         dialling, and OTP messages are dropped by the parser before they are
+         stored. Both are declaration-only on Android 6+; the runtime request
+         happens from the S-06 explainer screen. -->
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+
+    <!-- The phone is a normal phone, not a tablet: telephony is optional so the
+         app still installs (in manual-only mode) on a device without it. -->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false"/>
+
     <application
         android:label="spendstory"
         android:name="${applicationName}"
@@ -25,6 +41,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- Payment-app notifications (Google Pay, PhonePe, …) are captured here.
+             The BIND_NOTIFICATION_LISTENER_SERVICE permission is what stops any
+             other app from binding to it; only the OS can, and only after the
+             user ticks SpendStory in Settings → Notification access. -->
+        <service
+            android:name=".SpendStoryNotificationListener"
+            android:label="SpendStory"
+            android:exported="false"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService"/>
+            </intent-filter>
+        </service>
+
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
