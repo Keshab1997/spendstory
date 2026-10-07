@@ -15,10 +15,10 @@ Everything stays on your phone.
 
 | | |
 |---|---|
-| **Phase** | Batches 1–4 complete — data layer + SMS parser, design system + shell, onboarding + permissions |
+| **Phase** | Batches 1–5 complete — parser, design system, onboarding, and the core ledger screens |
 | **Package** | `com.keshabstudios.spendstory` |
 | **Flutter** | 3.47.6 stable · Dart 3.13.5 |
-| **Next** | Batch 5 — core app: Home done (T-401), transactions list next → `docs/11-TASKS.md` |
+| **Next** | Batch 6 — budgets, insights, accounts → `docs/11-TASKS.md` |
 
 ## Documentation
 

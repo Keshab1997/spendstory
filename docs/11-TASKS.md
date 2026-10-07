@@ -127,11 +127,57 @@ Check per change: `python3 tool/preflight.py` · Dart edit hole: `flutter test t
 
 - [x] **T-401** S-09 Home — hero money card, count-up, banner ad slot, quick actions
 - [x] **T-402** S-10 Transactions list — grouped, month strip, summary chips, filter chips, swipe → delete (undo) / re-categorise
-- [ ] **T-403** S-11 Transaction detail — incl. **raw-SMS viewer** (trust feature)
-- [ ] **T-404** S-12 Add/Edit sheet — custom keypad, 3-tap save
-- [ ] **T-405** S-13 Categories manager + editor
-- [ ] **T-406** S-18 Search & filter
-- [ ] **T-407** Widget tests: add-tx flow, filter results, detail renders source
+- [x] **T-403** S-11 Transaction detail — incl. **raw-SMS viewer** (trust feature)
+- [x] **T-404** S-12 Add/Edit sheet — custom keypad, 3-tap save
+- [x] **T-405** S-13 Categories manager + editor
+- [x] **T-406** S-18 Search & filter
+- [x] **T-407** Widget tests: add-tx flow, filter results, detail renders source
+
+**Gate:** every S-09 … S-13 + S-18 route resolves to a real screen, 229 tests
+green, `flutter analyze` clean. → 🟢 **BATCH 5 COMPLETE**
+
+**Delivered (T-403 … T-407):**
+- `lib/ui/screens/tx_detail_screen.dart` — S-11. The source row and the
+  raw-message viewer are the screen, not a footnote: the exact SMS the row was
+  parsed from, collapsed by default and **built only when opened**, so a
+  collapsed viewer is genuinely collapsed rather than merely invisible to the
+  eye and fully present to the accessibility tree. A typed row says it has no
+  message instead of showing an empty box.
+- `lib/ui/screens/tx_edit_sheet.dart` — S-12. A custom keypad: digits are
+  entered in paise and shifted up like a cash register, so there is no decimal
+  separator to get wrong in three languages and no half-typed `12.` state.
+  Switching direction clears a category that belongs to the other side.
+- `lib/ui/screens/tx_edit_screen.dart` — the same form hosted as a page, so
+  `/transactions/edit` is a real, reloadable route. The host says how to leave;
+  a page reached with `go()` has nothing to pop.
+- `lib/ui/screens/categories_screen.dart` — S-13. Two tabs, 3-col grid, editor
+  with icon/colour/3-language name/monthly cap. One name is enough to save; the
+  others fall back to it rather than rendering a blank label. Delete **hides**:
+  rows already filed keep their history.
+- `lib/ui/screens/search_screen.dart` — S-18. Matches merchant, note, category
+  and **amount the way a human remembers it** (`1240` and `1,240` both find
+  ₹1,240.00). Direction, source and multi-category filters, live result count.
+- `lib/app/providers.dart` — `TxActions` / `CategoryActions`: one write seam,
+  `TxRepo` when a database exists and session overlays when it does not, so the
+  web preview responds to every write instead of ignoring it.
+- `test/ui/` — 35 new tests driving the **real app and router**, because half of
+  this batch is route wiring and a perfect screen at an unreachable path is not
+  done. Includes no-overflow checks for each new screen in 3 languages at 1.3×
+  on 360×640.
+
+**Three real bugs this work surfaced (all now covered):**
+1. `Dismissible` asserts the row leaves the tree in the same frame; both
+   backends are asynchronous. Fixed with a local pending-delete set.
+2. The add sheet `await`ed `HapticFeedback.mediumImpact()` before closing. On a
+   device that resolves instantly; in a widget test nothing answers the channel,
+   so the form span forever. A vibration is feedback, not a step — it is no
+   longer awaited.
+3. `monthLabel()` selected the Bengali month list for `'en'` and then ignored it
+   via a second branch. Harmless, but one edit away from shipping Bengali month
+   names to English users. Rewritten as a single switch.
+
+**Deliberately not done here:** budgets/insights/accounts (Batch 6), ads and
+purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 
 **T-402 notes:**
 - The month strip is the list's scope, not decoration: rows are filtered to the
