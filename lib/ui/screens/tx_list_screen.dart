@@ -22,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/providers.dart';
 import '../../domain/models.dart';
 import '../../domain/view_models.dart';
+import '../components/category_sheet.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/money.dart';
@@ -29,6 +30,7 @@ import '../components/surfaces.dart';
 import '../format.dart';
 import '../strings.dart';
 import '../tokens.dart';
+import 'tx_edit_sheet.dart';
 
 enum _Filter { all, expense, income }
 
@@ -211,10 +213,10 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
                       // first expense" to someone with 300 of them is a bug.
                       title: all.isEmpty ? s.emptyTxTitle : s.txMonthEmptyTitle,
                       message: all.isEmpty ? s.emptyTxBody : s.txMonthEmptyBody,
-                      // No action button yet on purpose: the add sheet is
-                      // T-404. A button that does nothing is worse than no
-                      // button, and '/transactions/new' would resolve as a
-                      // transaction whose id is literally "new".
+                      actionLabel: all.isEmpty ? s.addFirst : null,
+                      onAction: all.isEmpty
+                          ? () => TxEditSheet.show(context)
+                          : null,
                     ),
                   )
                 : _TxGroupList(
@@ -270,16 +272,12 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
         .toList();
     if (offered.isEmpty) return;
 
-    final chosen = await showModalBottomSheet<String>(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (sheetContext) => _CategorySheet(
-        title: s.txPickCategory,
-        categories: offered,
-        locale: locale,
-        selectedId: txn.categoryId,
-      ),
+    final chosen = await showCategorySheet(
+      context,
+      title: s.txPickCategory,
+      categories: offered,
+      locale: locale,
+      selectedId: txn.categoryId,
     );
 
     if (chosen == null || chosen == txn.categoryId) return;
@@ -639,61 +637,6 @@ class _StaggerIn extends StatelessWidget {
         ),
       ),
       child: child,
-    );
-  }
-}
-
-/// The re-categorise sheet. Returns the chosen category id, or null.
-class _CategorySheet extends StatelessWidget {
-  const _CategorySheet({
-    required this.title,
-    required this.categories,
-    required this.locale,
-    required this.selectedId,
-  });
-
-  final String title;
-  final List<CategoryView> categories;
-  final String locale;
-  final String? selectedId;
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          SsSpace.x4,
-          0,
-          SsSpace.x4,
-          SsSpace.x4,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: SsText.h2),
-            const SizedBox(height: SsSpace.x3),
-            Flexible(
-              child: SingleChildScrollView(
-                child: Wrap(
-                  spacing: SsSpace.x2,
-                  runSpacing: SsSpace.x2,
-                  children: [
-                    for (final cat in categories)
-                      CategoryChip(
-                        label: cat.label(locale),
-                        icon: cat.icon,
-                        color: cat.color,
-                        selected: cat.id == selectedId,
-                        onTap: () => Navigator.of(context).pop(cat.id),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

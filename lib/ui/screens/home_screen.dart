@@ -25,6 +25,7 @@ import '../components/money.dart';
 import '../components/surfaces.dart';
 import '../format.dart';
 import '../tokens.dart';
+import 'tx_edit_sheet.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -184,9 +185,7 @@ class HomeScreen extends ConsumerWidget {
                 child: QuickAction(
                   icon: Icons.add_rounded,
                   label: s.addTx,
-                  onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(s['addEditUnavailable'])),
-                  ),
+                  onTap: () => TxEditSheet.show(context),
                 ),
               ),
               Expanded(
