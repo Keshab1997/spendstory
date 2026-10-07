@@ -126,12 +126,31 @@ Check per change: `python3 tool/preflight.py` · Dart edit hole: `flutter test t
 ## 🔜 Batch 5 — Core app (S-09 … S-13)
 
 - [x] **T-401** S-09 Home — hero money card, count-up, banner ad slot, quick actions
-- [ ] **T-402** S-10 Transactions list — grouped, swipe actions, filter chips
+- [x] **T-402** S-10 Transactions list — grouped, month strip, summary chips, filter chips, swipe → delete (undo) / re-categorise
 - [ ] **T-403** S-11 Transaction detail — incl. **raw-SMS viewer** (trust feature)
 - [ ] **T-404** S-12 Add/Edit sheet — custom keypad, 3-tap save
 - [ ] **T-405** S-13 Categories manager + editor
 - [ ] **T-406** S-18 Search & filter
 - [ ] **T-407** Widget tests: add-tx flow, filter results, detail renders source
+
+**T-402 notes:**
+- The month strip is the list's scope, not decoration: rows are filtered to the
+  selected month and the forward arrow is disabled in the current one, because a
+  future month is always empty and an empty screen the user cannot explain is
+  worse than a dead arrow.
+- The two summary chips describe the **month**, not the active filter — hiding
+  income should not make the month's income vanish from the header.
+- Swipe covers the two corrections an auto-captured ledger actually needs: left
+  deletes (soft delete + a 6s Undo, so the id, the raw SMS and the capture
+  history survive), right opens a category sheet offering only the categories
+  matching the row's direction. Amount and note stay a detail-screen job (T-403).
+- `TxActions` (`lib/app/providers.dart`) is the one write seam: `TxRepo` when a
+  database exists, in-session overlays when it does not — so the web preview
+  responds to a delete instead of silently ignoring it.
+- `_justDeleted` in the screen exists because `Dismissible` asserts the row
+  leaves the tree in the same frame, while both backends are asynchronous.
+- `test/ui/tx_list_test.dart` — 13 tests, including no-overflow across 3
+  languages × 2 text scales at 360×640.
 
 ---
 
