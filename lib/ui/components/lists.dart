@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../../domain/models.dart';
 import '../../domain/view_models.dart';
 import '../format.dart';
+import '../strings.dart';
 import '../tokens.dart';
 import 'money.dart';
 
@@ -122,6 +123,7 @@ class TxRow extends StatelessWidget {
   const TxRow({
     super.key,
     required this.txn,
+    required this.locale,
     this.category,
     this.onTap,
     this.showDate = true,
@@ -129,6 +131,7 @@ class TxRow extends StatelessWidget {
   });
 
   final TxnView txn;
+  final String locale;
   final CategoryView? category;
   final VoidCallback? onTap;
   final bool showDate;
@@ -141,11 +144,11 @@ class TxRow extends StatelessWidget {
 
     final title = txn.merchant?.trim().isNotEmpty == true
         ? txn.merchant!.trim()
-        : (category?.label() ?? 'অজানা');
+        : (category?.label(locale) ?? SsStrings(locale)['unknownCategory']);
 
     final meta = <String>[
-      if (category != null) category!.label(),
-      if (showDate) shortDate(txn.occurredAtMs),
+      if (category != null) category!.label(locale),
+      if (showDate) shortDate(txn.occurredAtMs, locale: locale),
     ].join(' · ');
 
     return InkWell(
@@ -267,11 +270,15 @@ class SsBadge extends StatelessWidget {
             Icon(icon, size: 12, color: base),
             const SizedBox(width: 4),
           ],
-          Text(
-            label,
-            style: SsText.micro.copyWith(
-              color: base,
-              fontWeight: FontWeight.w700,
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: SsText.micro.copyWith(
+                color: base,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],

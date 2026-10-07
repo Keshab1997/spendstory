@@ -14,6 +14,7 @@ import '../components/ad_slot.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/surfaces.dart';
+import '../format.dart';
 import '../tokens.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -61,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          'সক্রিয় · বিজ্ঞাপন নেই',
+                          s['activeNoAds'],
                           style: SsText.caption.copyWith(
                             color: const Color(0xFF2A1B00)
                                 .withValues(alpha: 0.72),
@@ -167,7 +168,7 @@ class SettingsScreen extends ConsumerWidget {
                   icon: Icons.savings_outlined,
                   tint: c.gold500,
                   title: s.budget,
-                  subtitle: 'ক্যাটাগরি ধরে মাসিক লিমিট',
+                  subtitle: s['budgetSettingBody'],
                   onTap: () => context.push('/budgets'),
                 ),
                 Divider(color: c.divider, height: 1),
@@ -175,14 +176,14 @@ class SettingsScreen extends ConsumerWidget {
                   icon: Icons.category_outlined,
                   tint: c.teal500,
                   title: s.categories,
-                  subtitle: 'নিজের ক্যাটাগরি বানান',
+                  subtitle: s['categoriesSettingBody'],
                   onTap: () => context.push('/categories'),
                 ),
                 Divider(color: c.divider, height: 1),
                 SettingTile(
                   icon: Icons.account_balance_outlined,
                   title: s.accounts,
-                  subtitle: 'ব্যাঙ্ক · ক্যাশ · ওয়ালেট',
+                  subtitle: s['accountsSettingBody'],
                   onTap: () => context.push('/accounts'),
                 ),
                 Divider(color: c.divider, height: 1),
@@ -191,7 +192,7 @@ class SettingsScreen extends ConsumerWidget {
                   tint: c.violet600,
                   title: s['privacy'],
                   subtitle: s['privacyBody'],
-                  onTap: () => _showPrivacy(context),
+                  onTap: () => _showPrivacy(context, ref),
                 ),
               ],
             ),
@@ -205,8 +206,8 @@ class SettingsScreen extends ConsumerWidget {
             ),
             child: SettingTile(
               icon: Icons.delete_outline_rounded,
-              title: 'সব ডেটা মুছুন',
-              subtitle: 'ডাবল-কনফার্মের পর সম্পূর্ণ মুছে যাবে',
+              title: s['deleteAllData'],
+              subtitle: s['deleteAllDataSubtitle'],
               danger: true,
               onTap: () => _confirmErase(context, ref),
             ),
@@ -219,7 +220,10 @@ class SettingsScreen extends ConsumerWidget {
             child: Column(
               children: [
                 Text(
-                  'SpendStory · ${s['version']} 1.0.0 (1)',
+                  localizeDigits(
+                    '${s.appName} · ${s['version']} 1.0.0 (1)',
+                    locale,
+                  ),
                   style: SsText.micro.copyWith(color: c.textTertiary),
                 ),
                 const SizedBox(height: SsSpace.x1),
@@ -236,8 +240,9 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _showPrivacy(BuildContext context) {
+  void _showPrivacy(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
+    final s = ref.read(stringsProvider);
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
@@ -252,17 +257,15 @@ class SettingsScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('প্রাইভেসি', style: SsText.h2),
+            Text(s.privacy, style: SsText.h2),
             const SizedBox(height: SsSpace.x3),
             Text(
-              'SpendStory শুধু ব্যাঙ্কের লেনদেন SMS পড়ে — OTP কখনো পড়ে না। '
-              'কোনো ডেটা সার্ভারে যায় না, কোনো অ্যাকাউন্ট লাগে না। '
-              'অ্যাপটা আনইনস্টল করলে সব ডেটা ফোন থেকেই চলে যায়।',
+              s['privacyDetails'],
               style: SsText.body.copyWith(color: c.textSecondary),
             ),
             const SizedBox(height: SsSpace.x4),
             SsBadge(
-              label: '100% অন-ডিভাইস',
+              label: s['privacyOnDevice'],
               color: c.teal500,
               icon: Icons.shield_outlined,
             ),
@@ -274,21 +277,20 @@ class SettingsScreen extends ConsumerWidget {
 
   Future<void> _confirmErase(BuildContext context, WidgetRef ref) async {
     final db = ref.read(appDbProvider);
+    final s = ref.read(stringsProvider);
     final first = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('সব ডেটা মুছবেন?'),
-        content: const Text(
-          'সব লেনদেন, বাজেট আর ক্যাটাগরি মুছে যাবে। এটি ফেরানো যাবে না।',
-        ),
+        title: Text(s['eraseTitle']),
+        content: Text(s['eraseBody']),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('থাক'),
+            child: Text(s['keep']),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('মুছুন'),
+            child: Text(s['erase']),
           ),
         ],
       ),
@@ -300,16 +302,16 @@ class SettingsScreen extends ConsumerWidget {
     final second = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('নিশ্চিত?'),
-        content: const Text('শেষ সুযোগ — তারপরই সব মুছে যাবে।'),
+        title: Text(s['confirm']),
+        content: Text(s['lastChance']),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('না'),
+            child: Text(s['no']),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('হ্যাঁ, মুছে ফেলুন'),
+            child: Text(s['yesErase']),
           ),
         ],
       ),
@@ -319,13 +321,8 @@ class SettingsScreen extends ConsumerWidget {
 
     if (db == null) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'ডেমো মোডে ডেটা মুছে ফেলা নিষ্ক্রিয় — ফোনের বিল্ডে কাজ করে।',
-            ),
-          ),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(s['demoEraseUnavailable'])));
       }
       return;
     }

@@ -138,6 +138,7 @@ class _TxListScreenState extends ConsumerState<TxListScreen> {
                                     Divider(color: c.divider, height: 1),
                                   TxRow(
                                     txn: group.txns[i],
+                                    locale: locale,
                                     category:
                                         categoryById[group.txns[i].categoryId],
                                     showDate: false,

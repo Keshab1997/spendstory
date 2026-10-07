@@ -43,9 +43,10 @@ void main() {
         addTearDown(tester.view.reset);
 
         final errors = <String>[];
+        var currentRoute = 'initial screen';
         final previous = FlutterError.onError;
         FlutterError.onError = (details) {
-          errors.add(details.exceptionAsString());
+          errors.add('$currentRoute: ${details.exceptionAsString()}');
         };
 
         await tester.pumpWidget(
@@ -72,6 +73,7 @@ void main() {
         final router = container.read(routerProvider);
 
         for (final route in _allRoutes) {
+          currentRoute = route;
           router.go(route);
           await tester.pumpAndSettle();
           // Give any lazy image or animation a chance to complain too.
@@ -80,13 +82,7 @@ void main() {
 
         FlutterError.onError = previous;
 
-        expect(
-          errors,
-          isEmpty,
-          reason: errors
-              .map((e) => '• ${e.split('\n').take(4).join(' ')}')
-              .join('\n'),
-        );
+        expect(errors, isEmpty, reason: errors.join('\n---\n'));
       });
     }
   }

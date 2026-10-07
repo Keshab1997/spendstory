@@ -99,6 +99,7 @@ class InsightsScreen extends ConsumerWidget {
                     _LegendRow(
                       label: categoryById[entry.key]?.label(locale) ?? '—',
                       icon: categoryById[entry.key]?.icon ?? '💳',
+                      locale: locale,
                       colour: categoryById[entry.key]?.color ?? c.violet600,
                       amountPaise: entry.value,
                       share: summary.expensePaise == 0
@@ -132,7 +133,7 @@ class InsightsScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'এই মাস শেষে আনুমানিক খরচ',
+                            s['forecast'],
                             style: SsText.caption.copyWith(
                               color: c.textSecondary,
                             ),
@@ -163,6 +164,7 @@ class _LegendRow extends StatelessWidget {
     required this.colour,
     required this.amountPaise,
     required this.share,
+    required this.locale,
   });
 
   final String label;
@@ -170,6 +172,7 @@ class _LegendRow extends StatelessWidget {
   final Color colour;
   final int amountPaise;
   final double share;
+  final String locale;
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +220,7 @@ class _LegendRow extends StatelessWidget {
           children: [
             MoneyText(amountPaise, style: SsText.bodyStrong),
             Text(
-              '${(share * 100).toStringAsFixed(0)}%',
+              localizeDigits('${(share * 100).toStringAsFixed(0)}%', locale),
               style: SsText.micro.copyWith(color: c.textTertiary),
             ),
           ],

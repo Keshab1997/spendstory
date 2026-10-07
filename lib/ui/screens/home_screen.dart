@@ -117,7 +117,11 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     if (previous.expensePaise > 0) ...[
                       const SizedBox(width: SsSpace.x2),
-                      MoneyDelta(deltaPercent: delta, onDark: true),
+                      MoneyDelta(
+                        deltaPercent: delta,
+                        onDark: true,
+                        locale: locale,
+                      ),
                       const SizedBox(width: SsSpace.x1),
                       Flexible(
                         child: Text(
@@ -181,9 +185,7 @@ class HomeScreen extends ConsumerWidget {
                   icon: Icons.add_rounded,
                   label: s.addTx,
                   onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Add / Edit sheet — ব্যাচ ৫ (T-404)'),
-                    ),
+                    SnackBar(content: Text(s['addEditUnavailable'])),
                   ),
                 ),
               ),
@@ -238,7 +240,7 @@ class HomeScreen extends ConsumerWidget {
                         const SizedBox(width: SsSpace.x1 + 2),
                         Expanded(
                           child: Text(
-                            'বাজেট ছাড়িয়ে গেছে — খরচ কমানোর সময়।',
+                            s['budgetExceeded'],
                             style: SsText.caption.copyWith(color: c.danger),
                           ),
                         ),
@@ -276,6 +278,7 @@ class HomeScreen extends ConsumerWidget {
                     TxRow(
                       txn: recent[i],
                       category: categoryById[recent[i].categoryId],
+                      locale: locale,
                       dense: true,
                       onTap: () =>
                           context.push('/transactions/${recent[i].id}'),

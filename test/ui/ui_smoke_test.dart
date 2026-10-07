@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spendstory/app/app.dart';
 import 'package:spendstory/app/providers.dart';
+import 'package:spendstory/app/router.dart';
 import 'package:spendstory/data/demo_data.dart';
 import 'package:spendstory/domain/models.dart';
 import 'package:spendstory/ui/components/lists.dart';
@@ -18,17 +19,19 @@ import 'package:spendstory/ui/strings.dart';
 import 'package:spendstory/ui/theme.dart';
 import 'package:spendstory/ui/tokens.dart';
 
-List<Override> _overrides() => <Override>[
+List<Override> _overrides({String locale = 'bn'}) => <Override>[
   appDbProvider.overrideWithValue(null),
   bootProvider.overrideWith(
-    (ref) async =>
-        const BootState(onboarded: true, demoMode: true, locale: 'bn'),
+    (ref) async => BootState(onboarded: true, demoMode: true, locale: locale),
   ),
 ];
 
-Future<void> _pumpApp(WidgetTester tester) async {
+Future<void> _pumpApp(WidgetTester tester, {String locale = 'bn'}) async {
   await tester.pumpWidget(
-    ProviderScope(overrides: _overrides(), child: const SpendStoryApp()),
+    ProviderScope(
+      overrides: _overrides(locale: locale),
+      child: const SpendStoryApp(),
+    ),
   );
   await tester.pumpAndSettle();
 }
@@ -207,6 +210,57 @@ void main() {
       expect(find.byIcon(Icons.add_rounded), findsOneWidget);
       expect(find.byIcon(Icons.savings_outlined), findsWidgets);
       expect(find.byIcon(Icons.category_outlined), findsWidgets);
+    });
+  });
+
+  group('locale switching', () {
+    testWidgets('selection localizes data labels and every app surface', (
+      tester,
+    ) async {
+      await _pumpApp(tester, locale: 'en');
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(MaterialApp)),
+      );
+      final router = container.read(routerProvider);
+
+      expect(container.read(localeProvider), 'en');
+      expect(find.text('Spent this month'), findsOneWidget);
+      expect(find.text('Advertisement — banner 320×50'), findsOneWidget);
+      expect(find.textContaining('Groceries'), findsWidgets);
+      expect(find.text('এই মাসের খরচ'), findsNothing);
+
+      container.read(localeProvider.notifier).state = 'hi';
+      await tester.pumpAndSettle();
+      expect(find.text('इस महीने का खर्च'), findsOneWidget);
+      expect(find.text('विज्ञापन — बैनर ३२०×५०'), findsOneWidget);
+
+      container.read(localeProvider.notifier).state = 'en';
+      await tester.pumpAndSettle();
+      router.go('/transactions');
+      await tester.pumpAndSettle();
+      expect(find.text('Transactions'), findsWidgets);
+      expect(find.textContaining('Groceries'), findsWidgets);
+      expect(find.text('মুদি ও বাজার'), findsNothing);
+
+      router.go('/insights');
+      await tester.pumpAndSettle();
+      expect(find.text('Last 6 months'), findsOneWidget);
+
+      router.go('/settings');
+      await tester.pumpAndSettle();
+      expect(find.text('Set monthly limits by category'), findsOneWidget);
+      expect(find.text('Delete all data'), findsOneWidget);
+
+      router.go('/pro');
+      await tester.pumpAndSettle();
+      expect(find.text('Monthly'), findsOneWidget);
+      expect(find.text('₹699'), findsOneWidget);
+      expect(find.text('Start your 7-day free trial'), findsOneWidget);
+
+      router.go('/budgets');
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Budget list and details'), findsOneWidget);
+      expect(find.textContaining('Category limits'), findsOneWidget);
     });
   });
 }

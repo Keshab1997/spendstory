@@ -1,8 +1,8 @@
 /// S-22 Pro paywall — pushed as a fullscreen dialog (`docs/04` §3).
 ///
 /// Prices come straight from `docs/08-MONETIZATION-ADMOB.md`: ₹99/month,
-/// ₹699/year, ₹1,499 lifetime, with a 7-day trial. The **yearly plan is the
-/// default selection**, because that is the one that is actually good value and
+/// ₹699/year, ₹1,499 lifetime, with a 7-day trial. The yearly plan is the
+/// default selection, because that is the one that is actually good value and
 /// pretending otherwise would be a dark pattern.
 ///
 /// The purchase itself is Batch 7 (T-601). Until the billing client exists, the
@@ -16,6 +16,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
 import '../components/controls.dart';
+import '../components/money.dart' show formatInr;
 import '../components/surfaces.dart';
 import '../tokens.dart';
 
@@ -31,49 +32,53 @@ class ProScreen extends ConsumerStatefulWidget {
 class _ProScreenState extends ConsumerState<ProScreen> {
   _Plan _plan = _Plan.yearly;
 
-  static const Map<_Plan, ({String title, String price, String note})> _plans =
-      <_Plan, ({String title, String price, String note})>{
-        _Plan.monthly: (title: 'মাসিক', price: '₹৯৯', note: 'প্রতি মাসে'),
-        _Plan.yearly: (
-          title: 'বার্ষিক',
-          price: '₹৬৯৯',
-          note: 'প্রতি বছরে · ৪১% সঞ্চয়',
-        ),
-        _Plan.lifetime: (
-          title: 'লাইফটাইম',
-          price: '₹১,৪৯৯',
-          note: 'একবার, চিরদিনের জন্য',
-        ),
-      };
-
-  static const List<({IconData icon, String title, String body})> _features =
-      <({IconData icon, String title, String body})>[
-        (
-          icon: Icons.block_rounded,
-          title: 'বিজ্ঞাপন নেই',
-          body: 'হোম, বাজেট আর ইনসাইট থেকে সব বিজ্ঞাপন সরে যাবে।',
-        ),
-        (
-          icon: Icons.savings_outlined,
-          title: 'আনলিমিটেড বাজেট',
-          body: 'যত খুশি ক্যাটাগরি-বাজেট, প্রতিটার অ্যালার্ট সহ।',
-        ),
-        (
-          icon: Icons.auto_graph_rounded,
-          title: 'খরচের পূর্বাভাস',
-          body: 'মাস শেষে কত খরচ হবে, আগেই জেনে নিন।',
-        ),
-        (
-          icon: Icons.picture_as_pdf_outlined,
-          title: 'এক্সপোর্ট ও রিপোর্ট',
-          body: 'CSV আর PDF — রিওয়ার্ডেড অ্যাডে আনলক, Pro-তে সরাসরি।',
-        ),
-      ];
-
   @override
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
+    final s = ref.watch(stringsProvider);
+    final locale = ref.watch(localeProvider);
     final isPro = ref.watch(proStatusProvider);
+
+    final plans = <_Plan, ({String title, int pricePaise, String note})>{
+      _Plan.monthly: (
+        title: s['planMonthly'],
+        pricePaise: 9900,
+        note: s['planMonthlyNote'],
+      ),
+      _Plan.yearly: (
+        title: s['planYearly'],
+        pricePaise: 69900,
+        note: s['planYearlyNote'],
+      ),
+      _Plan.lifetime: (
+        title: s['planLifetime'],
+        pricePaise: 149900,
+        note: s['planLifetimeNote'],
+      ),
+    };
+
+    final features = <({IconData icon, String title, String body})>[
+      (
+        icon: Icons.block_rounded,
+        title: s['featureNoAdsTitle'],
+        body: s['featureNoAdsBody'],
+      ),
+      (
+        icon: Icons.savings_outlined,
+        title: s['featureUnlimitedBudgetsTitle'],
+        body: s['featureUnlimitedBudgetsBody'],
+      ),
+      (
+        icon: Icons.auto_graph_rounded,
+        title: s['featureForecastTitle'],
+        body: s['featureForecastBody'],
+      ),
+      (
+        icon: Icons.picture_as_pdf_outlined,
+        title: s['featureExportTitle'],
+        body: s['featureExportBody'],
+      ),
+    ];
 
     return Scaffold(
       backgroundColor: c.bg,
@@ -116,7 +121,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                           const SizedBox(width: SsSpace.x3),
                           Flexible(
                             child: Text(
-                              'SpendStory Pro',
+                              s.proTitle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: SsText.h2.copyWith(
@@ -128,7 +133,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                       ),
                       const SizedBox(height: SsSpace.x3),
                       Text(
-                        '৭ দিন ফ্রি, তারপর যেকোনো সময় বাতিল।',
+                        s['trialDisclaimer'],
                         style: SsText.body.copyWith(
                           color: const Color(0xFF2A1B00).withValues(alpha: 0.8),
                         ),
@@ -138,7 +143,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                 ),
 
                 const SizedBox(height: SsSpace.x5),
-                for (final f in _features) ...[
+                for (final f in features) ...[
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -175,11 +180,15 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                 const SizedBox(height: SsSpace.x2),
                 for (final plan in _Plan.values) ...[
                   _PlanTile(
-                    title: _plans[plan]!.title,
-                    price: _plans[plan]!.price,
-                    note: _plans[plan]!.note,
+                    title: plans[plan]!.title,
+                    price: formatInr(
+                      plans[plan]!.pricePaise,
+                      showSymbol: true,
+                      localize: locale,
+                    ),
+                    note: plans[plan]!.note,
                     selected: _plan == plan,
-                    badge: plan == _Plan.yearly ? 'সবচেয়ে জনপ্রিয়' : null,
+                    badge: plan == _Plan.yearly ? s['popular'] : null,
                     onTap: () => setState(() => _plan = plan),
                   ),
                   const SizedBox(height: SsSpace.x3),
@@ -187,9 +196,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
 
                 const SizedBox(height: SsSpace.x3),
                 SsActionButton(
-                  label: isPro
-                      ? 'Pro চালু আছে'
-                      : '৭ দিন ফ্রি ট্রায়াল শুরু করুন',
+                  label: isPro ? s['proActive'] : s['startTrial'],
                   tone: SsButtonTone.gold,
                   onPressed: isPro
                       ? null
@@ -197,19 +204,14 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                           ref.read(proStatusProvider.notifier).state = true;
                           context.pop();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'ডেমো: Pro চালু হয়েছে — বিজ্ঞাপনগুলো সরে গেল। '
-                                'আসল বিলিং ব্যাচ ৭ (T-601)।',
-                              ),
-                            ),
+                            SnackBar(content: Text(s['proActivatedDemo'])),
                           );
                         },
                 ),
                 const SizedBox(height: SsSpace.x3),
                 Center(
                   child: Text(
-                    'পেমেন্ট এখনো যুক্ত হয়নি — বিলিং ব্যাচ ৭ (T-601)।',
+                    s['billingNotAvailable'],
                     style: SsText.micro.copyWith(color: c.textTertiary),
                     textAlign: TextAlign.center,
                   ),

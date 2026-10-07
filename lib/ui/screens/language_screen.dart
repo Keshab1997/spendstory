@@ -1,6 +1,6 @@
 /// S-05 Language picker.
 ///
-/// Three options, each written **in its own script** — a language chooser that
+/// Three options, each written in its own script — a language chooser that
 /// asks a Bengali speaker to read the word "Bengali" is a small insult.
 ///
 /// The switch is instant: `localeProvider` drives every string, so tapping a
@@ -25,38 +25,21 @@ class LanguageScreen extends ConsumerStatefulWidget {
 }
 
 class _LanguageScreenState extends ConsumerState<LanguageScreen> {
-  String _selected = 'bn';
+  String? _selected;
 
-  static const List<
-    ({String code, String native, String english, String sample})
-  >
-  _options = <({String code, String native, String english, String sample})>[
-    (
-      code: 'bn',
-      native: 'বাংলা',
-      english: 'Bengali',
-      sample: 'এই মাসে খরচ ₹১২,৪০০',
-    ),
-    (
-      code: 'hi',
-      native: 'हिन्दी',
-      english: 'Hindi',
-      sample: 'इस महीने खर्च ₹12,400',
-    ),
-    (
-      code: 'en',
-      native: 'English',
-      english: 'English',
-      sample: 'Spent this month ₹12,400',
-    ),
-  ];
+  static const List<({String code, String native, String sample})> _options =
+      <({String code, String native, String sample})>[
+        (code: 'bn', native: 'বাংলা', sample: 'এই মাসে খরচ ₹১২,৪০০'),
+        (code: 'hi', native: 'हिन्दी', sample: 'इस महीने खर्च ₹12,400'),
+        (code: 'en', native: 'English', sample: 'Spent this month ₹12,400'),
+      ];
 
-  Future<void> _continue() async {
-    ref.read(localeProvider.notifier).state = _selected;
+  Future<void> _continue(String selected) async {
+    ref.read(localeProvider.notifier).state = selected;
 
     final db = ref.read(appDbProvider);
     if (db != null) {
-      await db.setMeta('locale', _selected);
+      await db.setMeta('locale', selected);
       // Onboarding pages land in Batch 4 (T-302/303). Until then, choosing a
       // language is the whole first-run flow — and it is written to the database
       // exactly as it will be afterwards.
@@ -70,7 +53,8 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
-    final s = SsStrings(_selected);
+    final String selected = _selected ?? ref.watch(localeProvider);
+    final s = SsStrings(selected);
 
     return SsScaffold(
       scrollable: false,
@@ -81,22 +65,24 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
           Text(s['language'], style: SsText.h1),
           const SizedBox(height: SsSpace.x2),
           Text(
-            'তিনটি ভাষায় চলে — যেকোনো সময় বদলাতে পারবেন।',
+            s['languagePrompt'],
             style: SsText.body.copyWith(color: c.textSecondary),
           ),
           const SizedBox(height: SsSpace.x8),
           for (final option in _options) ...[
             _LanguageCard(
               native: option.native,
-              english: option.english,
               sample: option.sample,
-              selected: _selected == option.code,
+              selected: selected == option.code,
               onTap: () => setState(() => _selected = option.code),
             ),
             const SizedBox(height: SsSpace.x3),
           ],
           const Spacer(),
-          SsActionButton(label: 'শুরু করুন', onPressed: _continue),
+          SsActionButton(
+            label: s['start'],
+            onPressed: () => _continue(selected),
+          ),
           const SizedBox(height: SsSpace.x5),
         ],
       ),
@@ -107,14 +93,12 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
 class _LanguageCard extends StatelessWidget {
   const _LanguageCard({
     required this.native,
-    required this.english,
     required this.sample,
     required this.selected,
     required this.onTap,
   });
 
   final String native;
-  final String english;
   final String sample;
   final bool selected;
   final VoidCallback onTap;

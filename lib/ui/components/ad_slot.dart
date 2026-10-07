@@ -17,7 +17,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/providers.dart';
+import '../format.dart';
+import '../strings.dart';
 import '../tokens.dart';
 
 enum AdPlacement {
@@ -34,7 +38,7 @@ enum AdPlacement {
   detailNative,
 }
 
-class AdSlot extends StatelessWidget {
+class AdSlot extends ConsumerWidget {
   const AdSlot({
     super.key,
     required this.placement,
@@ -56,8 +60,10 @@ class AdSlot extends StatelessWidget {
   };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
+    final strings = ref.watch(stringsProvider);
+    final locale = ref.watch(localeProvider);
 
     if (!showPlaceholder) return SizedBox(height: heightFor(placement));
 
@@ -77,7 +83,7 @@ class AdSlot extends StatelessWidget {
           const SizedBox(width: SsSpace.x2),
           Flexible(
             child: Text(
-              'বিজ্ঞাপন — ${_label(placement)}',
+              '${strings['adLabel']} — ${_label(placement, strings, locale)}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: SsText.micro.copyWith(color: c.textTertiary),
@@ -88,12 +94,16 @@ class AdSlot extends StatelessWidget {
     );
   }
 
-  static String _label(AdPlacement p) => switch (p) {
-    AdPlacement.homeBanner => 'banner 320×50',
-    AdPlacement.sectionBanner => 'banner',
-    AdPlacement.budgetNative => 'native',
-    AdPlacement.detailNative => 'native',
-  };
+  static String _label(AdPlacement p, SsStrings strings, String locale) =>
+      switch (p) {
+        AdPlacement.homeBanner => localizeDigits(
+          '${strings['adBanner']} 320×50',
+          locale,
+        ),
+        AdPlacement.sectionBanner => strings['adBanner'],
+        AdPlacement.budgetNative => strings['adNative'],
+        AdPlacement.detailNative => strings['adNative'],
+      };
 }
 
 /// Whether ads should be shown at all. Pro is ad-free, and a user who has not

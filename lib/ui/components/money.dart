@@ -146,10 +146,12 @@ class MoneyDelta extends StatelessWidget {
     required this.deltaPercent,
     this.onDark = false,
     this.goodWhenDown = true,
+    required this.locale,
   });
 
   final double deltaPercent;
   final bool onDark;
+  final String locale;
 
   /// For an expense, spending *less* is the good outcome.
   final bool goodWhenDown;
@@ -172,7 +174,7 @@ class MoneyDelta extends StatelessWidget {
         ),
         const SizedBox(width: SsSpace.x1),
         Text(
-          '${deltaPercent.abs().toStringAsFixed(0)}%',
+          localizeDigits('${deltaPercent.abs().toStringAsFixed(0)}%', locale),
           style: SsText.caption.copyWith(
             color: colour,
             fontWeight: FontWeight.w700,
@@ -216,6 +218,7 @@ class BudgetBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
     final locale = ref.watch(localeProvider);
+    final strings = ref.watch(stringsProvider);
     final colour = _barColour(c);
     final remaining = limitPaise - spentPaise;
 
@@ -286,8 +289,8 @@ class BudgetBar extends ConsumerWidget {
               Flexible(
                 child: Text(
                   remaining >= 0
-                      ? 'বাকি ${formatInr(remaining, showSymbol: true, localize: locale)}'
-                      : '${formatInr(-remaining, showSymbol: true, localize: locale)} বেশি',
+                      ? '${strings['budgetLeft']} ${formatInr(remaining, showSymbol: true, localize: locale)}'
+                      : '${formatInr(-remaining, showSymbol: true, localize: locale)} ${strings['over']}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.right,

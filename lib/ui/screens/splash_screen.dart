@@ -9,6 +9,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/providers.dart';
 import '../components/surfaces.dart';
 import '../tokens.dart';
 
@@ -17,6 +18,8 @@ class SplashScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+
     return Scaffold(
       body: DecoratedBox(
         decoration: BoxDecoration(gradient: SsColors.light.moneyGradient),
@@ -35,12 +38,12 @@ class SplashScreen extends ConsumerWidget {
               ),
               const Spacer(flex: 2),
               Text(
-                'SpendStory',
+                s.appName,
                 style: SsText.h1.copyWith(color: Colors.white, fontSize: 34),
               ),
               const SizedBox(height: SsSpace.x2),
               Text(
-                'আপনার টাকার গল্প, নিজের ফোনেই',
+                s['appTagline'],
                 style: SsText.body.copyWith(
                   color: Colors.white.withValues(alpha: 0.85),
                 ),

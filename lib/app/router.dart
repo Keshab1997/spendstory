@@ -95,12 +95,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                 routes: <RouteBase>[
                   GoRoute(
                     path: ':id',
-                    builder: (context, state) => ComingSoonScreen(
-                      title: 'লেনদেনের বিস্তারিত',
-                      subtitle: 'S-11 · ট্রানজ্যাকশন ডিটেইল',
-                      body:
-                          'SMS-এর মূল টেক্সট, ক্যাটাগরি বদল, নোট আর ডিলিট — '
-                          'সব এখানে। ব্যাচ ৫ (T-403) এ বানছে।',
+                    builder: (context, state) => const ComingSoonScreen(
+                      titleKey: 'transactionDetailTitle',
+                      subtitleKey: 'transactionDetailSubtitle',
+                      bodyKey: 'transactionDetailBody',
                     ),
                   ),
                 ],
@@ -130,33 +128,33 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/budgets',
         builder: (context, state) => const ComingSoonScreen(
-          title: 'বাজেট',
-          subtitle: 'S-14 / S-15 · বাজেট লিস্ট ও ডিটেইল',
-          body: 'ক্যাটাগরি ধরে লিমিট, দৈনিক ভাতা আর ৮০% সতর্কতা — ব্যাচ ৬ (T-501)।',
+          titleKey: 'budget',
+          subtitleKey: 'budgetPageSubtitle',
+          bodyKey: 'budgetPageBody',
         ),
       ),
       GoRoute(
         path: '/accounts',
         builder: (context, state) => const ComingSoonScreen(
-          title: 'অ্যাকাউন্ট',
-          subtitle: 'S-16 · অ্যাকাউন্ট লিস্ট',
-          body: 'ব্যাঙ্ক, ক্যাশ, ওয়ালেট — প্রতিটার ব্যালান্স ব্যাচ ৬-এ।',
+          titleKey: 'accounts',
+          subtitleKey: 'accountPageSubtitle',
+          bodyKey: 'accountPageBody',
         ),
       ),
       GoRoute(
         path: '/categories',
         builder: (context, state) => const ComingSoonScreen(
-          title: 'ক্যাটাগরি',
-          subtitle: 'S-13 · ক্যাটাগরি ম্যানেজার',
-          body: 'নিজের ক্যাটাগরি, আইকন আর রঙ বাছা — ব্যাচ ৫ (T-405)।',
+          titleKey: 'categories',
+          subtitleKey: 'categoryPageSubtitle',
+          bodyKey: 'categoryPageBody',
         ),
       ),
       GoRoute(
         path: '/search',
         builder: (context, state) => const ComingSoonScreen(
-          title: 'খুঁজুন',
-          subtitle: 'S-18 · সার্চ ও ফিল্টার',
-          body: 'মার্চেন্ট, টাকার অঙ্ক বা তারিখ দিয়ে খোঁজা — ব্যাচ ৫ (T-406)।',
+          titleKey: 'search',
+          subtitleKey: 'searchPageSubtitle',
+          bodyKey: 'searchPageBody',
         ),
       ),
       GoRoute(
@@ -168,16 +166,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/not-found',
         builder: (context, state) => const ComingSoonScreen(
-          title: 'পাতা খুঁজে পাওয়া গেল না',
-          subtitle: '404',
-          body: 'সেটিংস থেকে হোমে ফিরে যান।',
+          titleKey: 'notFoundTitle',
+          subtitleKey: 'notFoundSubtitle',
+          bodyKey: 'notFoundBody',
         ),
       ),
     ],
     errorBuilder: (context, state) => const ComingSoonScreen(
-      title: 'পাতা খুঁজে পাওয়া গেল না',
-      subtitle: '404',
-      body: 'সেটিংস থেকে হোমে ফিরে যান।',
+      titleKey: 'notFoundTitle',
+      subtitleKey: 'notFoundSubtitle',
+      bodyKey: 'notFoundBody',
     ),
   );
 });

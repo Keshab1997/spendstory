@@ -10,6 +10,7 @@ import 'dart:ui' show Color;
 
 import '../capture/rule_engine.dart';
 import '../data/db.dart';
+import '../ui/strings.dart';
 import 'models.dart';
 
 /// One row of the ledger, as the UI needs it.
@@ -55,12 +56,13 @@ class TxnView {
 
   /// Where the row came from, in words the user understands. Shown on the detail
   /// screen — the trust-building "this is not a mystery number" line.
-  String get sourceLabel => switch (source) {
-    'auto_sms' => 'SMS থেকে স্বয়ংক্রিয়',
-    'auto_notif' => 'নোটিফিকেশন থেকে স্বয়ংক্রিয়',
-    'recurring' => 'নিয়মিত পেমেন্ট',
-    _ => 'নিজে যোগ করা',
-  };
+  String sourceLabel([String locale = 'bn']) =>
+      SsStrings(locale)[switch (source) {
+        'auto_sms' => 'sourceAutoSms',
+        'auto_notif' => 'sourceAutoNotification',
+        'recurring' => 'sourceRecurring',
+        _ => 'sourceManual',
+      }];
 }
 
 /// A category with its three localized names already resolved.

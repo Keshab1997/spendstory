@@ -18,6 +18,13 @@ class SpendStoryApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<BootState>>(bootProvider, (_, next) {
+      final boot = next.valueOrNull;
+      if (boot != null && ref.read(localeProvider) != boot.locale) {
+        ref.read(localeProvider.notifier).state = boot.locale;
+      }
+    });
+
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
 
