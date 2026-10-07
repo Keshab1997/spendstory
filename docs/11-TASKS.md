@@ -125,7 +125,7 @@ Check per change: `python3 tool/preflight.py` · Dart edit hole: `flutter test t
 
 ## 🔜 Batch 5 — Core app (S-09 … S-13)
 
-- [ ] **T-401** S-09 Home — hero money card, count-up, banner ad slot, quick actions
+- [x] **T-401** S-09 Home — hero money card, count-up, banner ad slot, quick actions
 - [ ] **T-402** S-10 Transactions list — grouped, swipe actions, filter chips
 - [ ] **T-403** S-11 Transaction detail — incl. **raw-SMS viewer** (trust feature)
 - [ ] **T-404** S-12 Add/Edit sheet — custom keypad, 3-tap save

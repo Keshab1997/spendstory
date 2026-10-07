@@ -171,6 +171,7 @@ void main() {
       expect(find.text('আয়'), findsWidgets);
       expect(find.text('মাসিক বাজেট'), findsOneWidget);
       expect(find.text('সাম্প্রতিক লেনদেন'), findsOneWidget);
+      expect(find.byType(CountUpMoney), findsOneWidget);
       expect(find.byType(MoneyText), findsWidgets);
     });
 

@@ -137,7 +137,7 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: SsSpace.x1),
-                MoneyText(
+                CountUpMoney(
                   summary.expensePaise,
                   color: Colors.white,
                   style: SsText.displayMoney,

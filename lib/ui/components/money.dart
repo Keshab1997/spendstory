@@ -139,6 +139,39 @@ class MoneyText extends ConsumerWidget {
   }
 }
 
+/// Counts the headline amount up on first paint and smoothly to each new value.
+///
+/// The tween keeps the last displayed value as its starting point when data
+/// changes, so a refresh never flashes back to zero. This is used on the Home
+/// hero; list rows stay static for scanability.
+class CountUpMoney extends StatelessWidget {
+  const CountUpMoney(
+    this.paise, {
+    super.key,
+    this.style,
+    this.color,
+    this.duration = const Duration(milliseconds: 600),
+  });
+
+  final int paise;
+  final TextStyle? style;
+  final Color? color;
+  final Duration duration;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<int>(
+      tween: IntTween(begin: 0, end: paise),
+      duration: MediaQuery.of(context).disableAnimations
+          ? Duration.zero
+          : duration,
+      curve: Curves.easeOutExpo,
+      builder: (context, value, _) =>
+          MoneyText(value, style: style, color: color),
+    );
+  }
+}
+
 /// "গত মাসের চেয়ে ১২% কম" — a delta with the arrow that matches its direction.
 class MoneyDelta extends StatelessWidget {
   const MoneyDelta({
