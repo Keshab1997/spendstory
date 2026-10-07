@@ -91,3 +91,22 @@ these show what shipped. When the two disagree, these win — and the difference
 usually a bug. The first capture of `final-insights-light` had a blank rectangle
 where the trend chart should be, which is how the JavaScript bit-shift bug in
 `MiniBars` was found.
+
+## `live/b4-*.jpg` — onboarding + permissions (Batch 4)
+
+Captured the same way as the `final-*.jpg` set above: a release web build served
+locally, Chromium at 412×915 @2×, light and dark. `onboarding-board.html` in
+`docs/` shows them as pairs.
+
+| file | screen |
+| --- | --- |
+| `b4-ob1-*` | S-02 · "every payment files itself" (page 1 of 3) |
+| `b4-ob2-*` | S-03 · "see where the money goes" |
+| `b4-ob3-*` | S-04 · "your data stays on your phone" |
+| `b4-perm-sms-*` | S-06 · reads / never-reads, then the button |
+| `b4-perm-notif-*` | S-07 · the six-app whitelist, honest state line |
+| `b4-manual-*` | S-08 · the no-permission path |
+
+The dark set is the same layout under the dark token set — captured through
+Chromium's `prefers-color-scheme: dark`, which is exactly how the app picks a
+theme when the user has not chosen one.

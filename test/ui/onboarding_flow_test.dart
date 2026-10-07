@@ -259,6 +259,21 @@ void main() {
       expect(find.text('আপনার ডেটা ফোনেই থাকে'), findsOneWidget);
       run.assertClean();
     });
+
+    testWidgets('a link moves an already-open flow to the page it names', (
+      tester,
+    ) async {
+      // The URL is the source of truth. A `PageView` keeps its own page across a
+      // rebuild, so this only works if the screen actively follows the route.
+      final run = await _firstRun(tester);
+      await run.goTo('/onboarding/1');
+      expect(find.text('প্রতিটা খরচ নিজে থেকে জমা হবে'), findsOneWidget);
+
+      await run.goTo('/onboarding/3');
+      expect(find.text('আপনার ডেটা ফোনেই থাকে'), findsOneWidget);
+      expect(find.text('প্রতিটা খরচ নিজে থেকে জমা হবে'), findsNothing);
+      run.assertClean();
+    });
   });
 
   group('the SMS screen answers honestly', () {

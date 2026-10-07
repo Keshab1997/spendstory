@@ -42,6 +42,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   @override
+  void didUpdateWidget(OnboardingScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The URL is the source of truth. A `PageView` keeps its own page across a
+    // rebuild, so without this a link to `/onboarding/3` opens page 2 for anyone
+    // who is already inside the flow — and `onPageChanged` would then write page
+    // 2 straight back into the URL, hiding the fact that the link was ignored.
+    final target = (widget.page - 1).clamp(0, OnboardingScreen.pageCount - 1);
+    final current =
+        _controller.hasClients && _controller.position.haveDimensions
+        ? _controller.page?.round()
+        : _controller.initialPage;
+    if (current != target) {
+      _controller.jumpToPage(target);
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
