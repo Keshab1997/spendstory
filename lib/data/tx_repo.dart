@@ -173,6 +173,47 @@ class TxRepo {
     db.transactions,
   )..where((t) => t.id.equals(id))).getSingleOrNull();
 
+  /// Inserts a transaction the user typed in themselves (S-12).
+  ///
+  /// Deliberately **not** routed through [insertParsed]: a manual entry has no
+  /// message to fingerprint, and running it through the dedupe path would let
+  /// two genuine ₹20 chai payments five minutes apart collapse into one. The
+  /// user is the authority on what they just typed.
+  Future<String> insertManual({
+    required int amountPaise,
+    required TxnDirection direction,
+    required int occurredAt,
+    String? merchant,
+    String? categoryId,
+    String? accountId,
+    PaymentMode mode = PaymentMode.cash,
+    String? note,
+  }) async {
+    final id = _uuid.v4();
+    final now = DateTime.now().millisecondsSinceEpoch;
+    await db
+        .into(db.transactions)
+        .insert(
+          TransactionsCompanion.insert(
+            id: id,
+            amountPaise: amountPaise,
+            direction: direction.wire,
+            merchant: Value(merchant),
+            categoryId: Value(categoryId),
+            accountId: Value(accountId),
+            mode: Value(mode.wire),
+            occurredAt: occurredAt,
+            createdAt: now,
+            updatedAt: now,
+            source: TxSource.manual.wire,
+            note: Value(note),
+            // Unique per row: a manual entry must never collide with another.
+            dedupeHash: 'manual:$id',
+          ),
+        );
+    return id;
+  }
+
   /// Soft delete — the undo snackbar's whole mechanism.
   Future<void> softDelete(String id) async {
     await (db.update(db.transactions)..where((t) => t.id.equals(id))).write(

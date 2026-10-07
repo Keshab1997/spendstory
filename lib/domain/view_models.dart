@@ -26,6 +26,7 @@ class TxnView {
     this.source = 'manual',
     this.note,
     this.rawText,
+    this.accountId,
   });
 
   final String id;
@@ -39,6 +40,10 @@ class TxnView {
   final String? note;
   final String? rawText;
 
+  /// Which account the money moved through, when known. Shown on the detail
+  /// screen; null for a cash entry the user typed without picking one.
+  final String? accountId;
+
   factory TxnView.fromRow(TxnRow row) => TxnView(
     id: row.id,
     amountPaise: row.amountPaise,
@@ -50,6 +55,7 @@ class TxnView {
     source: row.source,
     note: row.note,
     rawText: row.rawText,
+    accountId: row.accountId,
   );
 
   bool get isIncome => direction == TxnDirection.income;
@@ -69,6 +75,7 @@ class TxnView {
         source: source,
         note: note ?? this.note,
         rawText: rawText,
+        accountId: accountId,
       );
 
   /// Where the row came from, in words the user understands. Shown on the detail

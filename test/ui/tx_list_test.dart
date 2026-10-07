@@ -96,15 +96,14 @@ List<Override> _overrides({String locale = 'bn'}) => <Override>[
   selectedMonthProvider.overrideWith((ref) => startOfMonth(_ms(_now))),
   transactionsProvider.overrideWith((ref) async {
     final deleted = ref.watch(sessionDeletedIdsProvider);
-    final recategorised = ref.watch(sessionCategoryOverridesProvider);
-    return <TxnView>[
-      for (final t in _ledger)
-        if (!deleted.contains(t.id))
-          if (recategorised.containsKey(t.id))
-            t.copyWith(categoryId: recategorised[t.id])
-          else
-            t,
+    final patches = ref.watch(sessionPatchesProvider);
+    final added = ref.watch(sessionAddedProvider);
+    final rows = <TxnView>[
+      for (final t in <TxnView>[...added, ..._ledger])
+        if (!deleted.contains(t.id)) patches[t.id] ?? t,
     ];
+    rows.sort((a, b) => b.occurredAtMs.compareTo(a.occurredAtMs));
+    return rows;
   }),
   categoriesProvider.overrideWith((ref) async => _categories),
 ];
@@ -254,7 +253,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        container.read(sessionCategoryOverridesProvider)['bigbasket'],
+        container.read(sessionPatchesProvider)['bigbasket']?.categoryId,
         'cat-food',
       );
       // The row survived the swipe — a re-categorise is not a delete.

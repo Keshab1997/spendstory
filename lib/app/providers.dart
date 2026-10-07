@@ -7,6 +7,7 @@
 /// device build and the preview can never drift apart visually.
 library;
 
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,8 +18,9 @@ import '../data/connection_io.dart'
 import '../data/db.dart';
 import '../data/demo_data.dart';
 import '../data/tx_repo.dart';
-import '../platform/permissions.dart';
+import '../domain/models.dart';
 import '../domain/view_models.dart';
+import '../platform/permissions.dart';
 import '../ui/format.dart';
 import '../ui/strings.dart';
 
@@ -104,42 +106,63 @@ final proStatusProvider = StateProvider<bool>((ref) => false);
 // data
 // -----------------------------------------------------------------------------
 
-/// Rows deleted in this session while there is **no database** — the web
-/// preview and widget tests. On a device a delete is a real soft delete in
-/// SQLite; here it is an in-memory overlay, so the screen tells the truth about
-/// what the user just did instead of pretending the bundled demo ledger is
-/// writable. Nothing in this set survives a reload, and that is correct: the
-/// preview is a preview.
+/// ---------------------------------------------------------------------------
+/// The session overlay
+///
+/// Everything below exists because the app has two backends: SQLite on a phone,
+/// and nothing at all in the web preview and in widget tests. Rather than give
+/// the preview a fake read-only ledger that ignores the user, writes land in
+/// these in-memory overlays and the same screens respond exactly as they would
+/// on a device. Nothing here survives a reload, and that is correct — a preview
+/// is a preview, not a database.
+/// ---------------------------------------------------------------------------
+
+/// Rows deleted in this session while there is no database. On a device a
+/// delete is a real soft delete in SQLite.
 final sessionDeletedIdsProvider = StateProvider<Set<String>>(
   (ref) => const <String>{},
 );
 
-/// The same overlay for a re-categorise: transaction id → category id.
-final sessionCategoryOverridesProvider = StateProvider<Map<String, String>>(
-  (ref) => const <String, String>{},
+/// Rows edited in this session while there is no database: id → the new row.
+final sessionPatchesProvider = StateProvider<Map<String, TxnView>>(
+  (ref) => const <String, TxnView>{},
+);
+
+/// Rows added in this session while there is no database, newest first.
+final sessionAddedProvider = StateProvider<List<TxnView>>(
+  (ref) => const <TxnView>[],
+);
+
+/// Categories created or edited in this session while there is no database.
+final sessionCategoryPatchesProvider = StateProvider<Map<String, CategoryView>>(
+  (ref) => const <String, CategoryView>{},
+);
+
+final sessionCategoryDeletedProvider = StateProvider<Set<String>>(
+  (ref) => const <String>{},
 );
 
 final transactionsProvider = FutureProvider<List<TxnView>>((ref) async {
   final db = ref.watch(appDbProvider);
   final deleted = ref.watch(sessionDeletedIdsProvider);
-  final recategorised = ref.watch(sessionCategoryOverridesProvider);
+  final patches = ref.watch(sessionPatchesProvider);
+  final added = ref.watch(sessionAddedProvider);
 
   final base = db == null
       ? ref.watch(demoLedgerProvider).transactions
       : (await TxRepo(db).recent(limit: 500)).map(TxnView.fromRow).toList();
 
-  if (deleted.isEmpty && recategorised.isEmpty) return base;
-  return <TxnView>[
-    for (final t in base)
-      if (!deleted.contains(t.id))
-        if (recategorised.containsKey(t.id))
-          t.copyWith(categoryId: recategorised[t.id])
-        else
-          t,
+  final rows = <TxnView>[
+    for (final t in <TxnView>[...added, ...base])
+      if (!deleted.contains(t.id)) patches[t.id] ?? t,
   ];
+  // One ordering rule for both backends, so a row the user just added appears
+  // where its date says it belongs rather than always on top.
+  rows.sort((a, b) => b.occurredAtMs.compareTo(a.occurredAtMs));
+  return rows;
 });
 
-/// Every write the transaction list can perform, in one place.
+/// Every write the ledger screens can perform, in one place.
 ///
 /// Two backends, one contract: with a database the change is persisted through
 /// [TxRepo] (soft delete, so Undo is real rather than a re-insert); without one
@@ -176,15 +199,96 @@ class TxActions {
   }
 
   Future<void> setCategory(String id, String categoryId) async {
+    final current = _find(id);
+    if (current == null) return;
+    await update(current.copyWith(categoryId: categoryId));
+  }
+
+  /// Applies an edited row (S-12 in edit mode).
+  Future<void> update(TxnView updated) async {
     final db = _ref.read(appDbProvider);
     if (db == null) {
       _ref
-          .read(sessionCategoryOverridesProvider.notifier)
-          .update((map) => <String, String>{...map, id: categoryId});
+          .read(sessionPatchesProvider.notifier)
+          .update((map) => <String, TxnView>{...map, updated.id: updated});
+      // A row added in this session is replaced in place, so an edit of an edit
+      // does not resurrect the original.
+      _ref
+          .read(sessionAddedProvider.notifier)
+          .update(
+            (list) => <TxnView>[
+              for (final t in list)
+                if (t.id == updated.id) updated else t,
+            ],
+          );
       return;
     }
-    await TxRepo(db).updateManual(id, categoryId: categoryId);
+    await TxRepo(db).updateManual(
+      updated.id,
+      amountPaise: updated.amountPaise,
+      categoryId: updated.categoryId,
+      merchant: updated.merchant,
+      note: updated.note,
+      occurredAt: updated.occurredAtMs,
+      mode: updated.mode.wire,
+    );
     _ref.invalidate(transactionsProvider);
+  }
+
+  /// Saves a transaction the user typed in (S-12 in add mode).
+  Future<String> add({
+    required int amountPaise,
+    required TxnDirection direction,
+    required int occurredAtMs,
+    String? merchant,
+    String? categoryId,
+    String? accountId,
+    PaymentMode mode = PaymentMode.cash,
+    String? note,
+  }) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      final id = 'session-${DateTime.now().microsecondsSinceEpoch}';
+      _ref
+          .read(sessionAddedProvider.notifier)
+          .update(
+            (list) => <TxnView>[
+              TxnView(
+                id: id,
+                amountPaise: amountPaise,
+                direction: direction,
+                occurredAtMs: occurredAtMs,
+                merchant: merchant,
+                categoryId: categoryId,
+                mode: mode,
+                note: note,
+              ),
+              ...list,
+            ],
+          );
+      return id;
+    }
+    final id = await TxRepo(db).insertManual(
+      amountPaise: amountPaise,
+      direction: direction,
+      occurredAt: occurredAtMs,
+      merchant: merchant,
+      categoryId: categoryId,
+      accountId: accountId,
+      mode: mode,
+      note: note,
+    );
+    _ref.invalidate(transactionsProvider);
+    return id;
+  }
+
+  TxnView? _find(String id) {
+    final all =
+        _ref.read(transactionsProvider).valueOrNull ?? const <TxnView>[];
+    for (final t in all) {
+      if (t.id == id) return t;
+    }
+    return null;
   }
 }
 
@@ -192,13 +296,83 @@ final txActionsProvider = Provider<TxActions>((ref) => TxActions(ref));
 
 final categoriesProvider = FutureProvider<List<CategoryView>>((ref) async {
   final db = ref.watch(appDbProvider);
-  if (db == null) return ref.watch(demoLedgerProvider).categories;
-  final rows = await db.select(db.categories).get();
-  return rows
-      .where((r) => r.deletedAt == null)
-      .map(CategoryView.fromRow)
-      .toList();
+  final patches = ref.watch(sessionCategoryPatchesProvider);
+  final deleted = ref.watch(sessionCategoryDeletedProvider);
+
+  final base = db == null
+      ? ref.watch(demoLedgerProvider).categories
+      : (await db.select(db.categories).get())
+            .where((r) => r.deletedAt == null)
+            .map(CategoryView.fromRow)
+            .toList();
+
+  final known = {for (final c in base) c.id};
+  return <CategoryView>[
+    for (final c in base)
+      if (!deleted.contains(c.id)) patches[c.id] ?? c,
+    // Categories created in this session, which have no row behind them yet.
+    for (final entry in patches.entries)
+      if (!known.contains(entry.key) && !deleted.contains(entry.key))
+        entry.value,
+  ];
 });
+
+/// Create / edit / delete for the category manager (S-13).
+class CategoryActions {
+  const CategoryActions(this._ref);
+
+  final Ref _ref;
+
+  Future<void> save(CategoryView category) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionCategoryPatchesProvider.notifier)
+          .update(
+            (map) => <String, CategoryView>{...map, category.id: category},
+          );
+      return;
+    }
+    await db
+        .into(db.categories)
+        .insertOnConflictUpdate(
+          CategoriesCompanion.insert(
+            id: category.id,
+            kind: category.kind.wire,
+            nameEn: category.nameEn,
+            nameHi: category.nameHi,
+            nameBn: category.nameBn,
+            icon: category.icon,
+            colorHex: category.colorHex,
+            monthlyCapPaise: Value(category.monthlyCapPaise),
+          ),
+        );
+    _ref.invalidate(categoriesProvider);
+  }
+
+  /// Hides a category. Rows already filed under it keep their id — reassigning
+  /// someone's history behind their back would be worse than an orphan label,
+  /// and the list falls back to the merchant name.
+  Future<void> delete(String id) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionCategoryDeletedProvider.notifier)
+          .update((ids) => <String>{...ids, id});
+      return;
+    }
+    await (db.update(db.categories)..where((c) => c.id.equals(id))).write(
+      CategoriesCompanion(
+        deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
+      ),
+    );
+    _ref.invalidate(categoriesProvider);
+  }
+}
+
+final categoryActionsProvider = Provider<CategoryActions>(
+  (ref) => CategoryActions(ref),
+);
 
 final accountsProvider = FutureProvider<List<AccountView>>((ref) async {
   final db = ref.watch(appDbProvider);

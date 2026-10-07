@@ -42,6 +42,61 @@ class SsStrings {
   String get txSwipeHint => this['txSwipeHint'];
   String get txMonthEmptyTitle => this['txMonthEmptyTitle'];
   String get txMonthEmptyBody => this['txMonthEmptyBody'];
+  String get detailTitle => this['detailTitle'];
+  String get detailDate => this['detailDate'];
+  String get detailCategory => this['detailCategory'];
+  String get detailAccount => this['detailAccount'];
+  String get detailMode => this['detailMode'];
+  String get detailSource => this['detailSource'];
+  String get detailNote => this['detailNote'];
+  String get detailChange => this['detailChange'];
+  String get detailRawTitle => this['detailRawTitle'];
+  String get detailRawHint => this['detailRawHint'];
+  String get detailNoRaw => this['detailNoRaw'];
+  String get detailEdit => this['detailEdit'];
+  String get detailDeleteConfirmTitle => this['detailDeleteConfirmTitle'];
+  String get detailDeleteConfirmBody => this['detailDeleteConfirmBody'];
+  String get detailNotFound => this['detailNotFound'];
+  String get cancel => this['cancel'];
+  String get addTitle => this['addTitle'];
+  String get editTitle => this['editTitle'];
+  String get amountLabel => this['amountLabel'];
+  String get merchantHint => this['merchantHint'];
+  String get noteHint => this['noteHint'];
+  String get save => this['save'];
+  String get saved => this['saved'];
+  String get amountRequired => this['amountRequired'];
+  String get today => this['today'];
+  String get modeCash => this['modeCash'];
+  String get modeUpi => this['modeUpi'];
+  String get modeCard => this['modeCard'];
+  String get modeNetbanking => this['modeNetbanking'];
+  String get modeWallet => this['modeWallet'];
+  String get modeOther => this['modeOther'];
+  String get catManagerTitle => this['catManagerTitle'];
+  String get catNew => this['catNew'];
+  String get catEditTitle => this['catEditTitle'];
+  String get catNameEn => this['catNameEn'];
+  String get catNameHi => this['catNameHi'];
+  String get catNameBn => this['catNameBn'];
+  String get catIcon => this['catIcon'];
+  String get catColor => this['catColor'];
+  String get catMonthlyCap => this['catMonthlyCap'];
+  String get catDelete => this['catDelete'];
+  String get catDeleteWarn => this['catDeleteWarn'];
+  String get catNameRequired => this['catNameRequired'];
+  String get catEmpty => this['catEmpty'];
+  String get catEmptyBody => this['catEmptyBody'];
+  String get searchTitle => this['searchTitle'];
+  String get searchHint => this['searchHint'];
+  String get searchResultCount => this['searchResultCount'];
+  String get searchNoResults => this['searchNoResults'];
+  String get searchNoResultsBody => this['searchNoResultsBody'];
+  String get searchStartTitle => this['searchStartTitle'];
+  String get searchStartBody => this['searchStartBody'];
+  String get filterSourceAuto => this['filterSourceAuto'];
+  String get filterSourceManual => this['filterSourceManual'];
+  String get filterClear => this['filterClear'];
   String get insights => this['insights'];
   String get settings => this['settings'];
   String get accounts => this['accounts'];
@@ -282,6 +337,62 @@ const Map<String, String> _en = <String, String>{
   'txSwipeHint': 'Swipe a row — left to delete, right to change its category.',
   'txMonthEmptyTitle': 'Nothing in this month',
   'txMonthEmptyBody': 'Pick another month, or clear the filter.',
+  'detailTitle': 'Transaction',
+  'detailDate': 'Date',
+  'detailCategory': 'Category',
+  'detailAccount': 'Account',
+  'detailMode': 'Mode',
+  'detailSource': 'Source',
+  'detailNote': 'Note',
+  'detailChange': 'Change',
+  'detailRawTitle': 'Original message',
+  'detailRawHint': 'This is the exact text this entry was read from. It never leaves your phone.',
+  'detailNoRaw': 'You typed this one in, so there is no message to show.',
+  'detailEdit': 'Edit',
+  'detailDeleteConfirmTitle': 'Delete this transaction?',
+  'detailDeleteConfirmBody':
+      'It leaves your totals right away. You can undo it from the list.',
+  'detailNotFound': 'That transaction is no longer here.',
+  'cancel': 'Cancel',
+  'addTitle': 'New transaction',
+  'editTitle': 'Edit transaction',
+  'amountLabel': 'Amount',
+  'merchantHint': 'Where? (optional)',
+  'noteHint': 'Note (optional)',
+  'save': 'Save',
+  'saved': 'Saved',
+  'amountRequired': 'Enter an amount first',
+  'today': 'Today',
+  'modeCash': 'Cash',
+  'modeUpi': 'UPI',
+  'modeCard': 'Card',
+  'modeNetbanking': 'Netbanking',
+  'modeWallet': 'Wallet',
+  'modeOther': 'Other',
+  'catManagerTitle': 'Categories',
+  'catNew': 'New category',
+  'catEditTitle': 'Edit category',
+  'catNameEn': 'Name (English)',
+  'catNameHi': 'Name (Hindi)',
+  'catNameBn': 'Name (Bengali)',
+  'catIcon': 'Icon',
+  'catColor': 'Colour',
+  'catMonthlyCap': 'Monthly limit (optional)',
+  'catDelete': 'Delete category',
+  'catDeleteWarn': 'Transactions already filed here keep their history — they just lose the label.',
+  'catNameRequired': 'A category needs at least one name',
+  'catEmpty': 'No categories here yet',
+  'catEmptyBody': 'Add one with the + button.',
+  'searchTitle': 'Search',
+  'searchHint': 'Merchant, note or amount',
+  'searchResultCount': 'results',
+  'searchNoResults': 'Nothing matched',
+  'searchNoResultsBody': 'Try a shorter word, or clear a filter.',
+  'searchStartTitle': 'Search your ledger',
+  'searchStartBody': 'Type a merchant, a note, or an amount like 1240.',
+  'filterSourceAuto': 'Auto only',
+  'filterSourceManual': 'Typed only',
+  'filterClear': 'Clear',
   'planMonthly': 'Monthly',
   'planYearly': 'Yearly',
   'planLifetime': 'Lifetime',
@@ -470,6 +581,62 @@ const Map<String, String> _hi = <String, String>{
       'पंक्ति खिसकाएँ — बाएँ मिटाने के लिए, दाएँ श्रेणी बदलने के लिए।',
   'txMonthEmptyTitle': 'इस महीने कुछ नहीं',
   'txMonthEmptyBody': 'दूसरा महीना चुनें, या फ़िल्टर हटाएँ।',
+  'detailTitle': 'लेन-देन',
+  'detailDate': 'तारीख़',
+  'detailCategory': 'श्रेणी',
+  'detailAccount': 'खाता',
+  'detailMode': 'तरीका',
+  'detailSource': 'स्रोत',
+  'detailNote': 'नोट',
+  'detailChange': 'बदलें',
+  'detailRawTitle': 'मूल संदेश',
+  'detailRawHint': 'यह वही लिखावट है जिससे यह प्रविष्टि पढ़ी गई। यह आपके फ़ोन से कभी बाहर नहीं जाती।',
+  'detailNoRaw': 'यह आपने ख़ुद लिखा था, इसलिए दिखाने को कोई संदेश नहीं है।',
+  'detailEdit': 'बदलें',
+  'detailDeleteConfirmTitle': 'यह लेन-देन मिटाएँ?',
+  'detailDeleteConfirmBody':
+      'यह तुरंत आपके जोड़ से हट जाएगा। सूची से वापस ला सकते हैं।',
+  'detailNotFound': 'वह लेन-देन अब यहाँ नहीं है।',
+  'cancel': 'रद्द करें',
+  'addTitle': 'नया लेन-देन',
+  'editTitle': 'लेन-देन बदलें',
+  'amountLabel': 'रकम',
+  'merchantHint': 'कहाँ? (वैकल्पिक)',
+  'noteHint': 'नोट (वैकल्पिक)',
+  'save': 'सेव करें',
+  'saved': 'सेव हो गया',
+  'amountRequired': 'पहले रकम लिखें',
+  'today': 'आज',
+  'modeCash': 'नकद',
+  'modeUpi': 'UPI',
+  'modeCard': 'कार्ड',
+  'modeNetbanking': 'नेटबैंकिंग',
+  'modeWallet': 'वॉलेट',
+  'modeOther': 'अन्य',
+  'catManagerTitle': 'श्रेणियाँ',
+  'catNew': 'नई श्रेणी',
+  'catEditTitle': 'श्रेणी बदलें',
+  'catNameEn': 'नाम (अंग्रेज़ी)',
+  'catNameHi': 'नाम (हिन्दी)',
+  'catNameBn': 'नाम (बांग्ला)',
+  'catIcon': 'आइकन',
+  'catColor': 'रंग',
+  'catMonthlyCap': 'मासिक सीमा (वैकल्पिक)',
+  'catDelete': 'श्रेणी मिटाएँ',
+  'catDeleteWarn': 'इसमें दर्ज लेन-देन का इतिहास बना रहेगा — बस लेबल हट जाएगा।',
+  'catNameRequired': 'श्रेणी का कम से कम एक नाम ज़रूरी है',
+  'catEmpty': 'यहाँ अभी कोई श्रेणी नहीं',
+  'catEmptyBody': '+ बटन से एक जोड़ें।',
+  'searchTitle': 'खोजें',
+  'searchHint': 'दुकान, नोट या रकम',
+  'searchResultCount': 'नतीजे',
+  'searchNoResults': 'कुछ नहीं मिला',
+  'searchNoResultsBody': 'छोटा शब्द आज़माएँ, या कोई फ़िल्टर हटाएँ।',
+  'searchStartTitle': 'अपना हिसाब खोजें',
+  'searchStartBody': 'दुकान, नोट, या 1240 जैसी रकम लिखें।',
+  'filterSourceAuto': 'सिर्फ़ ऑटो',
+  'filterSourceManual': 'सिर्फ़ लिखा हुआ',
+  'filterClear': 'हटाएँ',
   'planMonthly': 'मासिक',
   'planYearly': 'सालाना',
   'planLifetime': 'लाइफ़टाइम',
@@ -655,6 +822,63 @@ const Map<String, String> _bn = <String, String>{
   'txSwipeHint': 'সারি সোয়াইপ করুন — বাঁয়ে মুছতে, ডানে ক্যাটাগরি বদলাতে।',
   'txMonthEmptyTitle': 'এই মাসে কিছু নেই',
   'txMonthEmptyBody': 'অন্য মাস বাছুন, বা ফিল্টার সরান।',
+  'detailTitle': 'লেনদেন',
+  'detailDate': 'তারিখ',
+  'detailCategory': 'ক্যাটাগরি',
+  'detailAccount': 'অ্যাকাউন্ট',
+  'detailMode': 'মোড',
+  'detailSource': 'সোর্স',
+  'detailNote': 'নোট',
+  'detailChange': 'বদলান',
+  'detailRawTitle': 'মূল মেসেজ',
+  'detailRawHint': 'এই লেখাটা থেকেই এন্ট্রিটা পড়া হয়েছে। এটা কখনো আপনার ফোনের বাইরে যায় না।',
+  'detailNoRaw': 'এটা আপনি নিজে লিখেছেন, তাই দেখানোর মতো কোনো মেসেজ নেই।',
+  'detailEdit': 'এডিট',
+  'detailDeleteConfirmTitle': 'এই লেনদেনটা মুছবেন?',
+  'detailDeleteConfirmBody':
+      'এটা সঙ্গে সঙ্গে হিসেব থেকে বাদ যাবে। তালিকা থেকে ফিরিয়ে আনতে পারবেন।',
+  'detailNotFound': 'সেই লেনদেনটা আর নেই।',
+  'cancel': 'বাতিল',
+  'addTitle': 'নতুন লেনদেন',
+  'editTitle': 'লেনদেন বদলান',
+  'amountLabel': 'টাকার অঙ্ক',
+  'merchantHint': 'কোথায়? (ঐচ্ছিক)',
+  'noteHint': 'নোট (ঐচ্ছিক)',
+  'save': 'সেভ করুন',
+  'saved': 'সেভ হয়েছে',
+  'amountRequired': 'আগে টাকার অঙ্ক লিখুন',
+  'today': 'আজ',
+  'modeCash': 'ক্যাশ',
+  'modeUpi': 'UPI',
+  'modeCard': 'কার্ড',
+  'modeNetbanking': 'নেটব্যাঙ্কিং',
+  'modeWallet': 'ওয়ালেট',
+  'modeOther': 'অন্যান্য',
+  'catManagerTitle': 'ক্যাটাগরি',
+  'catNew': 'নতুন ক্যাটাগরি',
+  'catEditTitle': 'ক্যাটাগরি বদলান',
+  'catNameEn': 'নাম (ইংরেজি)',
+  'catNameHi': 'নাম (হিন্দি)',
+  'catNameBn': 'নাম (বাংলা)',
+  'catIcon': 'আইকন',
+  'catColor': 'রং',
+  'catMonthlyCap': 'মাসিক সীমা (ঐচ্ছিক)',
+  'catDelete': 'ক্যাটাগরি মুছুন',
+  'catDeleteWarn':
+      'এতে থাকা লেনদেনগুলোর ইতিহাস থেকেই যাবে — শুধু লেবেলটা চলে যাবে।',
+  'catNameRequired': 'ক্যাটাগরির অন্তত একটা নাম দরকার',
+  'catEmpty': 'এখানে এখনো কোনো ক্যাটাগরি নেই',
+  'catEmptyBody': '+ বোতাম দিয়ে একটা যোগ করুন।',
+  'searchTitle': 'খুঁজুন',
+  'searchHint': 'মার্চেন্ট, নোট বা টাকার অঙ্ক',
+  'searchResultCount': 'ফলাফল',
+  'searchNoResults': 'কিছু মিলল না',
+  'searchNoResultsBody': 'ছোট শব্দ দিয়ে দেখুন, বা একটা ফিল্টার সরান।',
+  'searchStartTitle': 'আপনার হিসেব খুঁজুন',
+  'searchStartBody': 'মার্চেন্ট, নোট, বা 1240-এর মতো অঙ্ক লিখুন।',
+  'filterSourceAuto': 'শুধু অটো',
+  'filterSourceManual': 'শুধু হাতে লেখা',
+  'filterClear': 'সরান',
   'planMonthly': 'মাসিক',
   'planYearly': 'বার্ষিক',
   'planLifetime': 'লাইফটাইম',
