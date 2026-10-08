@@ -77,9 +77,10 @@ class _MainShellState extends ConsumerState<MainShell> {
       // user may be shown an ad at all, and the SDK is started only when it may
       // be — the ordering is the policy, not a preference (`docs/08 §7`). A Pro
       // user's phone starts neither.
-      if (ref.read(adsVisibleProvider)) {
-        unawaited(ref.read(consentControllerProvider).start());
-      }
+      final adsVisible = ref.read(adsVisibleProvider);
+      unawaited(
+        ref.read(consentControllerProvider).start(showConsent: adsVisible),
+      );
 
       // Today's reward counters, so an offer the user has already used is not
       // drawn as an offer (T-606).

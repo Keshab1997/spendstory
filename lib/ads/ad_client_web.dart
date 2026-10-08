@@ -58,4 +58,7 @@ class WebAdClient implements AdClient {
 
   @override
   Future<bool> privacyOptionsRequired() async => false;
+
+  @override
+  Future<bool> showPrivacyOptions() async => false;
 }

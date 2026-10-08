@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../ads/ad_consent.dart';
 import '../../app/providers.dart';
 import '../../pro/pro_controller.dart';
 import '../components/controls.dart';
@@ -27,6 +28,8 @@ class SettingsScreen extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
     final themeMode = ref.watch(themeModeProvider);
     final isPro = ref.watch(proStatusProvider);
+    final personalized = !ref.watch(nonPersonalizedAdsProvider);
+    final privacyOptionsRequired = ref.watch(privacyOptionsRequiredProvider);
 
     return SsScaffold(
       floatingNav: true,
@@ -218,6 +221,27 @@ class SettingsScreen extends ConsumerWidget {
                     );
                   },
                 ),
+                // ---- ads (T-610) ------------------------------------------
+                // Only for a free user: a Pro user sees no ads, so a control
+                // about what ads know is noise on their screen (`docs/07 §6`).
+                if (!isPro) ...[
+                  Divider(color: c.divider, height: 1),
+                  SettingTile(
+                    icon: Icons.tune_rounded,
+                    tint: c.textSecondary,
+                    title: s['personalizedAds'],
+                    subtitle: s['personalizedAdsBody'],
+                    trailing: Switch(
+                      value: personalized,
+                      onChanged: (on) => ref
+                          .read(consentControllerProvider)
+                          .setPersonalized(on),
+                    ),
+                    onTap: () => ref
+                        .read(consentControllerProvider)
+                        .setPersonalized(!personalized),
+                  ),
+                ],
                 Divider(color: c.divider, height: 1),
                 SettingTile(
                   icon: Icons.lock_outline_rounded,
@@ -229,6 +253,40 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
+
+          // The door Google's consent rules require when they require it: shown
+          // for everybody, Pro included, because consent can be withdrawn
+          // whatever plan you are on.
+          if (privacyOptionsRequired) ...[
+            const SizedBox(height: SsSpace.x5),
+            SsCard(
+              padding: const EdgeInsets.symmetric(
+                horizontal: SsSpace.x2,
+                vertical: SsSpace.x1,
+              ),
+              child: SettingTile(
+                icon: Icons.privacy_tip_outlined,
+                tint: c.teal500,
+                title: s['privacyOptions'],
+                subtitle: s['privacyOptionsBody'],
+                onTap: () async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  final shown = await ref
+                      .read(consentControllerProvider)
+                      .showPrivacyOptions();
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        shown
+                            ? s['privacyOptionsShown']
+                            : s['privacyOptionsMissing'],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
 
           const SizedBox(height: SsSpace.x5),
           SsCard(

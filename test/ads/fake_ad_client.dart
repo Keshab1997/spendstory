@@ -110,6 +110,14 @@ class FakeAdClient implements AdClient {
 
   @override
   Future<bool> privacyOptionsRequired() async => privacyOptions;
+
+  int privacyFormCalls = 0;
+
+  @override
+  Future<bool> showPrivacyOptions() async {
+    privacyFormCalls += 1;
+    return privacyOptions;
+  }
 }
 
 /// A client with ads on and every placement configured, which is what a device

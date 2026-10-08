@@ -457,6 +457,17 @@ const Map<String, String> _en = <String, String>{
   'billingFailed': 'The store refused the payment. No money left your account.',
   'billingSucceeded': 'Payment received. Pro is on.',
   // ---- Batch 7: rewarded offers (T-606) ----
+  // ---- Batch 7: the ads settings (T-610) ----
+  'personalizedAds': 'Personalized ads',
+  'personalizedAdsBody':
+      'Off by default in India. With it off, ads still pay for the app — they '
+      'just know less about you. Your spending is never sent anywhere either '
+      'way.',
+  'privacyOptions': 'Ad privacy options',
+  'privacyOptionsBody': 'Change your consent choices at any time.',
+  'privacyOptionsShown': 'Your choices are open.',
+  'privacyOptionsMissing':
+      'The form could not be opened right now. Try again later.',
   'planTaste': '24-hour taste',
   'proTasteBody':
       'Pro is on for 24 hours. No ads, and the forecast is open — thanks for '
@@ -856,6 +867,12 @@ const Map<String, String> _hi = <String, String>{
   'billingCanceled': 'ख़रीद रद्द। कुछ नहीं कटा।',
   'billingFailed': 'स्टोर ने भुगतान नहीं लिया। आपके खाते से कुछ नहीं गया।',
   'billingSucceeded': 'भुगतान मिल गया। Pro चालू है।',
+  'personalizedAds': 'व्यक्तिगत विज्ञापन',
+  'personalizedAdsBody': 'भारत में डिफ़ॉल्ट रूप से बंद। बंद रहने पर भी विज्ञापन ऐप का ख़र्च निकालते हैं — बस आपके बारे में कम जानते हैं। आपका ख़र्च किसी हाल में कहीं नहीं भेजा जाता।',
+  'privacyOptions': 'विज्ञापन प्राइवेसी विकल्प',
+  'privacyOptionsBody': 'अपनी सहमति कभी भी बदलें।',
+  'privacyOptionsShown': 'आपके विकल्प खुल गए।',
+  'privacyOptionsMissing': 'अभी फ़ॉर्म नहीं खुल सका। थोड़ी देर बाद कोशिश करें।',
   'planTaste': '24 घंटे का टेस्ट',
   'proTasteBody': '24 घंटे के लिए Pro चालू है। विज्ञापन बंद, पूर्वानुमान खुला — देखने के लिए शुक्रिया।',
   'watchAdForTaste': 'विज्ञापन देखें, 24 घंटे का Pro पाएँ',
@@ -1248,6 +1265,12 @@ const Map<String, String> _bn = <String, String>{
   'billingCanceled': 'কেনা বাতিল হয়েছে। কোনো টাকা কাটা হয়নি।',
   'billingFailed': 'স্টোর পেমেন্ট নেয়নি। আপনার অ্যাকাউন্ট থেকে টাকা যায়নি।',
   'billingSucceeded': 'পেমেন্ট পেয়ে গেছি। Pro চালু।',
+  'personalizedAds': 'ব্যক্তিগতকৃত বিজ্ঞাপন',
+  'personalizedAdsBody': 'ভারতে ডিফল্টে বন্ধ। বন্ধ থাকলেও বিজ্ঞাপন অ্যাপের খরচ চালায় — শুধু আপনার সম্পর্কে কম জানে। আপনার খরচের ডেটা কোনোভাবেই কোথাও যায় না।',
+  'privacyOptions': 'বিজ্ঞাপনের প্রাইভেসি অপশন',
+  'privacyOptionsBody': 'আপনার সম্মতি যখন খুশি বদলান।',
+  'privacyOptionsShown': 'আপনার পছন্দ খুলে গেল।',
+  'privacyOptionsMissing': 'এখন ফর্ম খোলা গেল না। কিছুক্ষণ পরে চেষ্টা করুন।',
   'planTaste': '২৪ ঘণ্টার টেস্ট',
   'proTasteBody': '২৪ ঘণ্টার জন্য Pro চালু। বিজ্ঞাপন বন্ধ, পূর্বাভাস খোলা — দেখার জন্য ধন্যবাদ।',
   'watchAdForTaste': 'বিজ্ঞাপন দেখে ২৪ ঘণ্টার Pro নিন',

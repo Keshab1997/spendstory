@@ -23,6 +23,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../app/providers.dart';
 import 'ad_client.dart';
 
+// The flag every request carries, re-exported so a screen that only offers the
+// choice does not have to import the ads seam — `docs/03 §S-20` keeps the ad
+// client out of Settings, and the audit test holds that line.
+export 'ad_client.dart' show nonPersonalizedAdsProvider;
+
 /// Whether personalized ads would be the default for this country.
 ///
 /// India: **no**. Everywhere else: yes, which is what the store listings and the
@@ -62,16 +67,28 @@ class ConsentController {
 
   bool _personalized = false;
   ConsentState _state = ConsentState.unknown;
+  bool _privacyOptionsRequired = false;
 
   ConsentState get state => _state;
   bool get personalized => _personalized;
+
+  /// Whether the platform makes the app offer a way to change this choice later
+  /// (the UMP privacy-options requirement). Settings shows the row only when
+  /// this is true, because a door that leads nowhere is worse than no door.
+  bool get privacyOptionsRequiredNow => _privacyOptionsRequired;
 
   /// Called once per launch, from the shell, after the first frame.
   ///
   /// Order matters and is the whole point of this method: read the stored
   /// choice, set the flag every request will carry, then let Google ask the user
   /// if they need to be asked — and only then start the SDK.
-  Future<void> start({String? countryCode}) async {
+  ///
+  /// [showConsent] is false for a user who pays: they will never be shown an ad,
+  /// so they are not asked to consent to one (`docs/05 §6`, and the same reason
+  /// their phone never starts the SDK). Their app still learns whether it owes
+  /// them a privacy-options door, because that obligation outlives a
+  /// subscription.
+  Future<void> start({bool showConsent = true, String? countryCode}) async {
     final db = _ref.read(appDbProvider);
     final stored = db == null
         ? _ref.read(sessionPersonalizedAdsProvider)
@@ -83,6 +100,16 @@ class ConsentController {
     _ref.read(nonPersonalizedAdsProvider.notifier).state = !_personalized;
 
     final client = _ref.read(adClientProvider);
+
+    // Asked here rather than when Settings is opened: it costs one call at a
+    // moment the app is already talking to the consent SDK, and it lets the row
+    // decide whether to exist without an async build.
+    _privacyOptionsRequired = await client.privacyOptionsRequired();
+    _ref.read(privacyOptionsRequiredProvider.notifier).state =
+        _privacyOptionsRequired;
+
+    if (!showConsent) return;
+
     _state = await client.ensureConsent();
     _ref.read(consentStateProvider.notifier).state = _state;
 
@@ -109,9 +136,29 @@ class ConsentController {
     await db.setMeta(metaKey, personalized ? 'on' : 'off');
   }
 
-  /// Whether the platform requires the app to offer a "privacy options" door.
+  /// Whether the platform requires the app to offer a "privacy options" door,
+  /// read fresh rather than from the launch's answer.
   Future<bool> privacyOptionsRequired() async =>
       _ref.read(adClientProvider).privacyOptionsRequired();
+
+  /// Opens that door (T-610). False when there was no form to show.
+  Future<bool> showPrivacyOptions() async {
+    final shown = await _ref.read(adClientProvider).showPrivacyOptions();
+    // The user may have changed their mind in the form; the flag every request
+    // carries is re-read from the store rather than assumed.
+    if (shown) {
+      final db = _ref.read(appDbProvider);
+      final stored = db == null
+          ? _ref.read(sessionPersonalizedAdsProvider)
+          : await db.meta(metaKey);
+      _personalized = personalizedChoiceFrom(
+        stored,
+        countryCode: _deviceCountry(),
+      );
+      _ref.read(nonPersonalizedAdsProvider.notifier).state = !_personalized;
+    }
+    return shown;
+  }
 
   String? _deviceCountry() {
     try {
@@ -132,6 +179,10 @@ final consentControllerProvider = Provider<ConsentController>(
 final consentStateProvider = StateProvider<ConsentState>(
   (ref) => ConsentState.unknown,
 );
+
+/// Whether the app has to offer a privacy-options door (T-610). False until the
+/// launch's consent flow says otherwise.
+final privacyOptionsRequiredProvider = StateProvider<bool>((ref) => false);
 
 /// The stored personalized-ads choice for the demo/web build, where there is no
 /// `app_meta` to write it to. The same overlay pattern as the rest of the app.

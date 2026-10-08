@@ -82,6 +82,19 @@ void main() {
     expect(client.initializeCalls, 0);
   });
 
+  testWidgets('…but still learns whether it owes them a privacy door', (
+    tester,
+  ) async {
+    // Consent withdrawal is not a feature of the free tier: a user who agreed
+    // before buying Pro keeps the right to change their mind afterwards, so the
+    // launch asks the one question that keeps that door in Settings (T-610).
+    final client = FakeAdClient(privacyOptions: true);
+    final container = await _boot(tester, client, isPro: true);
+
+    expect(client.consentChecks, 0);
+    expect(container.read(privacyOptionsRequiredProvider), isTrue);
+  });
+
   testWidgets('the Indian default is written into every request', (
     tester,
   ) async {

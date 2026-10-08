@@ -149,6 +149,11 @@ abstract class AdClient {
   /// requirement that a user can change their mind later (T-610 puts the door in
   /// Settings).
   Future<bool> privacyOptionsRequired();
+
+  /// Opens that entry point. Returns true when a form was actually shown, which
+  /// is what the toast in Settings reports — a door that opens onto nothing is
+  /// worse than no door.
+  Future<bool> showPrivacyOptions();
 }
 
 /// The client for this platform: the real SDK on Android/iOS, a stub on the web.

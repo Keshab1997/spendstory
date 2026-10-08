@@ -135,7 +135,7 @@ Rules notified **13 Nov 2025** (G.S.R. 846(E)); substantive obligations enforcea
 - **Never** pass SMS, transaction, category, merchant, or amount data into any ad request. No custom targeting keys from financial data.
 - **No ads** on permission screens, onboarding, transaction edit, or paywall.
 - Families/child-directed: **not** child-directed (`setTagForChildDirectedTreatment(false)`), content rating Everyone.
-- User consent: for EEA/UK users the SDK shows a UMP consent form; for India, add an in-app "ব্যক্তিগতকৃত বিজ্ঞাপন বন্ধ করুন" toggle in Settings (respects the spirit of DPDP even before enforcement).
+- User consent: for EEA/UK users the SDK shows a UMP consent form; for India, add an in-app "ব্যক্তিগতকৃত বিজ্ঞাপন বন্ধ করুন" toggle in Settings (respects the spirit of DPDP even before enforcement). **Implemented (T-607/T-610):** the form runs before the SDK is ever started and a declined user gets no ads at all; the Settings row is `Personalized ads`, off by default in India, stored in `app_meta` and handed to every request; where UMP requires a privacy-options entry point, Settings carries that door — for Pro users too, because consent can be withdrawn whatever plan you are on.
 - **Ad-free is a Pro benefit** and must remain a genuine, working upgrade.
 
 ## 7. Store listing policy alignment

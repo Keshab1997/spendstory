@@ -136,9 +136,15 @@ class MobileAdClient implements AdClient {
 
   /// Shows the privacy-options form, for a user who wants to change their mind
   /// (Settings, T-610). Returns true when a form was shown.
+  @override
   Future<bool> showPrivacyOptions() async {
     if (!hasAds) return false;
     try {
+      // The UMP form needs an update behind it, and a phone that never ran the
+      // flow at launch — a paying user's — has not done one. Getting one here
+      // costs a call, and makes the door work wherever it is opened from.
+      final info = gma.ConsentInformation.instance;
+      await _requestConsentInfo(info);
       await gma.ConsentForm.showPrivacyOptionsForm((_) {});
       return true;
     } catch (_) {

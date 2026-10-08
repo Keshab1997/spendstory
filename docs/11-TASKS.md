@@ -297,7 +297,7 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 - [x] **T-607** UMP consent form (first ad request) + India personalized-ads toggle
 - [x] **T-608** `test/ads/ad_slot_test.dart` — Pro user → `SizedBox.shrink()`
 - [x] **T-609** Audit: grep every `AdRequest` site → **zero** financial data passed
-- [ ] **T-610** Settings toggle: "personalized ads" (off by default in India)
+- [x] **T-610** Settings toggle: "personalized ads" (off by default in India)
 
 **What landed (T-601 … T-603, T-608, T-609):**
 - `lib/ads/` — the whole ads layer, and the only place that knows the SDK
@@ -470,11 +470,33 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
     loads the ledger with the rest of the launch work, and the button reads what
     the ledger published rather than guessing.
 
-**Next:** T-610 — the Settings half: the "personalized ads" switch (off by
-default in India, which is the default `lib/ads/ad_consent.dart` already
-applies) plus the "privacy options" row when UMP says the app has to offer one.
-The mechanism is in place; what is missing is the door. After that Batch 7 is
-done, and Batch 8's T-705 is where the free PDF export credit gets spent.
+**What landed (T-610):**
+- **The switch is the app's own obligation, not the SDK's**: `docs/07 §6` asks
+  for an in-app control over personalized ads in the spirit of the DPDP rules,
+  and the row in Settings reads the same flag every ad request carries
+  (`nonPersonalizedAdsProvider`, re-exported through `lib/ads/ad_consent.dart` so
+  `docs/03 §S-20`'s "no ad client in Settings" line survives). Turning it off
+  writes `personalizedAds = off` to `app_meta` and takes effect on the next
+  request; nothing about the choice leaves the phone.
+- **Off is the default in India and the switch shows it that way**, because the
+  default is a *stored* decision, not a hard-coded label: the launch reads
+  `app_meta`, falls back to the region, and the switch reads what the launch
+  decided. There is exactly one place that decides.
+- **The privacy-options door** exists only when UMP says the app must offer one
+  (`PrivacyOptionsRequirementStatus.required`), opens the real
+  `showPrivacyOptionsForm`, and then **re-reads** the stored choice, because the
+  user may have changed it inside the form. It is shown to Pro users too:
+  consent can be withdrawn whatever plan you are on, so a paying user's launch
+  asks the one question (`privacyOptionsRequired`) that keeps that door there —
+  without a form and without starting the SDK.
+- **A Pro user is not shown the ads switch**: they see no ads, so a control about
+  what ads know would be noise — the same reason their settings carry no ad slot.
+- The button that opens the door runs the UMP info update first, because a phone
+  that never ran the consent flow at launch (a paying user's) has not done one.
+
+**Batch 7 is done** — T-601 → T-610. What is left for a release is Keshab's four
+console items (`docs/08 §8b`), not code. Then Batch 8's T-705 is where the free
+PDF export credit gets spent.
 
 ---
 

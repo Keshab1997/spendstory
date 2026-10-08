@@ -174,6 +174,7 @@ class AdSlot extends ConsumerWidget {
 | The 24-hour taste | `ProPlan.taste` + `ProController.grantTaste` | an entitlement like any other — same window, same expiry, and **not for sale** |
 | Consent | `lib/ads/ad_consent.dart` + `AdClient.ensureConsent` | UMP form **before** the SDK starts; the client opens only on Google's `canRequestAds()` |
 | Tests | `test/ads/ad_rewards_test.dart`, `test/ads/ad_consent_test.dart`, `test/ui/rewarded_offer_test.dart` | the caps, the three outcomes, the launch order, and the labelled offer on screen |
+| Settings control | `lib/ui/screens/settings_screen.dart` | personalized ads (off by default in India) + the privacy-options door **only when UMP requires it** |
 
 **Four things Keshab owns, and none of them is in the repo:**
 1. Create the six units in the AdMob console and paste their ids into
