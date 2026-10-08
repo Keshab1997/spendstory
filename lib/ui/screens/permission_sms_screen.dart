@@ -146,6 +146,17 @@ class _PermissionSmsScreenState extends ConsumerState<PermissionSmsScreen> {
               ),
             ),
           ),
+          // The DPDP notice has to be one tap away at the moment the permission
+          // is asked for, not only in Settings afterwards (docs/07 §5).
+          Center(
+            child: TextButton(
+              onPressed: () => context.push('/about'),
+              child: Text(
+                s['privacyReadAll'],
+                style: SsText.caption.copyWith(color: c.violet600),
+              ),
+            ),
+          ),
           const SizedBox(height: SsSpace.x6),
         ],
       ),

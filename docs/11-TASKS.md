@@ -505,7 +505,7 @@ PDF export credit gets spent.
 - [x] **T-701** `lib/l10n/*.arb` — en/hi/bn full key set
 - [x] **T-702** `test/l10n/l10n_test.dart` — key parity across locales
 - [x] **T-703** Category names in 3 languages (seed)
-- [ ] **T-704** S-21 About/Privacy — text must match `07` §5
+- [x] **T-704** S-21 About/Privacy — text must match `07` §5
 - [ ] **T-705** S-23 Export/Backup — AES-256-GCM + CSV + rewarded PDF
 - [ ] **T-706** Settings data-erase (double confirm) + biometric lock
 - [ ] **T-707** Bengali digits toggle
@@ -538,6 +538,35 @@ PDF export credit gets spent.
   typed getters, and a header that says where copy now lives. No screen changed
   in this commit: 267 `s['key']` call sites and the 22 `SsStrings(locale)`
   constructions the tests build still work untouched.
+- `lib/ui/screens/about_screen.dart` + `/about` (T-704) — S-21, and the app's
+  DPDP notice. Every obligation in `docs/07 §5` has a section: what we collect
+  (**nothing**, in a sentence rather than a slogan); what we read and why, one
+  permission at a time — bank SMS (OTPs dropped first), payment-app
+  notifications, our own alerts, the optional app lock, and internet for ads and
+  billing only; the rights triad in the user's words (see all of it / correct
+  anything / erase everything) plus withdrawing a permission; the delete
+  everything path as three numbered steps; and how to reach a human. It is
+  reachable **before the first permission ask** (the SMS screen links to it),
+  from Settings' Privacy row, and from the paywall summary, which now ends with
+  "read the full policy" instead of being a dead end. No ad slot anywhere on it.
+- `lib/app/app_info.dart` — version, source repository and the grievance address
+  in one place, because they are values and not copy. The address is **empty
+  until Keshab sets it** (`docs/08 §8b` item 5) and the screen then says so and
+  falls back to the repository; a made-up support@ mailbox inside a compliance
+  screen would be worse than a stated gap. Both contact rows copy to the
+  clipboard rather than opening a browser: "we never phone home" is the claim the
+  screen is making, and a link would need a browser (and a new dependency) to
+  make it.
+- 33 new strings × 3 languages (414 keys each now) — including the honest
+  sentence about the missing address, so the gap is translated too.
+- `test/ui/about_test.dart` — 8 tests: every permission title *and* its
+  explanation is on the screen (a permission with no reason cannot be consented
+  to), the rights and the three steps are there, the notice renders in Bengali
+  with Bengali digits, no `AdSlot`, no invented address, Settings → Privacy opens
+  it and the back arrow returns, the permission screen links to it, and the repo
+  row copies the real URL. `/about` was added to the render-smoke route list, and
+  that caught a real overflow: the Hindi "कॉपी करने के लिए टैप करें" trailing label
+  pushed a tile 47px past the edge at 1.3×, so the hint moved above the card.
 - `test/l10n/category_names_test.dart` — 11 tests. The seed already carried
   `nameEn/nameHi/nameBn` for all 18 categories and the screens already read
   `CategoryView.label(locale)`, so this task became the guard rather than the

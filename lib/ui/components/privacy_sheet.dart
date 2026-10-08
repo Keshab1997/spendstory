@@ -5,16 +5,21 @@
 /// to them. S-20 Settings opens them, and `docs/03 §S-22` makes both links
 /// mandatory on the paywall — three call sites that must never drift.
 ///
-/// Until T-704 puts the full policy behind a real screen (S-21 About), these
-/// sheets carry the summary that is already true of the app: reads only bank
-/// SMS, nothing is uploaded, no account, erase everything from Settings.
+/// S-21 (`lib/ui/screens/about_screen.dart`) is the full notice, and it is what
+/// Settings' Privacy row opens. These sheets stay for the one place a modal
+/// cannot push a screen: the paywall, where `docs/03 §S-22` makes the privacy
+/// link mandatory. The summary is short on purpose, and it ends with the way to
+/// the long version so nobody has to take the summary's word for it.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:go_router/go_router.dart';
+
 import '../../app/providers.dart';
 import '../tokens.dart';
+import 'controls.dart';
 import 'lists.dart';
 
 Future<void> showPrivacySheet(BuildContext context, WidgetRef ref) {
@@ -46,6 +51,16 @@ Future<void> showPrivacySheet(BuildContext context, WidgetRef ref) {
             label: s['privacyOnDevice'],
             color: c.teal500,
             icon: Icons.shield_outlined,
+          ),
+          const SizedBox(height: SsSpace.x5),
+          SsActionButton(
+            label: s['privacyReadAll'],
+            tone: SsButtonTone.secondary,
+            icon: Icons.open_in_new_rounded,
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.push('/about');
+            },
           ),
         ],
       ),

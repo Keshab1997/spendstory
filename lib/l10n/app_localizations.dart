@@ -2361,6 +2361,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Added manually'**
   String get sourceManual;
+
+  /// No description provided for @aboutScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About & privacy'**
+  String get aboutScreenTitle;
+
+  /// No description provided for @aboutCollectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What we collect'**
+  String get aboutCollectTitle;
+
+  /// No description provided for @aboutCollectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing. Your transactions, budgets and notes stay on this phone. There is no server, no account and no sign-in, so there is nowhere for them to go — the app cannot send your data out even if it wanted to.'**
+  String get aboutCollectBody;
+
+  /// No description provided for @aboutReadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What we read, and why'**
+  String get aboutReadTitle;
+
+  /// No description provided for @aboutReadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Each permission below is asked for exactly one reason. Hand any of them back in Android settings and the app keeps working — you just type more of it yourself.'**
+  String get aboutReadBody;
+
+  /// No description provided for @aboutPermSmsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank SMS'**
+  String get aboutPermSmsTitle;
+
+  /// No description provided for @aboutPermSmsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction alerts from banks, cards and wallets only — the amount, the merchant and the date. OTPs, passwords and personal messages are dropped before anything else looks at them, and no message is ever sent anywhere.'**
+  String get aboutPermSmsBody;
+
+  /// No description provided for @aboutPermNotifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment app notifications'**
+  String get aboutPermNotifyTitle;
+
+  /// No description provided for @aboutPermNotifyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'With your permission, SpendStory reads notifications from the payment apps you choose — PhonePe, Google Pay, Paytm and the rest — so a UPI payment lands in the ledger the moment it happens.'**
+  String get aboutPermNotifyBody;
+
+  /// No description provided for @aboutPermAlertsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications from us'**
+  String get aboutPermAlertsTitle;
+
+  /// No description provided for @aboutPermAlertsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Only for the budget warnings and payment reminders you switch on yourself. Nothing else is ever notified.'**
+  String get aboutPermAlertsBody;
+
+  /// No description provided for @aboutPermLockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fingerprint or face (optional)'**
+  String get aboutPermLockTitle;
+
+  /// No description provided for @aboutPermLockBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Used only to open the app on this phone. The reading stays inside Android — SpendStory never sees it.'**
+  String get aboutPermLockBody;
+
+  /// No description provided for @aboutPermInternetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet'**
+  String get aboutPermInternetTitle;
+
+  /// No description provided for @aboutPermInternetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Needed for the ads in the free version and for Play billing. No transaction, amount, merchant or category ever travels with an ad request.'**
+  String get aboutPermInternetBody;
+
+  /// No description provided for @aboutRightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your rights over your data'**
+  String get aboutRightsTitle;
+
+  /// No description provided for @aboutRightAccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See all of it'**
+  String get aboutRightAccessTitle;
+
+  /// No description provided for @aboutRightAccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the whole ledger out as CSV or JSON from Settings, any time, free.'**
+  String get aboutRightAccessBody;
+
+  /// No description provided for @aboutRightCorrectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct anything'**
+  String get aboutRightCorrectTitle;
+
+  /// No description provided for @aboutRightCorrectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit any transaction, change its category, or delete it. A wrong guess by the parser is yours to overrule.'**
+  String get aboutRightCorrectBody;
+
+  /// No description provided for @aboutRightEraseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase everything'**
+  String get aboutRightEraseTitle;
+
+  /// No description provided for @aboutRightEraseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings, Delete all data, confirm twice — every transaction, budget and category is gone from this phone immediately.'**
+  String get aboutRightEraseBody;
+
+  /// No description provided for @aboutRightWithdrawTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take permission back'**
+  String get aboutRightWithdrawTitle;
+
+  /// No description provided for @aboutRightWithdrawBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn SMS or notification access off in Android settings whenever you like. The app goes back to manual entry — nothing is held hostage.'**
+  String get aboutRightWithdrawBody;
+
+  /// No description provided for @aboutEraseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to delete everything'**
+  String get aboutEraseTitle;
+
+  /// No description provided for @aboutEraseStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings → Delete all data.'**
+  String get aboutEraseStep1;
+
+  /// No description provided for @aboutEraseStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm twice. The second confirmation lists what is about to go.'**
+  String get aboutEraseStep2;
+
+  /// No description provided for @aboutEraseStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Uninstalling the app takes the database and every setting with it.'**
+  String get aboutEraseStep3;
+
+  /// No description provided for @aboutContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions or complaints'**
+  String get aboutContactTitle;
+
+  /// No description provided for @aboutContactBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to us and we answer within 30 days. Your data is on your phone, so we cannot look at your ledger — but we can fix what is broken.'**
+  String get aboutContactBody;
+
+  /// No description provided for @aboutGrievanceEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Support email'**
+  String get aboutGrievanceEmail;
+
+  /// No description provided for @aboutEmailMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The support address is being set up. Until it is live, open an issue on the source repository below.'**
+  String get aboutEmailMissing;
+
+  /// No description provided for @aboutSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Source code'**
+  String get aboutSourceTitle;
+
+  /// No description provided for @aboutSourceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The whole app is public. Every sentence on this screen can be checked against it.'**
+  String get aboutSourceBody;
+
+  /// No description provided for @aboutTapToCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to copy'**
+  String get aboutTapToCopy;
+
+  /// No description provided for @aboutCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get aboutCopied;
+
+  /// No description provided for @privacyReadAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the full policy'**
+  String get privacyReadAll;
 }
 
 class _AppLocalizationsDelegate

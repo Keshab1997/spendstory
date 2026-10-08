@@ -31,6 +31,9 @@ const List<String> _allRoutes = <String>[
   '/categories',
   '/search',
   '/recurring',
+  // S-21 is nothing but text in three languages, which is exactly the shape
+  // that overflows on a 360 dp phone at 1.3x.
+  '/about',
 ];
 
 void main() {

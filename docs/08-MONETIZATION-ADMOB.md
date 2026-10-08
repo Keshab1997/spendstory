@@ -176,7 +176,7 @@ class AdSlot extends ConsumerWidget {
 | Tests | `test/ads/ad_rewards_test.dart`, `test/ads/ad_consent_test.dart`, `test/ui/rewarded_offer_test.dart` | the caps, the three outcomes, the launch order, and the labelled offer on screen |
 | Settings control | `lib/ui/screens/settings_screen.dart` | personalized ads (off by default in India) + the privacy-options door **only when UMP requires it** |
 
-**Four things Keshab owns, and none of them is in the repo:**
+**Five things Keshab owns, and none of them is in the repo:**
 1. Create the six units in the AdMob console and paste their ids into
    `AdLiveIds` (`lib/ads/ad_ids.dart`), plus the app id.
 2. Put the live app id in `android/local.properties` (`admob.appId=…`) — machine
@@ -191,6 +191,12 @@ class AdSlot extends ConsumerWidget {
    `AdLiveIds.rewarded`. Until the form exists, `isConsentFormAvailable()` is
    false and the app simply requests no ads in the regions that need one; until
    the unit id exists, the 24-hour taste offer is not shown at all.
+5. The **grievance address** for `AppInfo.grievanceEmail` (`lib/app/app_info.dart`),
+   plus the hosted copy of the policy the Play console asks for
+   (`docs/07 §4`, `docs/10 §7`). DPDP wants a named contact that answers within
+   30 days, and Play wants a policy URL. Until the address is set, S-21 says the
+   address is being set up and points at the repository instead — it never shows
+   an invented mailbox.
 
 Until these are done the app ships **ad-free**, which is the safe direction: an
 empty id requests nothing, and a live id is never reached in debug. The paywall

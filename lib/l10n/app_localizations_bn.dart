@@ -1222,4 +1222,131 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get sourceManual => 'নিজে যোগ করা';
+
+  @override
+  String get aboutScreenTitle => 'পরিচিতি ও প্রাইভেসি';
+
+  @override
+  String get aboutCollectTitle => 'আমরা কী নিই';
+
+  @override
+  String get aboutCollectBody =>
+      'কিছুই না। তোমার লেনদেন, বাজেট আর নোট সব এই ফোনেই থাকে। কোনো সার্ভার নেই, অ্যাকাউন্ট নেই, সাইন-ইন নেই — তাই এগুলোর যাওয়ার জায়গাই নেই। চাইলেও অ্যাপ তোমার ডেটা বাইরে পাঠাতে পারে না।';
+
+  @override
+  String get aboutReadTitle => 'আমরা কী পড়ি, আর কেন';
+
+  @override
+  String get aboutReadBody =>
+      'নিচের প্রতিটা অনুমতি ঠিক একটা কারণেই চাওয়া হয়। Android settings-এ ফিরিয়ে দিলে অ্যাপ তবু চলবে — শুধু কিছু জিনিস নিজে লিখতে হবে।';
+
+  @override
+  String get aboutPermSmsTitle => 'ব্যাঙ্কের SMS';
+
+  @override
+  String get aboutPermSmsBody =>
+      'শুধু ব্যাঙ্ক, কার্ড আর ওয়ালেটের লেনদেনের SMS — টাকার পরিমাণ, দোকান আর তারিখ। OTP, পাসওয়ার্ড বা ব্যক্তিগত message আর কিছু দেখার আগেই বাদ পড়ে, আর কোনো message কোথাও পাঠানো হয় না।';
+
+  @override
+  String get aboutPermNotifyTitle => 'পেমেন্ট অ্যাপের notification';
+
+  @override
+  String get aboutPermNotifyBody =>
+      'তোমার অনুমতি নিয়ে SpendStory তোমার বাছা পেমেন্ট অ্যাপগুলোর — PhonePe, Google Pay, Paytm — notification পড়ে, যাতে UPI পেমেন্ট হওয়ার সঙ্গে সঙ্গেই খাতায় উঠে যায়।';
+
+  @override
+  String get aboutPermAlertsTitle => 'আমাদের পাঠানো notification';
+
+  @override
+  String get aboutPermAlertsBody =>
+      'শুধু তুমি নিজে চালু করা বাজেট সতর্কতা আর পেমেন্টের রিমাইন্ডারের জন্য। আর কিছুর জন্য কখনো নয়।';
+
+  @override
+  String get aboutPermLockTitle => 'ফিঙ্গারপ্রিন্ট বা মুখ (ইচ্ছে হলে)';
+
+  @override
+  String get aboutPermLockBody =>
+      'শুধু এই ফোনে অ্যাপ খোলার জন্য। পড়াটা Android-এর ভিতরেই থাকে — SpendStory কখনো দেখে না।';
+
+  @override
+  String get aboutPermInternetTitle => 'ইন্টারনেট';
+
+  @override
+  String get aboutPermInternetBody =>
+      'ফ্রি ভার্সনের বিজ্ঞাপন আর Play billing-এর জন্য দরকার। কোনো লেনদেন, টাকার পরিমাণ, দোকান বা ক্যাটাগরি কোনো ad request-এর সঙ্গে যায় না।';
+
+  @override
+  String get aboutRightsTitle => 'তোমার ডেটার উপর তোমার অধিকার';
+
+  @override
+  String get aboutRightAccessTitle => 'সবটা দেখো';
+
+  @override
+  String get aboutRightAccessBody =>
+      'Settings থেকে পুরো খাতা CSV বা JSON-এ যেকোনো সময়, ফ্রিতে নিয়ে যাও।';
+
+  @override
+  String get aboutRightCorrectTitle => 'যা খুশি ঠিক করো';
+
+  @override
+  String get aboutRightCorrectBody =>
+      'যেকোনো লেনদেন এডিট করো, ক্যাটাগরি বদলাও বা মুছে ফেলো। parser ভুল করলে সেটা তুমিই বদলাতে পারো।';
+
+  @override
+  String get aboutRightEraseTitle => 'সব মুছে ফেলো';
+
+  @override
+  String get aboutRightEraseBody =>
+      'Settings, সব ডেটা মুছুন, দুবার নিশ্চিত — এই ফোন থেকে সব লেনদেন, বাজেট আর ক্যাটাগরি সঙ্গে সঙ্গে মুছে যায়।';
+
+  @override
+  String get aboutRightWithdrawTitle => 'অনুমতি ফিরিয়ে নাও';
+
+  @override
+  String get aboutRightWithdrawBody =>
+      'Android settings-এ SMS বা notification access যখন খুশি বন্ধ করে দাও। অ্যাপ নিজে লেখার মোডে ফিরে যায় — কোনো সুবিধা জিম্মি করে রাখা নেই।';
+
+  @override
+  String get aboutEraseTitle => 'সব মুছবে কীভাবে';
+
+  @override
+  String get aboutEraseStep1 => 'Settings → সব ডেটা মুছুন খোলো।';
+
+  @override
+  String get aboutEraseStep2 =>
+      'দুবার নিশ্চিত করো। দ্বিতীয়বার কী কী মুছে যাবে সেটা লেখা থাকে।';
+
+  @override
+  String get aboutEraseStep3 =>
+      'অ্যাপ আনইনস্টল করলে ডেটাবেস আর সব সেটিংসও সঙ্গে চলে যায়।';
+
+  @override
+  String get aboutContactTitle => 'প্রশ্ন বা অভিযোগ';
+
+  @override
+  String get aboutContactBody =>
+      'লিখে পাঠাও, ৩০ দিনের মধ্যে উত্তর পাবে। তোমার ডেটা তোমার ফোনে, তাই আমরা তোমার খাতা দেখতে পারি না — কিন্তু যা নষ্ট তা ঠিক করতে পারি।';
+
+  @override
+  String get aboutGrievanceEmail => 'সাপোর্ট ইমেল';
+
+  @override
+  String get aboutEmailMissing =>
+      'সাপোর্ট অ্যাড্রেস ঠিক করা হচ্ছে। চালু হওয়ার আগে নিচের সোর্স রিপোজিটরিতে একটা issue খুলে দাও।';
+
+  @override
+  String get aboutSourceTitle => 'সোর্স কোড';
+
+  @override
+  String get aboutSourceBody =>
+      'পুরো অ্যাপ পাবলিক। এই স্ক্রিনের প্রতিটা কথা ওটাতে মিলিয়ে দেখা যায়।';
+
+  @override
+  String get aboutTapToCopy => 'কপি করতে চাপ দাও';
+
+  @override
+  String get aboutCopied => 'কপি হয়েছে';
+
+  @override
+  String get privacyReadAll => 'পুরো প্রাইভেসি নীতি দেখো';
 }

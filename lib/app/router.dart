@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ui/screens/about_screen.dart';
 import '../ui/screens/accounts_screen.dart';
 import '../ui/screens/budget_detail_screen.dart';
 import '../ui/screens/budgets_screen.dart';
@@ -197,6 +198,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/recurring',
         builder: (context, state) => const RecurringScreen(),
       ),
+      // S-21. A plain pushed route, not a sheet: it is the page a reviewer and
+      // a worried user both want to read in full, and it is reachable from the
+      // permission screen *before* the first ask (docs/07 §5, notice).
+      GoRoute(path: '/about', builder: (context, state) => const AboutScreen()),
       GoRoute(
         path: '/pro',
         pageBuilder: (context, state) =>

@@ -18,7 +18,6 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spendstory/l10n/app_localizations.dart';
 import 'package:spendstory/l10n/strings_table.g.dart';
@@ -68,8 +67,6 @@ const Set<String> _sameInEveryLanguage = <String>{
 
 void main() {
   final en = _arb('en');
-  final hi = _arb('hi');
-  final bn = _arb('bn');
   final keys = en.keys.toList();
   final sources = _libSources();
 

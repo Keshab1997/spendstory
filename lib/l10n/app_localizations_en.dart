@@ -1230,4 +1230,131 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sourceManual => 'Added manually';
+
+  @override
+  String get aboutScreenTitle => 'About & privacy';
+
+  @override
+  String get aboutCollectTitle => 'What we collect';
+
+  @override
+  String get aboutCollectBody =>
+      'Nothing. Your transactions, budgets and notes stay on this phone. There is no server, no account and no sign-in, so there is nowhere for them to go — the app cannot send your data out even if it wanted to.';
+
+  @override
+  String get aboutReadTitle => 'What we read, and why';
+
+  @override
+  String get aboutReadBody =>
+      'Each permission below is asked for exactly one reason. Hand any of them back in Android settings and the app keeps working — you just type more of it yourself.';
+
+  @override
+  String get aboutPermSmsTitle => 'Bank SMS';
+
+  @override
+  String get aboutPermSmsBody =>
+      'Transaction alerts from banks, cards and wallets only — the amount, the merchant and the date. OTPs, passwords and personal messages are dropped before anything else looks at them, and no message is ever sent anywhere.';
+
+  @override
+  String get aboutPermNotifyTitle => 'Payment app notifications';
+
+  @override
+  String get aboutPermNotifyBody =>
+      'With your permission, SpendStory reads notifications from the payment apps you choose — PhonePe, Google Pay, Paytm and the rest — so a UPI payment lands in the ledger the moment it happens.';
+
+  @override
+  String get aboutPermAlertsTitle => 'Notifications from us';
+
+  @override
+  String get aboutPermAlertsBody =>
+      'Only for the budget warnings and payment reminders you switch on yourself. Nothing else is ever notified.';
+
+  @override
+  String get aboutPermLockTitle => 'Fingerprint or face (optional)';
+
+  @override
+  String get aboutPermLockBody =>
+      'Used only to open the app on this phone. The reading stays inside Android — SpendStory never sees it.';
+
+  @override
+  String get aboutPermInternetTitle => 'Internet';
+
+  @override
+  String get aboutPermInternetBody =>
+      'Needed for the ads in the free version and for Play billing. No transaction, amount, merchant or category ever travels with an ad request.';
+
+  @override
+  String get aboutRightsTitle => 'Your rights over your data';
+
+  @override
+  String get aboutRightAccessTitle => 'See all of it';
+
+  @override
+  String get aboutRightAccessBody =>
+      'Take the whole ledger out as CSV or JSON from Settings, any time, free.';
+
+  @override
+  String get aboutRightCorrectTitle => 'Correct anything';
+
+  @override
+  String get aboutRightCorrectBody =>
+      'Edit any transaction, change its category, or delete it. A wrong guess by the parser is yours to overrule.';
+
+  @override
+  String get aboutRightEraseTitle => 'Erase everything';
+
+  @override
+  String get aboutRightEraseBody =>
+      'Settings, Delete all data, confirm twice — every transaction, budget and category is gone from this phone immediately.';
+
+  @override
+  String get aboutRightWithdrawTitle => 'Take permission back';
+
+  @override
+  String get aboutRightWithdrawBody =>
+      'Turn SMS or notification access off in Android settings whenever you like. The app goes back to manual entry — nothing is held hostage.';
+
+  @override
+  String get aboutEraseTitle => 'How to delete everything';
+
+  @override
+  String get aboutEraseStep1 => 'Open Settings → Delete all data.';
+
+  @override
+  String get aboutEraseStep2 =>
+      'Confirm twice. The second confirmation lists what is about to go.';
+
+  @override
+  String get aboutEraseStep3 =>
+      'Uninstalling the app takes the database and every setting with it.';
+
+  @override
+  String get aboutContactTitle => 'Questions or complaints';
+
+  @override
+  String get aboutContactBody =>
+      'Write to us and we answer within 30 days. Your data is on your phone, so we cannot look at your ledger — but we can fix what is broken.';
+
+  @override
+  String get aboutGrievanceEmail => 'Support email';
+
+  @override
+  String get aboutEmailMissing =>
+      'The support address is being set up. Until it is live, open an issue on the source repository below.';
+
+  @override
+  String get aboutSourceTitle => 'Source code';
+
+  @override
+  String get aboutSourceBody =>
+      'The whole app is public. Every sentence on this screen can be checked against it.';
+
+  @override
+  String get aboutTapToCopy => 'Tap to copy';
+
+  @override
+  String get aboutCopied => 'Copied';
+
+  @override
+  String get privacyReadAll => 'Read the full policy';
 }

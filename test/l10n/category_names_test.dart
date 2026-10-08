@@ -16,7 +16,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:spendstory/data/seed.dart';
 import 'package:spendstory/domain/models.dart';
 import 'package:spendstory/domain/view_models.dart';
-import 'package:spendstory/ui/components/lists.dart';
 
 import '../ui/ledger_harness.dart';
 

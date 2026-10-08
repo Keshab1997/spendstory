@@ -10,10 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../ads/ad_consent.dart';
+import '../../app/app_info.dart';
 import '../../app/providers.dart';
 import '../../pro/pro_controller.dart';
 import '../components/controls.dart';
-import '../components/privacy_sheet.dart';
 import '../components/surfaces.dart';
 import '../format.dart';
 import '../tokens.dart';
@@ -248,7 +248,9 @@ class SettingsScreen extends ConsumerWidget {
                   tint: c.violet600,
                   title: s['privacy'],
                   subtitle: s['privacyBody'],
-                  onTap: () => showPrivacySheet(context, ref),
+                  // S-21 is the full notice and the DPDP page; the sheet stays
+                  // as the two-line summary the paywall needs inline.
+                  onTap: () => context.push('/about'),
                 ),
               ],
             ),
@@ -305,21 +307,33 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: SsSpace.x6),
           Center(
-            child: Column(
-              children: [
-                Text(
-                  localizeDigits(
-                    '${s.appName} · ${s['version']} 1.0.0 (1)',
-                    locale,
-                  ),
-                  style: SsText.micro.copyWith(color: c.textTertiary),
+            child: InkWell(
+              borderRadius: SsRadius.rMd,
+              onTap: () => context.push('/about'),
+              child: Padding(
+                padding: const EdgeInsets.all(SsSpace.x2),
+                child: Column(
+                  children: [
+                    Text(
+                      localizeDigits(
+                        '${s.appName} · ${s['version']} ${AppInfo.version}',
+                        locale,
+                      ),
+                      style: SsText.micro.copyWith(color: c.textTertiary),
+                    ),
+                    const SizedBox(height: SsSpace.x1),
+                    Text(
+                      s['aboutBody'],
+                      style: SsText.micro.copyWith(color: c.textTertiary),
+                    ),
+                    const SizedBox(height: SsSpace.x1),
+                    Text(
+                      s['about'],
+                      style: SsText.micro.copyWith(color: c.violet600),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: SsSpace.x1),
-                Text(
-                  s['aboutBody'],
-                  style: SsText.micro.copyWith(color: c.textTertiary),
-                ),
-              ],
+              ),
             ),
           ),
           const SizedBox(height: SsSpace.x4),

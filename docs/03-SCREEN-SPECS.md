@@ -377,6 +377,13 @@ Legend: **P0** = v1.0 must ship · **P1** = v1.0 target · **P2** = v1.1
 **Ads:** ❌.
 **Why it matters:** ei screen ta Play declaration er sathe consistent hote hobe — `07-PERMISSIONS-POLICY.md` dekho.
 
+**Implemented (T-704):** `lib/ui/screens/about_screen.dart`, route `/about`.
+Reachable from the SMS permission screen (before the first ask), Settings →
+Privacy, and the paywall's privacy summary. The contact address is
+`AppInfo.grievanceEmail` and is empty until Keshab sets it (`08 §8b`); until
+then the screen says so and points at the repository. There is no `AdSlot` on
+it, and both contact rows copy rather than open a browser.
+
 ---
 
 ## S-22 · Pro Paywall — `/pro` — P0
