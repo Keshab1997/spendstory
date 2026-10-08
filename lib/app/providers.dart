@@ -648,7 +648,9 @@ final previousMonthSummaryProvider = Provider<LedgerSummary>((ref) {
   return LedgerSummary.from(txns, fromMs: prev, toMs: endOfMonth(prev));
 });
 
-/// Expense totals for the last six months, oldest first — the Insights trend.
+/// Expense totals for the last six months, oldest first. The S-17 rewrite
+/// draws a 30-day line instead, so nothing on a screen reads this yet — it is
+/// kept for the MiniBars component and the home trend still to come.
 final sixMonthTrendProvider = Provider<List<int>>((ref) {
   final txns = ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
   final now = DateTime.now();

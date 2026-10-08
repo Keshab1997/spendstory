@@ -660,3 +660,155 @@ class _GaugePainter extends CustomPainter {
   bool shouldRepaint(covariant _GaugePainter old) =>
       old.progress != progress || old.color != color;
 }
+
+/// A 30-day spending line with a gradient fill, drawn left to right.
+///
+/// Hand-painted for the same reason the donut is: it is a polyline and a fill,
+/// and it has to match the token ramp exactly. The "draw" is a path metric —
+/// the line is painted up to a moving point rather than fading in, which is
+/// what makes it read as the month being written out.
+class TrendLine extends StatelessWidget {
+  const TrendLine({
+    super.key,
+    required this.values,
+    this.height = 132,
+    this.color,
+  });
+
+  /// One point per day, oldest first. Daily totals in paise.
+  final List<int> values;
+
+  final double height;
+
+  /// Defaults to the money gradient's violet.
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = SsColors.of(context);
+    final line = color ?? c.violet600;
+
+    if (values.length < 2) {
+      return SizedBox(
+        height: height,
+        child: Center(
+          child: Text(
+            '—',
+            style: SsText.caption.copyWith(color: c.textTertiary),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: height,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 900),
+        curve: Curves.easeInOutCubic,
+        builder: (context, progress, _) => CustomPaint(
+          size: Size.infinite,
+          painter: _TrendPainter(
+            values: values,
+            progress: progress,
+            line: line,
+            fill: line.withValues(alpha: c.isDark ? 0.28 : 0.18),
+            baseline: c.surfaceTint,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TrendPainter extends CustomPainter {
+  _TrendPainter({
+    required this.values,
+    required this.progress,
+    required this.line,
+    required this.fill,
+    required this.baseline,
+  });
+
+  final List<int> values;
+  final double progress;
+  final Color line;
+  final Color fill;
+  final Color baseline;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var maxValue = 1;
+    for (final v in values) {
+      if (v > maxValue) maxValue = v;
+    }
+
+    final points = <Offset>[
+      for (var i = 0; i < values.length; i++)
+        Offset(
+          size.width * i / (values.length - 1),
+          size.height -
+              (size.height * 0.88) * (values[i] / maxValue).clamp(0.0, 1.0) -
+              4,
+        ),
+    ];
+
+    final path = Path()..moveTo(points.first.dx, points.first.dy);
+    for (final p in points.skip(1)) {
+      path.lineTo(p.dx, p.dy);
+    }
+
+    final metric = path.computeMetrics().first;
+    // The fill is the line's own path closed down to the baseline, so it
+    // arrives with the drawing instead of revealing the shape in advance.
+    canvas.drawPath(
+      Path.from(metric.extractPath(0, metric.length * progress))
+        ..lineTo(points.first.dx, size.height)
+        ..lineTo(
+          points.first.dx +
+              (points.last.dx - points.first.dx) * progress,
+          size.height,
+        )
+        ..close(),
+      Paint()..color = fill,
+    );
+
+    canvas.drawPath(
+      metric.extractPath(0, metric.length * progress),
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.4
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..color = line,
+    );
+
+    // The tip: a dot where the drawing has reached.
+    canvas.drawCircle(
+      Offset(
+        points.first.dx + (points.last.dx - points.first.dx) * progress,
+        _yAt(points, progress),
+      ),
+      3.6,
+      Paint()..color = line,
+    );
+  }
+
+  double _yAt(List<Offset> points, double t) {
+    final x = points.first.dx + (points.last.dx - points.first.dx) * t;
+    for (var i = 1; i < points.length; i++) {
+      if (x <= points[i].dx) {
+        final a = points[i - 1];
+        final b = points[i];
+        final span = (b.dx - a.dx).abs();
+        final local = span == 0 ? 0.0 : ((x - a.dx) / span).clamp(0.0, 1.0);
+        return a.dy + (b.dy - a.dy) * local;
+      }
+    }
+    return points.last.dy;
+  }
+
+  @override
+  bool shouldRepaint(covariant _TrendPainter old) =>
+      old.progress != progress || old.values.length != values.length;
+}

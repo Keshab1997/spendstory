@@ -250,7 +250,11 @@ void main() {
 
       router.go('/insights');
       await tester.pumpAndSettle();
-      expect(find.text('Last 6 months'), findsOneWidget);
+      // The real S-17 screen now, not the Batch 4 placeholder: the window
+      // switcher, the 30-day line it draws, and English on both.
+      expect(find.text('Week'), findsOneWidget);
+      expect(find.text('Daily spending, last 30 days'), findsOneWidget);
+      expect(find.text(SsStrings('bn')['periodWeek']), findsNothing);
 
       router.go('/settings');
       await tester.pumpAndSettle();
