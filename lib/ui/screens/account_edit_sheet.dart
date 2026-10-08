@@ -92,9 +92,7 @@ class _AccountEditorSheetState extends ConsumerState<AccountEditorSheet> {
 
     final name = _name.text.trim();
     if (name.isEmpty) {
-      messenger.showSnackBar(
-        SnackBar(content: Text(s['accountNameRequired'])),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(s['accountNameRequired'])));
       return;
     }
 
@@ -167,10 +165,7 @@ class _AccountEditorSheetState extends ConsumerState<AccountEditorSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _LabelledField(
-                      label: s['accountName'],
-                      controller: _name,
-                    ),
+                    _LabelledField(label: s['accountName'], controller: _name),
                     const SizedBox(height: SsSpace.x4),
 
                     Text(

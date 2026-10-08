@@ -245,7 +245,8 @@ Offset _ringPoint(WidgetTester tester, double degrees) {
   final centre = tester.getCenter(find.byType(DonutChart));
   final radians = degrees * math.pi / 180;
   const radius = 70.0; // between the 66px inner edge and the 84px outer edge
-  return centre + Offset(radius * math.sin(radians), -radius * math.cos(radians));
+  return centre +
+      Offset(radius * math.sin(radians), -radius * math.cos(radians));
 }
 
 void main() {

@@ -49,11 +49,10 @@ class NativeBridge {
   }) async {
     if (!hasNativeHost) return false;
     try {
-      return await _channel.invokeMethod<bool>('postNotification', <String, Object?>{
-            'id': id,
-            'title': title,
-            'body': body,
-          }) ??
+      return await _channel.invokeMethod<bool>(
+            'postNotification',
+            <String, Object?>{'id': id, 'title': title, 'body': body},
+          ) ??
           false;
     } on PlatformException {
       return false;

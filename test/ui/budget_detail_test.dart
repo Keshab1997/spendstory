@@ -174,7 +174,6 @@ void main() {
       expect(find.text('₹750'), findsWidgets);
       expect(find.text('₹1,000'), findsWidgets);
     });
-
   });
 
   group('S-15 the daily allowance', () {

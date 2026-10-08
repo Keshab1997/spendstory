@@ -29,14 +29,13 @@ AccountView _account(
   String type,
   int opening, {
   String? last4,
-}) =>
-    AccountView(
-      id: id,
-      name: name,
-      type: type,
-      openingBalancePaise: opening,
-      last4: last4,
-    );
+}) => AccountView(
+  id: id,
+  name: name,
+  type: type,
+  openingBalancePaise: opening,
+  last4: last4,
+);
 
 TxnView _txn({
   required String id,
@@ -61,7 +60,12 @@ final _accounts = <AccountView>[
 ];
 
 final _ledger = <TxnView>[
-  _txn(id: 'salary', paise: 5000000, accountId: 'acc-hdfc', direction: TxnDirection.income),
+  _txn(
+    id: 'salary',
+    paise: 5000000,
+    accountId: 'acc-hdfc',
+    direction: TxnDirection.income,
+  ),
   _txn(id: 'bigbasket', paise: 124000, accountId: 'acc-hdfc'),
   _txn(id: 'chai', paise: 3000, accountId: 'acc-cash'),
 ];
@@ -146,7 +150,9 @@ void main() {
   });
 
   group('S-16 balances', () {
-    testWidgets('each card computes opening + credits − debits', (tester) async {
+    testWidgets('each card computes opening + credits − debits', (
+      tester,
+    ) async {
       await _pump(tester);
 
       expect(find.text('₹96,960'), findsOneWidget); // HDFC
@@ -219,7 +225,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Give the account a name'), findsOneWidget);
-      expect((container.read(accountsProvider).valueOrNull ?? const []).length, 3);
+      expect(
+        (container.read(accountsProvider).valueOrNull ?? const []).length,
+        3,
+      );
     });
 
     testWidgets('editing the opening balance moves the card and the total', (

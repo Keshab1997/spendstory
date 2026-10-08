@@ -582,9 +582,7 @@ class CircularGauge extends StatelessWidget {
     // danger once the cap is gone.
     final arcColour =
         color ??
-        (ratio >= 1.0
-            ? c.danger
-            : (ratio >= 0.8 ? c.gold500 : c.violet600));
+        (ratio >= 1.0 ? c.danger : (ratio >= 0.8 ? c.gold500 : c.violet600));
 
     return SizedBox(
       width: size,
@@ -765,8 +763,7 @@ class _TrendPainter extends CustomPainter {
       Path.from(metric.extractPath(0, metric.length * progress))
         ..lineTo(points.first.dx, size.height)
         ..lineTo(
-          points.first.dx +
-              (points.last.dx - points.first.dx) * progress,
+          points.first.dx + (points.last.dx - points.first.dx) * progress,
           size.height,
         )
         ..close(),

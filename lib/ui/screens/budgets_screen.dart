@@ -42,7 +42,8 @@ class BudgetsScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final locale = ref.watch(localeProvider);
     final showAds = ref.watch(adsVisibleProvider);
-    final budgets = ref.watch(budgetsProvider).valueOrNull ?? const <BudgetView>[];
+    final budgets =
+        ref.watch(budgetsProvider).valueOrNull ?? const <BudgetView>[];
     final txns =
         ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
     final categoryById = ref.watch(categoryByIdProvider);
@@ -178,10 +179,8 @@ class BudgetsScreen extends ConsumerWidget {
                     label: s['budgetEdit'],
                     tone: SsButtonTone.secondary,
                     height: 40,
-                    onPressed: () => showBudgetEditor(
-                      context,
-                      existing: overall.first,
-                    ),
+                    onPressed: () =>
+                        showBudgetEditor(context, existing: overall.first),
                   ),
                 ],
               ),
@@ -218,7 +217,8 @@ class BudgetsScreen extends ConsumerWidget {
 
           // ---- a cap that keeps being missed ----------------------------------
           for (final status in shown)
-            if (status.at120) _SuggestionCard(status: status, locale: locale, s: s),
+            if (status.at120)
+              _SuggestionCard(status: status, locale: locale, s: s),
 
           if (shown.isNotEmpty) ...[
             const SizedBox(height: SsSpace.x4),
@@ -269,10 +269,7 @@ class _NoOverallCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            text,
-            style: SsText.caption.copyWith(color: c.textSecondary),
-          ),
+          Text(text, style: SsText.caption.copyWith(color: c.textSecondary)),
           const SizedBox(height: SsSpace.x3),
           SsActionButton(
             label: actionLabel,

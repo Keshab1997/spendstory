@@ -42,11 +42,7 @@ Future<bool> showBudgetEditor(
 }
 
 class BudgetEditorSheet extends ConsumerStatefulWidget {
-  const BudgetEditorSheet({
-    super.key,
-    this.existing,
-    this.fixedCategoryId,
-  });
+  const BudgetEditorSheet({super.key, this.existing, this.fixedCategoryId});
 
   final BudgetView? existing;
 
@@ -91,7 +87,9 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
 
     final rupees = int.tryParse(_amount.text.trim()) ?? 0;
     if (rupees <= 0) {
-      messenger.showSnackBar(SnackBar(content: Text(s['budgetAmountRequired'])));
+      messenger.showSnackBar(
+        SnackBar(content: Text(s['budgetAmountRequired'])),
+      );
       return;
     }
 
@@ -99,9 +97,7 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
     final budget = BudgetView(
       // A new budget gets an id that is stable and readable in the database —
       // budgets are few, and a uuid here would buy nothing.
-      id:
-          existing?.id ??
-          'budget-${_categoryId ?? 'overall'}',
+      id: existing?.id ?? 'budget-${_categoryId ?? 'overall'}',
       categoryId: _categoryId,
       amountPaise: rupees * 100,
       period: existing?.period ?? 'monthly',
@@ -160,8 +156,9 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
     final locale = ref.watch(localeProvider);
     final all =
         ref.watch(categoriesProvider).valueOrNull ?? const <CategoryView>[];
-    final expenseCategories =
-        all.where((cat) => cat.kind == TxnDirection.expense).toList();
+    final expenseCategories = all
+        .where((cat) => cat.kind == TxnDirection.expense)
+        .toList();
 
     return SafeArea(
       top: false,
@@ -239,8 +236,7 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
                               icon: cat.icon,
                               selected: _categoryId == cat.id,
                               color: cat.color,
-                              onTap: () =>
-                                  setState(() => _categoryId = cat.id),
+                              onTap: () => setState(() => _categoryId = cat.id),
                             ),
                         ],
                       ),
@@ -288,9 +284,7 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
                         Expanded(
                           child: Text(
                             s['budgetStartDayBody'],
-                            style: SsText.micro.copyWith(
-                              color: c.textTertiary,
-                            ),
+                            style: SsText.micro.copyWith(color: c.textTertiary),
                           ),
                         ),
                       ],
@@ -323,10 +317,7 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
                 ),
               ),
             ),
-            SsActionButton(
-              label: s['budgetSave'],
-              onPressed: _save,
-            ),
+            SsActionButton(label: s['budgetSave'], onPressed: _save),
             if (widget.existing != null) ...[
               const SizedBox(height: SsSpace.x2),
               SsActionButton(

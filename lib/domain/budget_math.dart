@@ -94,15 +94,19 @@ BudgetCycle _cycleBetween(int startMs, int endMs, int nowMs) {
   final start = DateTime.fromMillisecondsSinceEpoch(startMs);
   final end = DateTime.fromMillisecondsSinceEpoch(endMs);
   final totalDays =
-      DateTime(end.year, end.month, end.day)
-          .difference(DateTime(start.year, start.month, start.day))
-          .inDays +
+      DateTime(
+        end.year,
+        end.month,
+        end.day,
+      ).difference(DateTime(start.year, start.month, start.day)).inDays +
       1;
   final now = DateTime.fromMillisecondsSinceEpoch(nowMs);
   final elapsed =
-      DateTime(now.year, now.month, now.day)
-          .difference(DateTime(start.year, start.month, start.day))
-          .inDays +
+      DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).difference(DateTime(start.year, start.month, start.day)).inDays +
       1;
   return BudgetCycle(
     startMs: startMs,
@@ -128,8 +132,7 @@ class BudgetStatus {
   int get limitPaise => budget.amountPaise;
 
   /// Uncapped: 1.07 really is 107%, and the screen has to say so.
-  double get ratio =>
-      limitPaise <= 0 ? 0 : spentPaise / limitPaise;
+  double get ratio => limitPaise <= 0 ? 0 : spentPaise / limitPaise;
 
   int get remainingPaise => limitPaise - spentPaise;
 
@@ -144,8 +147,7 @@ class BudgetStatus {
   ///
   /// Null — not zero — when the money is already gone or the cycle is over,
   /// because "spend ₹0 a day" is advice and "nothing left to spread" is a fact.
-  int? get dailyAllowancePaise =>
-      remainingPaise <= 0 || cycle.daysLeft <= 0
+  int? get dailyAllowancePaise => remainingPaise <= 0 || cycle.daysLeft <= 0
       ? null
       : remainingPaise ~/ cycle.daysLeft;
 }
@@ -163,7 +165,9 @@ int spentInCycle({
   var sum = 0;
   for (final t in txns) {
     if (t.direction != TxnDirection.expense) continue;
-    if (t.occurredAtMs < cycle.startMs || t.occurredAtMs > cycle.endMs) continue;
+    if (t.occurredAtMs < cycle.startMs || t.occurredAtMs > cycle.endMs) {
+      continue;
+    }
     if (budget.categoryId != null && t.categoryId != budget.categoryId) {
       continue;
     }

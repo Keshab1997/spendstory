@@ -53,19 +53,22 @@ void main() {
       expect(cycle.totalDays, 31, reason: '7 Oct → 6 Nov inclusive');
     });
 
-    test('a cycle that has not started yet this month belongs to last month', () {
-      final cycle = budgetCycle(nowMs: _ms(2026, 10, 3), startDay: 7);
+    test(
+      'a cycle that has not started yet this month belongs to last month',
+      () {
+        final cycle = budgetCycle(nowMs: _ms(2026, 10, 3), startDay: 7);
 
-      expect(
-        DateTime.fromMillisecondsSinceEpoch(cycle.startMs),
-        DateTime(2026, 9, 7),
-      );
-      expect(
-        DateTime.fromMillisecondsSinceEpoch(cycle.endMs),
-        DateTime(2026, 10, 6, 23, 59, 59, 999),
-      );
-      expect(cycle.daysLeft, 3);
-    });
+        expect(
+          DateTime.fromMillisecondsSinceEpoch(cycle.startMs),
+          DateTime(2026, 9, 7),
+        );
+        expect(
+          DateTime.fromMillisecondsSinceEpoch(cycle.endMs),
+          DateTime(2026, 10, 6, 23, 59, 59, 999),
+        );
+        expect(cycle.daysLeft, 3);
+      },
+    );
 
     test('the cycle wraps the year without arithmetic rolling over', () {
       final cycle = budgetCycle(nowMs: _ms(2026, 1, 3), startDay: 25);
@@ -158,7 +161,11 @@ void main() {
 
     test('an overall budget counts every expense and no income', () {
       const budget = BudgetView(id: 'b', amountPaise: 500000);
-      final status = budgetStatus(txns: txns, budget: budget, nowMs: _ms(2026, 10, 7));
+      final status = budgetStatus(
+        txns: txns,
+        budget: budget,
+        nowMs: _ms(2026, 10, 7),
+      );
 
       expect(status.spentPaise, 380000, reason: '₹38,000, income ignored');
     });
@@ -170,7 +177,11 @@ void main() {
         amountPaise: 500000,
         startDay: 5,
       );
-      final status = budgetStatus(txns: txns, budget: budget, nowMs: _ms(2026, 10, 7));
+      final status = budgetStatus(
+        txns: txns,
+        budget: budget,
+        nowMs: _ms(2026, 10, 7),
+      );
 
       expect(
         status.spentPaise,
@@ -221,26 +232,29 @@ void main() {
       expect(statusAt(150000).dailyAllowancePaise, isNull);
     });
 
-    test('the last day of a cycle yields no allowance rather than a divide', () {
-      // 31 October: 24 days elapsed of a 31-day month, 7 left — then a custom
-      // window ending today, where daysLeft is 0.
-      const lastDay = BudgetView(
-        id: 'b',
-        categoryId: 'food',
-        amountPaise: 100000,
-        period: 'custom',
-        startsOn: null,
-        endsOn: null,
-      );
-      final status = budgetStatus(
-        txns: const <TxnView>[],
-        budget: lastDay,
-        nowMs: _ms(2026, 10, 31),
-      );
-      // A custom budget without a window degrades to the monthly one.
-      expect(status.cycle.daysLeft, 0);
-      expect(status.dailyAllowancePaise, isNull);
-    });
+    test(
+      'the last day of a cycle yields no allowance rather than a divide',
+      () {
+        // 31 October: 24 days elapsed of a 31-day month, 7 left — then a custom
+        // window ending today, where daysLeft is 0.
+        const lastDay = BudgetView(
+          id: 'b',
+          categoryId: 'food',
+          amountPaise: 100000,
+          period: 'custom',
+          startsOn: null,
+          endsOn: null,
+        );
+        final status = budgetStatus(
+          txns: const <TxnView>[],
+          budget: lastDay,
+          nowMs: _ms(2026, 10, 31),
+        );
+        // A custom budget without a window degrades to the monthly one.
+        expect(status.cycle.daysLeft, 0);
+        expect(status.dailyAllowancePaise, isNull);
+      },
+    );
   });
 
   group('the list order', () {
@@ -252,18 +266,28 @@ void main() {
         ],
         budgets: const <BudgetView>[
           BudgetView(id: 'a-food', categoryId: 'food', amountPaise: 100000),
-          BudgetView(id: 'b-grocery', categoryId: 'grocery', amountPaise: 90000),
-          BudgetView(id: 'c-transport', categoryId: 'transport', amountPaise: 50000),
+          BudgetView(
+            id: 'b-grocery',
+            categoryId: 'grocery',
+            amountPaise: 90000,
+          ),
+          BudgetView(
+            id: 'c-transport',
+            categoryId: 'transport',
+            amountPaise: 50000,
+          ),
           BudgetView(id: 'd-fun', categoryId: 'fun', amountPaise: 90000),
         ],
         nowMs: _ms(2026, 10, 7),
       );
 
       // 100% → 100% (tie on ratio, so the bigger cap wins) → 90% → 0%.
-      expect(
-        ranked.map((s) => s.budget.id).toList(),
-        <String>['a-food', 'b-grocery', 'd-fun', 'c-transport'],
-      );
+      expect(ranked.map((s) => s.budget.id).toList(), <String>[
+        'a-food',
+        'b-grocery',
+        'd-fun',
+        'c-transport',
+      ]);
     });
   });
 }

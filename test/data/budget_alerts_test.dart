@@ -130,24 +130,25 @@ void main() {
       expect(over.single.body, 'Food: ₹280 over');
     });
 
-    test('a switched-off threshold stays silent, and the next one still fires', () {
-      expect(
-        _owed([_status(spentPaise: 85000, alertAt80: false)]),
-        isEmpty,
-        reason: '80% is off, and 85% has not crossed yet',
-      );
-      final crossed = _owed([
-        _status(spentPaise: 110000, alertAt80: false),
-      ]);
-      expect(crossed, hasLength(1));
-      expect(crossed.single.level, BudgetAlertLevel.at100);
+    test(
+      'a switched-off threshold stays silent, and the next one still fires',
+      () {
+        expect(
+          _owed([_status(spentPaise: 85000, alertAt80: false)]),
+          isEmpty,
+          reason: '80% is off, and 85% has not crossed yet',
+        );
+        final crossed = _owed([_status(spentPaise: 110000, alertAt80: false)]);
+        expect(crossed, hasLength(1));
+        expect(crossed.single.level, BudgetAlertLevel.at100);
 
-      expect(
-        _owed([_status(spentPaise: 110000, alertAt100: false)]),
-        isEmpty,
-        reason: 'crossing is off; the 80% warning was not asked for either',
-      );
-    });
+        expect(
+          _owed([_status(spentPaise: 110000, alertAt100: false)]),
+          isEmpty,
+          reason: 'crossing is off; the 80% warning was not asked for either',
+        );
+      },
+    );
 
     test('an untouched budget is not a warning', () {
       expect(_owed([_status(spentPaise: 0)]), isEmpty);
@@ -226,7 +227,8 @@ void main() {
       expect(
         ok,
         isFalse,
-        reason: 'flutter test and the web have no Android host, so the alert '
+        reason:
+            'flutter test and the web have no Android host, so the alert '
             'stays owed instead of being written down as sent',
       );
     });
@@ -251,7 +253,9 @@ void main() {
             (ref) async =>
                 BootState(onboarded: true, demoMode: true, locale: 'en'),
           ),
-          categoriesProvider.overrideWith((ref) async => _categories.values.toList()),
+          categoriesProvider.overrideWith(
+            (ref) async => _categories.values.toList(),
+          ),
           budgetsProvider.overrideWith((ref) async => budgets),
           transactionsProvider.overrideWith((ref) async => ledger),
           budgetAlertSenderProvider.overrideWith(

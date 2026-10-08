@@ -57,13 +57,18 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
     final locale = ref.watch(localeProvider);
     final isPro = ref.watch(proStatusProvider);
     final showAds = ref.watch(adsVisibleProvider);
-    final txns = ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
+    final txns =
+        ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
     final categoryById = ref.watch(categoryByIdProvider);
     final now = ref.watch(nowProvider);
 
     final window = _windowFor(now);
     final projected = _forecastPaise();
-    final summary = LedgerSummary.from(txns, fromMs: window.$1, toMs: window.$2);
+    final summary = LedgerSummary.from(
+      txns,
+      fromMs: window.$1,
+      toMs: window.$2,
+    );
     final previous = LedgerSummary.from(
       txns,
       fromMs: window.$3,
@@ -190,7 +195,10 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
             SsCard(
               child: Column(
                 children: [
-                  TrendLine(values: dailySpend(txns, through: now), height: 132),
+                  TrendLine(
+                    values: dailySpend(txns, through: now),
+                    height: 132,
+                  ),
                   const SizedBox(height: SsSpace.x2),
                   Row(
                     children: [
@@ -206,8 +214,11 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                       const Spacer(),
                       Text(
                         shortDate(
-                          DateTime(now.year, now.month, now.day)
-                              .millisecondsSinceEpoch,
+                          DateTime(
+                            now.year,
+                            now.month,
+                            now.day,
+                          ).millisecondsSinceEpoch,
                           locale: locale,
                         ),
                         style: SsText.micro.copyWith(color: c.textTertiary),
@@ -221,10 +232,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
             // ---- who keeps taking it -------------------------------------
             if (merchants.isNotEmpty) ...[
               const SizedBox(height: SsSpace.x5),
-              SectionHeader(
-                title: s['topMerchants'],
-                padding: EdgeInsets.zero,
-              ),
+              SectionHeader(title: s['topMerchants'], padding: EdgeInsets.zero),
               SsCard(
                 child: Column(
                   children: [
@@ -369,7 +377,8 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
     if (_period == InsightsPeriod.custom || _period == InsightsPeriod.year) {
       return null;
     }
-    final txns = ref.read(transactionsProvider).valueOrNull ?? const <TxnView>[];
+    final txns =
+        ref.read(transactionsProvider).valueOrNull ?? const <TxnView>[];
     final window = _windowFor(now);
     final summary = LedgerSummary.from(
       txns,
@@ -498,8 +507,11 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
 /// the line. Days with nothing spent are a real zero, not a gap: that is what
 /// "no chai on Sunday" looks like, and smoothing it away would be a lie.
 List<int> dailySpend(List<TxnView> txns, {required DateTime through}) {
-  final start = DateTime(through.year, through.month, through.day)
-      .subtract(const Duration(days: 29));
+  final start = DateTime(
+    through.year,
+    through.month,
+    through.day,
+  ).subtract(const Duration(days: 29));
   final buckets = List<int>.filled(30, 0);
 
   for (final t in txns) {
@@ -701,7 +713,10 @@ class _LegendRow extends StatelessWidget {
               children: [
                 MoneyText(amountPaise, style: SsText.bodyStrong),
                 Text(
-                  localizeDigits('${(share * 100).toStringAsFixed(0)}%', locale),
+                  localizeDigits(
+                    '${(share * 100).toStringAsFixed(0)}%',
+                    locale,
+                  ),
                   style: SsText.micro.copyWith(color: c.textTertiary),
                 ),
               ],
@@ -754,9 +769,7 @@ class _MerchantRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: SsSpace.x3),
-        Flexible(
-          child: MoneyText(amountPaise, style: SsText.bodyStrong),
-        ),
+        Flexible(child: MoneyText(amountPaise, style: SsText.bodyStrong)),
       ],
     );
   }
@@ -878,9 +891,7 @@ class _Findings extends StatelessWidget {
           const SizedBox(height: SsSpace.x1),
           Text(
             '${categories[jump.$1]?.label(locale) ?? '—'} · '
-            '${strings.fill('deltaMoreTemplate', {
-              'pct': localizeDigits('${jump.$2.round()}', locale),
-            })}',
+            '${strings.fill('deltaMoreTemplate', {'pct': localizeDigits('${jump.$2.round()}', locale)})}',
             style: SsText.bodyStrong,
           ),
           const SizedBox(height: SsSpace.x4),

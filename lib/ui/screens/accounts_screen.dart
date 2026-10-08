@@ -34,7 +34,8 @@ class AccountsScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final locale = ref.watch(localeProvider);
     final showAds = ref.watch(adsVisibleProvider);
-    final accounts = ref.watch(accountsProvider).valueOrNull ?? const <AccountView>[];
+    final accounts =
+        ref.watch(accountsProvider).valueOrNull ?? const <AccountView>[];
     final balances =
         ref.watch(accountBalancesProvider).valueOrNull ?? const <String, int>{};
 
@@ -90,7 +91,8 @@ class AccountsScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(bottom: SsSpace.x3),
               child: _AccountCard(
                 account: account,
-                balancePaise: balances[account.id] ?? account.openingBalancePaise,
+                balancePaise:
+                    balances[account.id] ?? account.openingBalancePaise,
                 locale: locale,
                 onTap: () => showAccountEditor(context, existing: account),
               ),

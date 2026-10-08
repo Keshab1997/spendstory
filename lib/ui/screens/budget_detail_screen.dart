@@ -54,7 +54,8 @@ class BudgetDetailScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final locale = ref.watch(localeProvider);
     final showAds = ref.watch(adsVisibleProvider);
-    final budgets = ref.watch(budgetsProvider).valueOrNull ?? const <BudgetView>[];
+    final budgets =
+        ref.watch(budgetsProvider).valueOrNull ?? const <BudgetView>[];
     final txns =
         ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
     final categoryById = ref.watch(categoryByIdProvider);
@@ -292,11 +293,7 @@ class _Stat extends StatelessWidget {
             style: SsText.micro.copyWith(color: c.textTertiary),
           ),
           const SizedBox(height: SsSpace.x1),
-          MoneyText(
-            value,
-            tone: tone ?? AmountTone.neutral,
-            style: SsText.h3,
-          ),
+          MoneyText(value, tone: tone ?? AmountTone.neutral, style: SsText.h3),
         ],
       ),
     );
