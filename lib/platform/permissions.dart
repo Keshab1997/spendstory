@@ -129,6 +129,19 @@ class Permissions {
   /// Opens the system notification-access list.
   static Future<bool> openNotificationSettings() =>
       NativeBridge.openNotificationAccessSettings();
+
+  /// Asks for POST_NOTIFICATIONS — Android 13+ only, and only ever from a place
+  /// where the user has just asked for alerts. Every older release, and the
+  /// web, answer yes without a dialog because there is nothing to ask.
+  static Future<bool> requestNotifications() async {
+    if (!hasNativeHost) return false;
+    try {
+      final status = await Permission.notification.request();
+      return status.isGranted;
+    } catch (_) {
+      return false;
+    }
+  }
 }
 
 /// What the screens are allowed to ask for.
@@ -147,6 +160,11 @@ abstract class PermissionsApi {
   Future<SmsAccess> requestSms();
   Future<bool> openNotificationSettings();
   Future<bool> openAppSettingsPage();
+
+  /// Has a default, unlike the rest: the tests that predate budget alerts do
+  /// not care about POST_NOTIFICATIONS, and a fake that forgets this method
+  /// should not fail to compile.
+  Future<bool> requestNotifications() async => true;
 }
 
 /// The real implementation: everything goes to Android.
@@ -165,4 +183,7 @@ class DevicePermissions extends PermissionsApi {
 
   @override
   Future<bool> openAppSettingsPage() => Permissions.openAppSettingsPage();
+
+  @override
+  Future<bool> requestNotifications() => Permissions.requestNotifications();
 }

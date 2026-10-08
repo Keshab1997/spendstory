@@ -202,12 +202,59 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 
 ## 🔜 Batch 6 — Budget, insights, accounts
 
-- [ ] **T-501** S-14 Budget list + native ad after 3rd row
-- [ ] **T-502** S-15 Budget detail — circular gauge + **daily allowance**
-- [ ] **T-503** S-16 Accounts + computed balances
-- [ ] **T-504** S-17 Insights — donut, trend, top merchants, deltas
-- [ ] **T-505** Budget alert notifications (80%/100%), once-per-day cap
+- [x] **T-501** S-14 Budget list + native ad after 3rd row
+- [x] **T-502** S-15 Budget detail — circular gauge + **daily allowance**
+- [x] **T-503** S-16 Accounts + computed balances
+- [x] **T-504** S-17 Insights — donut, trend, top merchants, deltas
+- [x] **T-505** Budget alert notifications (80%/100%), once-per-day cap
 - [ ] **T-506** S-19 Recurring & reminders (v1.1)
+
+**What landed (T-501 … T-505):**
+- `lib/domain/budget_math.dart` — the cycle and the status, pure and shared.
+  A cycle starts on `startDay` (salary day), not on the 1st; 80/100/120 and the
+  daily allowance (left ÷ days remaining) are defined here once.
+- `lib/ui/screens/budgets_screen.dart` — S-14. Headline overall cap, rows sorted
+  by % used, 80/100/120 colours, the 120% suggestion card, and **one native ad
+  after the third row** — never above the fold, and the list is never padded to
+  reach it.
+- `lib/ui/screens/budget_detail_screen.dart` + `CircularGauge` (`money.dart`) —
+  S-15. Ring, spent/left/limit, the daily allowance card, the category's recent
+  rows, one banner at the bottom.
+- `lib/ui/screens/accounts_screen.dart` + `account_edit_sheet.dart` — S-16.
+  Balances are **computed from the ledger every time, never stored**; the
+  opening balance is the only number the user owns. Deleting an account hides
+  it without taking its transactions out of the totals.
+- `lib/ui/screens/insights_screen.dart` + `TrendLine` — S-17. Week/month/year/
+  custom windows, donut with angle-accurate taps, 30-day line, top-5 merchants,
+  delta chips, biggest jump (20% floor), weekend pattern (1.25× floor), Pro
+  forecast. The ad sits under everything, never between two charts being read
+  together.
+- `lib/data/budget_alerts.dart` + `MainActivity.postNotification` +
+  `POST_NOTIFICATIONS` — T-505. The planner is pure: at most one alert per
+  budget per run, crossing beats 80%, switched-off thresholds stay silent, and
+  nothing repeats inside the same day. The day is remembered in `app_meta` on a
+  phone and in the session overlay in the demo build. A notification the OS
+  refuses (no permission, no host) is **not** marked delivered — it is still
+  owed tomorrow. The permission is asked at the moment a user switches a
+  warning on, and nowhere else.
+- `test/` — budgets 21, budget detail 17, accounts 15, insights 33, alerts 17,
+  plus the render smoke pass over every route in 3 languages × 2 text scales.
+
+**Bugs the tests surfaced (all fixed):**
+1. `monthProgress()` reads the day off the date it is given; the insights
+   forecast was handing it the 1st, so it thought one day had elapsed and hid
+   the card for the first days of every month.
+2. The insights compare row overflowed a 360dp phone by 150px — the trailing
+   amount and delta now shrink together.
+3. `SectionHeader` had no ellipsis, so Bengali's "অ্যাকাউন্ট যোগ করুন"
+   overflowed at 1.3×; the same class of bug bit the account card's balance.
+4. Hidden lazily-loaded providers: `budgetStatusesProvider` is a Future on
+   purpose — `valueOrNull` on a provider nobody has started is null, and an
+   alert pipeline that sees an empty ledger decides there is nothing to warn
+   about.
+
+**Next:** T-506 (S-19 recurring & reminders, v1.1) — schema, screen and reminder
+notifications, reusing the alert channel.
 
 ---
 

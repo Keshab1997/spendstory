@@ -9,6 +9,7 @@
 /// Transactions · Insights · Settings.
 library;
 
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -19,13 +20,35 @@ import '../ui/format.dart';
 import '../ui/tokens.dart';
 import 'providers.dart';
 
-class MainShell extends ConsumerWidget {
+class MainShell extends ConsumerStatefulWidget {
   const MainShell({super.key, required this.shell});
 
   final StatefulNavigationShell shell;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends ConsumerState<MainShell> {
+  @override
+  void initState() {
+    super.initState();
+    // Budget alerts (T-505) are checked when the shell comes up and again
+    // whenever the ledger changes. That is the whole trigger: the app has no
+    // background service, and it does not need one — every new expense reaches
+    // this process first. The once-a-day cap lives in the runner, which is what
+    // makes calling it this often safe.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) unawaited(ref.read(budgetAlertRunnerProvider)());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(transactionsProvider, (previous, next) {
+      if (next.hasValue) unawaited(ref.read(budgetAlertRunnerProvider)());
+    });
+
     final s = ref.watch(stringsProvider);
     final locale = ref.watch(localeProvider);
     final uncategorised = ref.watch(uncategorisedCountProvider);
@@ -58,16 +81,16 @@ class MainShell extends ConsumerWidget {
 
     return Scaffold(
       extendBody: true,
-      body: shell,
+      body: widget.shell,
       bottomNavigationBar: _FloatingNav(
         locale: locale,
         items: items,
-        currentIndex: shell.currentIndex,
-        onTap: (index) => shell.goBranch(
+        currentIndex: widget.shell.currentIndex,
+        onTap: (index) => widget.shell.goBranch(
           index,
           // Tapping the tab you are already on pops that branch back to its
           // root — the standard Android behaviour.
-          initialLocation: index == shell.currentIndex,
+          initialLocation: index == widget.shell.currentIndex,
         ),
       ),
     );

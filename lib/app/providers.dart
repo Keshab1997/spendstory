@@ -13,13 +13,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // The conditional import must name the *stub* explicitly: a bare filename would
 // resolve relative to this file (lib/app/), not to lib/data/.
+import '../data/budget_alerts.dart';
 import '../data/connection_io.dart'
     if (dart.library.js_interop) '../data/connection_web.dart';
 import '../data/db.dart';
 import '../data/demo_data.dart';
 import '../data/tx_repo.dart';
+import '../domain/budget_math.dart';
 import '../domain/models.dart';
 import '../domain/view_models.dart';
+import '../platform/native_bridge.dart';
 import '../platform/permissions.dart';
 import '../ui/format.dart';
 import '../ui/strings.dart';
@@ -623,6 +626,118 @@ class BudgetActions {
 final budgetActionsProvider = Provider<BudgetActions>(
   (ref) => BudgetActions(ref),
 );
+
+// -----------------------------------------------------------------------------
+// budget alerts (T-505)
+// -----------------------------------------------------------------------------
+
+/// Every budget, spent and rated — exactly what the budget screen draws.
+///
+/// Alerts read this rather than re-adding the numbers themselves: a warning
+/// that disagrees with the bar it is warning about is worse than no warning.
+/// A Future on purpose: `valueOrNull` on a provider nobody has started yet is
+/// null, and an alert pipeline that silently sees an empty ledger would decide
+/// there was nothing to warn about. Awaiting both makes "no budgets" and "not
+/// loaded yet" impossible to confuse.
+final budgetStatusesProvider = FutureProvider<List<BudgetStatus>>((ref) async {
+  final budgets = await ref.watch(budgetsProvider.future);
+  final txns = await ref.watch(transactionsProvider.future);
+  final nowMs = ref.watch(nowProvider).millisecondsSinceEpoch;
+
+  return <BudgetStatus>[
+    for (final budget in budgets)
+      budgetStatus(txns: txns, budget: budget, nowMs: nowMs),
+  ];
+});
+
+/// What posting an alert actually means. A provider so a test can watch what
+/// the pipeline decided to send without an Android host anywhere near it.
+final budgetAlertSenderProvider =
+    Provider<Future<bool> Function(BudgetAlert)>(
+      (ref) => (alert) => NativeBridge.postNotification(
+        id: alert.notificationId,
+        title: alert.title,
+        body: alert.body,
+      ),
+    );
+
+/// The day each alert was last delivered, for the demo/web build where there is
+/// no database to write the record to.
+final sessionAlertsSentProvider = StateProvider<Map<String, String>>(
+  (ref) => const <String, String>{},
+);
+
+/// Runs the alert check and returns what actually went out.
+///
+/// Called when the shell appears and whenever the ledger changes; the
+/// once-a-day cap is what makes calling it that often safe.
+typedef BudgetAlertRunner = Future<List<BudgetAlert>> Function();
+
+final budgetAlertRunnerProvider = Provider<BudgetAlertRunner>((ref) {
+  return () async {
+    final statuses = await ref.read(budgetStatusesProvider.future);
+    if (statuses.isEmpty) return const <BudgetAlert>[];
+
+    final today = alertDay(ref.read(nowProvider));
+    final db = ref.read(appDbProvider);
+
+    // Read back what has already been delivered. The database is the record on
+    // a phone; the session map stands in for it in the demo build.
+    final sentOn = <String, String>{};
+    if (db == null) {
+      sentOn.addAll(ref.read(sessionAlertsSentProvider));
+    } else {
+      for (final status in statuses) {
+        for (final level in const ['80', '100']) {
+          final key = 'budget:${status.budget.id}:$level';
+          final day = await db.meta('alert:$key');
+          if (day != null) sentOn[key] = day;
+        }
+      }
+    }
+
+    // The category names go in the body ("Food: ₹150 left"), so the categories
+    // have to be loaded before `categoryByIdProvider` is read — it answers from
+    // whatever has arrived, and an empty map here means the alert says
+    // "Category budget" instead of naming the one that is nearly spent.
+    await ref.read(categoriesProvider.future);
+
+    final owed = owedBudgetAlerts(
+      statuses: statuses,
+      strings: ref.read(stringsProvider),
+      locale: ref.read(localeProvider),
+      today: today,
+      sentOn: sentOn,
+      categories: ref.read(categoryByIdProvider),
+    );
+    if (owed.isEmpty) return const <BudgetAlert>[];
+
+    final send = ref.read(budgetAlertSenderProvider);
+    final delivered = <BudgetAlert>[];
+
+    for (final alert in owed) {
+      var ok = false;
+      try {
+        ok = await send(alert);
+      } catch (_) {
+        // A host that cannot post is not a crash: the alert stays owed.
+        ok = false;
+      }
+      if (!ok) continue;
+
+      delivered.add(alert);
+      if (db == null) {
+        ref.read(sessionAlertsSentProvider.notifier).update(
+          (map) => <String, String>{...map, alert.key: today},
+        );
+      } else {
+        await db.setMeta('alert:${alert.key}', today);
+      }
+    }
+
+    return delivered;
+  };
+});
 
 // -----------------------------------------------------------------------------
 // derived

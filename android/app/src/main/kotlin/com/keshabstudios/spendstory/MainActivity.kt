@@ -1,6 +1,12 @@
 package com.keshabstudios.spendstory
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.provider.Settings
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -10,9 +16,9 @@ import io.flutter.plugin.common.MethodChannel
  * The only native entry point the app has.
  *
  * Everything here is something Flutter genuinely cannot do on its own: read the
- * "notification access" setting, open that settings screen, and drain the
- * notification buffer the listener service fills. Nothing that Dart could do
- * itself lives in this file.
+ * "notification access" setting, open that settings screen, drain the
+ * notification buffer the listener service fills, and post a budget alert.
+ * Nothing that Dart could do itself lives in this file.
  *
  * Channel: `spendstory/native`, mirroring [NativeBridge] on the Dart side. Every
  * method must be answerable in a plain `flutter test`, which is why the Dart side
@@ -46,9 +52,76 @@ class MainActivity : FlutterActivity() {
                 "drainPendingNotifications" ->
                     result.success(SpendStoryNotificationListener.drainPending(this))
 
+                "postNotification" ->
+                    result.success(
+                        postNotification(
+                            id = call.argument<Int>("id") ?: 0,
+                            title = call.argument<String>("title").orEmpty(),
+                            body = call.argument<String>("body").orEmpty(),
+                        ),
+                    )
+
                 else -> result.notImplemented()
             }
         }
+    }
+
+    /**
+     * Posts one budget alert and reports whether the OS took it.
+     *
+     * False is a real answer, not an error: on Android 13+ the user may never
+     * have granted POST_NOTIFICATIONS. The Dart side treats "not posted" as
+     * "not delivered" and leaves the alert owed, instead of marking it sent and
+     * losing it — a budget warning that is silently dropped is worse than one
+     * that arrives the next day.
+     */
+    private fun postNotification(id: Int, title: String, body: String): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+
+        val manager = getSystemService(NotificationManager::class.java) ?: return false
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(
+                NotificationChannel(
+                    ALERT_CHANNEL,
+                    getString(R.string.alert_channel_name),
+                    NotificationManager.IMPORTANCE_DEFAULT,
+                ),
+            )
+        }
+
+        val open = Intent(this, MainActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val content = PendingIntent.getActivity(
+            this,
+            id,
+            open,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+
+        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(this, ALERT_CHANNEL)
+        } else {
+            @Suppress("DEPRECATION")
+            Notification.Builder(this)
+        }
+
+        val notification = builder
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setStyle(Notification.BigTextStyle().bigText(body))
+            .setContentIntent(content)
+            .setAutoCancel(true)
+            .build()
+
+        manager.notify(id, notification)
+        return true
     }
 
     /**
@@ -70,5 +143,9 @@ class MainActivity : FlutterActivity() {
 
     private companion object {
         const val CHANNEL = "spendstory/native"
+
+        /// Separate from the capture channel on purpose: muting budget warnings
+        /// must not turn off transaction capture, and vice versa.
+        const val ALERT_CHANNEL = "spendstory_budget_alerts"
     }
 }

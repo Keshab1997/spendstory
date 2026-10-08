@@ -9,6 +9,11 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
+    <!-- Budget alerts (S-14/S-15) and, later, recurring reminders. Requested
+         only when a user turns an alert on in the budget editor, and the app
+         works without it — the warnings simply stay in the app. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <!-- The phone is a normal phone, not a tablet: telephony is optional so the
          app still installs (in manual-only mode) on a device without it. -->
     <uses-feature

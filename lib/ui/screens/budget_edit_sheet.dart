@@ -7,6 +7,8 @@
 /// new one for a category the user tapped from somewhere else.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -110,6 +112,17 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
 
     await ref.read(budgetActionsProvider).save(budget);
     navigator.pop(true);
+  }
+
+  /// The one moment the app is allowed to ask for POST_NOTIFICATIONS: the user
+  /// has just switched a warning on. The switch stays on either way — if the
+  /// permission is refused the alert is simply kept inside the app.
+  ///
+  /// Fire-and-forget on purpose: the dialog belongs to the OS, and nothing in
+  /// this sheet waits on its answer.
+  void _askForNotificationPermission(bool turningOn) {
+    if (!turningOn) return;
+    unawaited(ref.read(permissionsProvider).requestNotifications());
   }
 
   Future<void> _delete() async {
@@ -292,12 +305,18 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
                     _AlertSwitch(
                       label: s['budgetAlert80'],
                       value: _alert80,
-                      onChanged: (v) => setState(() => _alert80 = v),
+                      onChanged: (v) {
+                        setState(() => _alert80 = v);
+                        _askForNotificationPermission(v);
+                      },
                     ),
                     _AlertSwitch(
                       label: s['budgetAlert100'],
                       value: _alert100,
-                      onChanged: (v) => setState(() => _alert100 = v),
+                      onChanged: (v) {
+                        setState(() => _alert100 = v);
+                        _askForNotificationPermission(v);
+                      },
                     ),
                     const SizedBox(height: SsSpace.x5),
                   ],

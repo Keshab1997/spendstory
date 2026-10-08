@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shown in Android's own notification settings, where the system, not
+         the app, renders the text: the channel name cannot come from
+         SsStrings, so it is spelled out here. -->
+    <string name="alert_channel_name">Budget alerts</string>
+</resources>

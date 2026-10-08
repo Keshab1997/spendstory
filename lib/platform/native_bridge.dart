@@ -36,6 +36,32 @@ class NativeBridge {
     }
   }
 
+  /// Posts one budget alert.
+  ///
+  /// False is a real answer, not an error: on the web, in `flutter test`, and
+  /// on a phone where POST_NOTIFICATIONS was never granted, the notification
+  /// does not go out. The caller keeps the alert owed rather than marking it
+  /// delivered, so a warning is never lost to a missing permission.
+  static Future<bool> postNotification({
+    required int id,
+    required String title,
+    required String body,
+  }) async {
+    if (!hasNativeHost) return false;
+    try {
+      return await _channel.invokeMethod<bool>('postNotification', <String, Object?>{
+            'id': id,
+            'title': title,
+            'body': body,
+          }) ??
+          false;
+    } on PlatformException {
+      return false;
+    } on MissingPluginException {
+      return false;
+    }
+  }
+
   /// Opens the system "notification access" list. Returns false when there is
   /// nothing to open — the caller then shows the manual instructions instead of
   /// a button that does nothing.
