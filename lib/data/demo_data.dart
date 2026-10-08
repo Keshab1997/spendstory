@@ -58,7 +58,9 @@ class DemoLedger {
       name: 'Cash',
       type: 'cash',
       last4: null,
-      openingBalancePaise: 250000,
+      // A month's float: six months of chai, petrol and the odd restaurant
+      // table adds up, and a demo that drifts negative teaches the wrong thing.
+      openingBalancePaise: 1200000,
     ),
     AccountView(
       id: accountHdfc,

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ui/screens/accounts_screen.dart';
 import '../ui/screens/budget_detail_screen.dart';
 import '../ui/screens/budgets_screen.dart';
 import '../ui/screens/categories_screen.dart';
@@ -181,11 +182,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/accounts',
-        builder: (context, state) => const ComingSoonScreen(
-          titleKey: 'accounts',
-          subtitleKey: 'accountPageSubtitle',
-          bodyKey: 'accountPageBody',
-        ),
+        builder: (context, state) => const AccountsScreen(),
       ),
       GoRoute(
         path: '/categories',

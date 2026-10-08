@@ -199,17 +199,24 @@ class SectionHeader extends StatelessWidget {
         children: [
           Expanded(child: Text(title, style: SsText.h3)),
           if (actionLabel != null)
-            TextButton(
-              onPressed: onAction,
-              style: TextButton.styleFrom(
-                foregroundColor: c.violet600,
-                padding: const EdgeInsets.symmetric(horizontal: SsSpace.x2),
-                minimumSize: const Size(0, 32),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                actionLabel!,
-                style: SsText.bodyStrong.copyWith(color: c.violet600),
+            // Flexible, and the label ellipsizes: in Bengali at a large text
+            // scale "অ্যাকাউন্ট যোগ করুন" is wider than half a small phone, and
+            // a header is not worth a RenderFlex error.
+            Flexible(
+              child: TextButton(
+                onPressed: onAction,
+                style: TextButton.styleFrom(
+                  foregroundColor: c.violet600,
+                  padding: const EdgeInsets.symmetric(horizontal: SsSpace.x2),
+                  minimumSize: const Size(0, 32),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  actionLabel!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: SsText.bodyStrong.copyWith(color: c.violet600),
+                ),
               ),
             ),
         ],
