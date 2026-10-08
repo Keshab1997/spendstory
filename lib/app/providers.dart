@@ -19,12 +19,14 @@ import '../data/connection_io.dart'
 import '../data/db.dart';
 import '../data/demo_data.dart';
 import '../data/recurring_tasks.dart';
+import '../pro/entitlement.dart';
 import '../data/tx_repo.dart';
 import '../domain/budget_math.dart';
 import '../domain/models.dart';
 import '../domain/view_models.dart';
 import '../platform/native_bridge.dart';
 import '../platform/permissions.dart';
+import '../pro/billing_client.dart';
 import '../ui/format.dart';
 import '../ui/strings.dart';
 
@@ -109,9 +111,38 @@ final nowProvider = Provider<DateTime>((ref) => DateTime.now());
 /// Light / dark / system. The design ships both themes; the user picks.
 final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
 
-/// Free or Pro. Batch 7 (T-601) backs this with a real purchase; until then it
-/// is what the paywall flips so the ad-free state can be reviewed.
-final proStatusProvider = StateProvider<bool>((ref) => false);
+/// The entitlement the store has confirmed for this install, or null for free.
+///
+/// Only `lib/pro/pro_controller.dart` writes this, and only when Play says the
+/// user owns something. Everything else — [proStatusProvider], the ad slots, the
+/// paywall — reads it.
+final proEntitlementProvider = StateProvider<ProEntitlement?>((ref) => null);
+
+/// The session copy of the stored record, for the builds with no database.
+final sessionProEntitlementProvider = StateProvider<String?>((ref) => null);
+
+/// The last thing the store said, for the paywall to show or explain: a pending
+/// payment, a refusal, a product that is not live yet.
+final lastBillingEventProvider = StateProvider<BillingEvent?>((ref) => null);
+
+/// True while a purchase is in flight, so the button can say so instead of
+/// letting the user tap it twice.
+final billingBusyProvider = StateProvider<bool>((ref) => false);
+
+/// Free or Pro — derived, never set directly.
+///
+/// The single source is [proEntitlementProvider], which only the billing
+/// controller writes (`lib/pro/pro_controller.dart`), and only when the store
+/// says the user owns something. Ad slots, the forecast, the paywall and
+/// Settings all read this one boolean, so they cannot disagree.
+///
+/// A record that has run out counts as free at the moment it runs out, without
+/// waiting for the next launch to clear it.
+final proStatusProvider = Provider<bool>((ref) {
+  final entitlement = ref.watch(proEntitlementProvider);
+  if (entitlement == null) return false;
+  return entitlement.isActiveAt(ref.watch(nowProvider).millisecondsSinceEpoch);
+});
 
 // -----------------------------------------------------------------------------
 // data

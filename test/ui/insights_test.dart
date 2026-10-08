@@ -291,11 +291,54 @@ void main() {
       expect(_donutTotal('₹3,600'), findsOneWidget); // 2,100 + 900 + 600
     });
 
-    testWidgets('custom is Pro: the chip goes to the paywall', (tester) async {
+    testWidgets('custom is Pro: the third tap goes to the paywall', (
+      tester,
+    ) async {
       await _pumpApp(tester);
+
+      // §S-22 lets the app offer the paywall on the third tap at a Pro-locked
+      // insight, and not before. The first two taps still answer — with the
+      // reason, in the app's own words — because a chip that does nothing
+      // reads as broken.
+      await tester.tap(find.text('Custom'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ProScreen), findsNothing);
+      // A snackbar, not a route: the wording is the same as the Pro card's, so
+      // the finder has to say which one it means.
+      expect(
+        find.descendant(
+          of: find.byType(SnackBar),
+          matching: find.textContaining('are part of Pro'),
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Custom'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ProScreen), findsNothing);
+
       await tester.tap(find.text('Custom'));
       await tester.pumpAndSettle();
       expect(find.byType(ProScreen), findsOneWidget);
+    });
+
+    testWidgets('and only one paywall a session, however many taps', (
+      tester,
+    ) async {
+      await _pumpApp(tester);
+
+      for (var i = 0; i < 3; i++) {
+        await tester.tap(find.text('Custom'));
+        await tester.pumpAndSettle();
+      }
+      expect(find.byType(ProScreen), findsOneWidget);
+
+      // Back out of it; the session has had its one offer.
+      await tester.tap(find.byIcon(Icons.close_rounded));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Custom'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ProScreen), findsNothing);
     });
 
     testWidgets('with Pro, custom offers a date range', (tester) async {

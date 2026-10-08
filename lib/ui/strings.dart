@@ -427,8 +427,35 @@ const Map<String, String> _en = <String, String>{
   'proActive': 'Pro is active',
   'startTrial': 'Start your 7-day free trial',
   'proActivatedDemo': 'Demo: Pro is active and ads are hidden. Real billing is coming in Batch 7 (T-601).',
+  // ---- Batch 7: real billing (T-604, T-605) ----
   'billingNotAvailable':
-      'Payments are not connected yet. Billing is coming in Batch 7 (T-601).',
+      'The store could not be reached. Check your connection and try again.',
+  'savePercentTemplate': 'Save {pct}%',
+  'priceEstimateNote': 'Estimates — the store shows the exact price in your currency before you pay.',
+  'purchasePending': 'Waiting for the store…',
+  'purchaseThanks': 'Opening the store… your purchase will appear in a moment.',
+  'restorePurchases': 'Restore a purchase',
+  'restoreDone': 'Pro is active again on this device.',
+  'restoreNothing': 'No purchase found for this account.',
+  'maybeLater': 'Maybe later',
+  'terms': 'Terms',
+  'termsBody':
+      'SpendStory keeps your ledger on this phone. Pro removes ads and unlocks '
+      'the forecast, custom date ranges, PDF export and unlimited budgets. '
+      'Subscriptions renew automatically until you cancel in the Play Store; '
+      'cancel any time and Pro stays until the period you paid for ends. '
+      'Lifetime is a one-time payment. Refunds follow the Play Store policy. '
+      'Your spending data is never sent to us, so cancelling never costs you '
+      'your ledger.',
+  'subscriptionFootNote': 'Cancel any time in the Play Store.',
+  'proActiveBody': 'Pro is on. Thanks for paying for an app with no ads.',
+  'renewsOnTemplate': 'Renews on {date}',
+  'billingPending':
+      'The store is holding this payment for review — common for a first '
+      'purchase. Pro turns on by itself when it clears.',
+  'billingCanceled': 'Purchase cancelled. Nothing was charged.',
+  'billingFailed': 'The store refused the payment. No money left your account.',
+  'billingSucceeded': 'Payment received. Pro is on.',
   'sourceAutoSms': 'Automatically added from SMS',
   'sourceAutoNotification': 'Automatically added from notification',
   'sourceRecurring': 'Recurring payment',
@@ -794,7 +821,25 @@ const Map<String, String> _hi = <String, String>{
   'startTrial': '7 दिन का मुफ़्त ट्रायल शुरू करें',
   'proActivatedDemo': 'डेमो: Pro चालू है और विज्ञापन छिप गए हैं। असली बिलिंग बैच 7 (T-601) में आएगी।',
   'billingNotAvailable':
-      'भुगतान अभी नहीं जुड़े हैं। बिलिंग बैच 7 (T-601) में आएगी।',
+      'स्टोर से संपर्क नहीं हो सका। कनेक्शन जाँचें और फिर कोशिश करें।',
+  'savePercentTemplate': '{pct}% बचत',
+  'priceEstimateNote':
+      'अनुमानित — भुगतान से पहले स्टोर आपकी मुद्रा में सही दाम दिखाता है।',
+  'purchasePending': 'स्टोर का इंतज़ार…',
+  'purchaseThanks': 'स्टोर खुल रहा है… ख़रीद कुछ ही देर में दिखेगी।',
+  'restorePurchases': 'ख़रीद वापस लाएँ',
+  'restoreDone': 'इस डिवाइस पर Pro फिर चालू है।',
+  'restoreNothing': 'इस अकाउंट के लिए कोई ख़रीद नहीं मिली।',
+  'maybeLater': 'बाद में',
+  'terms': 'शर्तें',
+  'termsBody': 'SpendStory आपका हिसाब इसी फ़ोन में रखता है। Pro विज्ञापन हटाता है और पूर्वानुमान, कस्टम तारीख़ें, PDF एक्सपोर्ट और असीमित बजट खोलता है। सब्सक्रिप्शन Play Store से रद्द करने तक अपने आप नवीनीकृत होता है; जब चाहें रद्द करें — जिस अवधि का भुगतान किया है वो पूरी चलेगी। लाइफ़टाइम एक बार का भुगतान है। रिफ़ंड Play Store की नीति के अनुसार। आपका ख़र्च कभी हम तक नहीं आता, इसलिए रद्द करने पर हिसाब कभी नहीं जाता।',
+  'subscriptionFootNote': 'Play Store से कभी भी रद्द करें।',
+  'proActiveBody': 'Pro चालू है। बिना विज्ञापन वाले ऐप के लिए शुक्रिया।',
+  'renewsOnTemplate': '{date} को नवीनीकरण',
+  'billingPending': 'स्टोर इस भुगतान की समीक्षा कर रहा है — पहली ख़रीद में आम है। पूरा होते ही Pro अपने आप चालू हो जाएगा।',
+  'billingCanceled': 'ख़रीद रद्द। कुछ नहीं कटा।',
+  'billingFailed': 'स्टोर ने भुगतान नहीं लिया। आपके खाते से कुछ नहीं गया।',
+  'billingSucceeded': 'भुगतान मिल गया। Pro चालू है।',
   'sourceAutoSms': 'SMS से अपने आप जोड़ा गया',
   'sourceAutoNotification': 'सूचना से अपने आप जोड़ा गया',
   'sourceRecurring': 'नियमित भुगतान',
@@ -1159,7 +1204,25 @@ const Map<String, String> _bn = <String, String>{
   'startTrial': '৭ দিনের ফ্রি ট্রায়াল শুরু করুন',
   'proActivatedDemo': 'ডেমো: Pro চালু হয়েছে, বিজ্ঞাপন লুকানো। আসল বিলিং ব্যাচ ৭ (T-601) এ আসছে।',
   'billingNotAvailable':
-      'পেমেন্ট এখনো যুক্ত হয়নি। বিলিং ব্যাচ ৭ (T-601) এ আসছে।',
+      'স্টোরে পৌঁছানো গেল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।',
+  'savePercentTemplate': '{pct}% সাশ্রয়',
+  'priceEstimateNote':
+      'আনুমানিক — টাকা দেওয়ার আগে স্টোর আপনার মুদ্রায় সঠিক দাম দেখাবে।',
+  'purchasePending': 'স্টোরের অপেক্ষায়…',
+  'purchaseThanks': 'স্টোর খুলছে… কিনতে কয়েক সেকেন্ড লাগবে।',
+  'restorePurchases': 'কেনা ফিরিয়ে আনুন',
+  'restoreDone': 'এই ফোনে Pro আবার চালু হয়েছে।',
+  'restoreNothing': 'এই অ্যাকাউন্টে কোনো কেনা পাওয়া যায়নি।',
+  'maybeLater': 'পরে দেখব',
+  'terms': 'শর্তাবলি',
+  'termsBody': 'SpendStory আপনার হিসাব এই ফোনেই রাখে। Pro বিজ্ঞাপন সরায় আর ভবিষ্যৎ খরচের পূর্বাভাস, কাস্টম তারিখ, PDF এক্সপোর্ট আর সীমাহীন বাজেট খুলে দেয়। সাবস্ক্রিপশন Play Store থেকে বাতিল না করলে নিজে থেকেই নবীন হয়; যখন খুশি বাতিল করুন — যে সময়ের টাকা দিয়েছেন সেটা পুরো চলে। আজীবন মানে একবার পেমেন্ট। রিফান্ড Play Store নীতি অনুযায়ী। আপনার খরচের ডেটা কখনো আমাদের কাছে যায় না, তাই বাতিল করলেও হিসাব থাকবে।',
+  'subscriptionFootNote': 'Play Store থেকে যখন খুশি বাতিল করুন।',
+  'proActiveBody': 'Pro চালু। বিজ্ঞাপন-হীন অ্যাপের জন্য ধন্যবাদ।',
+  'renewsOnTemplate': 'নবীন হবে {date}',
+  'billingPending': 'স্টোর পেমেন্টটা দেখে নিচ্ছে — প্রথম কেনায় এটা স্বাভাবিক। পাস হলে Pro নিজে থেকেই চালু হবে।',
+  'billingCanceled': 'কেনা বাতিল হয়েছে। কোনো টাকা কাটা হয়নি।',
+  'billingFailed': 'স্টোর পেমেন্ট নেয়নি। আপনার অ্যাকাউন্ট থেকে টাকা যায়নি।',
+  'billingSucceeded': 'পেমেন্ট পেয়ে গেছি। Pro চালু।',
   'sourceAutoSms': 'SMS থেকে নিজে থেকেই যোগ হয়েছে',
   'sourceAutoNotification': 'নোটিফিকেশন থেকে নিজে থেকেই যোগ হয়েছে',
   'sourceRecurring': 'নিয়মিত পেমেন্ট',

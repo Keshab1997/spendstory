@@ -17,6 +17,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../ads/ad_client.dart';
+import '../pro/paywall_gate.dart';
+import '../pro/pro_controller.dart';
 import '../ui/format.dart';
 import '../ui/tokens.dart';
 import 'providers.dart';
@@ -43,6 +45,24 @@ class _MainShellState extends ConsumerState<MainShell> {
       if (!mounted) return;
       unawaited(ref.read(budgetAlertRunnerProvider)());
       unawaited(ref.read(recurringRunnerProvider)());
+
+      // Reading what this install already owns is also a start-up job: it is
+      // what gives a reinstall its Pro back, and what stops a subscription that
+      // lapsed in the store from living on in `app_meta` (T-605).
+      unawaited(ref.read(proControllerProvider).start());
+
+      // The paywall's own counters, and §S-22's last placement: after the tenth
+      // session the app may offer itself once — never more than one a session,
+      // and never to somebody who already pays.
+      final gate = ref.read(paywallGateProvider);
+      unawaited(
+        gate.start().then((_) {
+          if (!mounted) return;
+          if (requestPaywall(ref, PaywallTrigger.sessionCount)) {
+            context.push('/pro');
+          }
+        }),
+      );
 
       // The ads SDK comes up here too — after the first frame, never on the
       // splash, and only when an ad could actually be shown to this user. A Pro

@@ -1,13 +1,26 @@
-/// S-22 Pro paywall — pushed as a fullscreen dialog (`docs/04` §3).
+/// S-22 Pro paywall — pushed as a fullscreen dialog (`docs/04` §3, T-604).
 ///
-/// Prices come straight from `docs/08-MONETIZATION-ADMOB.md`: ₹99/month,
-/// ₹699/year, ₹1,499 lifetime, with a 7-day trial. The yearly plan is the
-/// default selection, because that is the one that is actually good value and
-/// pretending otherwise would be a dark pattern.
+/// Four rules from `docs/08 §6` and `docs/03 §S-22` shape every decision here,
+/// and each of them is a test in `test/ui/paywall_test.dart`:
 ///
-/// The purchase itself is Batch 7 (T-601). Until the billing client exists, the
-/// button flips `proStatusProvider` so the ad-free state can be reviewed end to
-/// end — and says so on screen, rather than pretending to charge anyone.
+/// * **The price is the store's price.** The number on a tier is what Play will
+///   charge, read from the store. Before the store answers — or where there is
+///   no store, like the web preview — the documented price is shown and marked
+///   as an estimate rather than passed off as the store's word.
+/// * **No dark patterns.** No countdown, no struck-through fake price, no
+///   pre-ticked box, no "are you sure you want to stay poor". The monthly plan
+///   is the one selected when the screen opens, because it is the cheapest and
+///   the user can move to a better one themselves.
+/// * **Restore is always offered**, next to the buy button rather than buried:
+///   it is the only way back for somebody who paid on another phone, and Play
+///   requires it to be reachable.
+/// * **Privacy and terms are one tap away** — the privacy sheet the Settings
+///   screen opens, so there is one text about privacy in the app rather than
+///   two that can drift.
+///
+/// A Pro user does not see a paywall at all: the screen shows what they own,
+/// when it renews, and the restore button, and nothing in it is trying to sell
+/// them anything twice.
 library;
 
 import 'package:flutter/material.dart';
@@ -15,12 +28,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
+import '../../pro/billing_client.dart';
+import '../../pro/product_ids.dart';
+import '../../pro/entitlement.dart';
+import '../../pro/pro_controller.dart';
 import '../components/controls.dart';
+import '../components/privacy_sheet.dart';
 import '../components/money.dart' show formatInr;
 import '../components/surfaces.dart';
+import '../format.dart';
+import '../strings.dart';
 import '../tokens.dart';
-
-enum _Plan { monthly, yearly, lifetime }
 
 class ProScreen extends ConsumerStatefulWidget {
   const ProScreen({super.key});
@@ -30,7 +48,11 @@ class ProScreen extends ConsumerStatefulWidget {
 }
 
 class _ProScreenState extends ConsumerState<ProScreen> {
-  _Plan _plan = _Plan.yearly;
+  /// Monthly by default: the cheapest tier, and the one a user can upgrade away
+  /// from. `docs/03 §S-22` names it as the default selection, and picking the
+  /// most expensive tier for the user is the kind of thing the spec calls a dark
+  /// pattern.
+  ProPlan _plan = ProPlan.monthly;
 
   @override
   Widget build(BuildContext context) {
@@ -38,23 +60,16 @@ class _ProScreenState extends ConsumerState<ProScreen> {
     final s = ref.watch(stringsProvider);
     final locale = ref.watch(localeProvider);
     final isPro = ref.watch(proStatusProvider);
+    final entitlement = ref.watch(proEntitlementProvider);
+    final busy = ref.watch(billingBusyProvider);
+    final lastEvent = ref.watch(lastBillingEventProvider);
+    final storeProducts =
+        ref.watch(proProductsProvider).valueOrNull ?? const <ProProduct>[];
 
-    final plans = <_Plan, ({String title, int pricePaise, String note})>{
-      _Plan.monthly: (
-        title: s['planMonthly'],
-        pricePaise: 9900,
-        note: s['planMonthlyNote'],
-      ),
-      _Plan.yearly: (
-        title: s['planYearly'],
-        pricePaise: 69900,
-        note: s['planYearlyNote'],
-      ),
-      _Plan.lifetime: (
-        title: s['planLifetime'],
-        pricePaise: 149900,
-        note: s['planLifetimeNote'],
-      ),
+    final plans = <ProPlan, ({String title, String note})>{
+      ProPlan.monthly: (title: s['planMonthly'], note: s['planMonthlyNote']),
+      ProPlan.yearly: (title: s['planYearly'], note: s['planYearlyNote']),
+      ProPlan.lifetime: (title: s['planLifetime'], note: s['planLifetimeNote']),
     };
 
     final features = <({IconData icon, String title, String body})>[
@@ -79,6 +94,25 @@ class _ProScreenState extends ConsumerState<ProScreen> {
         body: s['featureExportBody'],
       ),
     ];
+
+    // The app is honest about which price it is showing: the store's, or its
+    // own estimate while the store has not answered.
+    String priceFor(ProPlan plan) {
+      for (final product in storeProducts) {
+        if (product.plan == plan) return product.priceLabel;
+      }
+      return formatInr(
+        fallbackPricePaise(plan),
+        showSymbol: true,
+        localize: locale,
+      );
+    }
+
+    final priceIsEstimate = storeProducts.isEmpty;
+    final yearlySaving = _savingPercent(
+      fallbackPricePaise(ProPlan.monthly),
+      fallbackPricePaise(ProPlan.yearly),
+    );
 
     return Scaffold(
       backgroundColor: c.bg,
@@ -133,7 +167,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                       ),
                       const SizedBox(height: SsSpace.x3),
                       Text(
-                        s['trialDisclaimer'],
+                        isPro ? s['proActiveBody'] : s['trialDisclaimer'],
                         style: SsText.body.copyWith(
                           color: const Color(0xFF2A1B00).withValues(alpha: 0.8),
                         ),
@@ -178,42 +212,93 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                 ],
 
                 const SizedBox(height: SsSpace.x2),
-                for (final plan in _Plan.values) ...[
-                  _PlanTile(
-                    title: plans[plan]!.title,
-                    price: formatInr(
-                      plans[plan]!.pricePaise,
-                      showSymbol: true,
-                      localize: locale,
+
+                // A Pro user is not sold to; they get their receipt.
+                if (isPro && entitlement != null)
+                  _ProStatusCard(
+                    entitlement: entitlement,
+                    locale: locale,
+                    strings: s,
+                  )
+                else ...[
+                  for (final plan in ProPlan.values) ...[
+                    _PlanTile(
+                      title: plans[plan]!.title,
+                      price: priceFor(plan),
+                      note: plans[plan]!.note,
+                      selected: _plan == plan,
+                      badge: plan == ProPlan.yearly
+                          ? s.fill('savePercentTemplate', {
+                              'pct': localizeDigits('$yearlySaving', locale),
+                            })
+                          : null,
+                      onTap: () => setState(() => _plan = plan),
                     ),
-                    note: plans[plan]!.note,
-                    selected: _plan == plan,
-                    badge: plan == _Plan.yearly ? s['popular'] : null,
-                    onTap: () => setState(() => _plan = plan),
+                    const SizedBox(height: SsSpace.x3),
+                  ],
+
+                  if (priceIsEstimate) ...[
+                    Text(
+                      s['priceEstimateNote'],
+                      style: SsText.micro.copyWith(color: c.textTertiary),
+                    ),
+                    const SizedBox(height: SsSpace.x3),
+                  ],
+
+                  SsActionButton(
+                    label: busy ? s['purchasePending'] : s['startTrial'],
+                    tone: SsButtonTone.gold,
+                    onPressed: busy ? null : () => _buy(_plan),
                   ),
-                  const SizedBox(height: SsSpace.x3),
                 ],
 
                 const SizedBox(height: SsSpace.x3),
-                SsActionButton(
-                  label: isPro ? s['proActive'] : s['startTrial'],
-                  tone: SsButtonTone.gold,
-                  onPressed: isPro
-                      ? null
-                      : () {
-                          ref.read(proStatusProvider.notifier).state = true;
-                          context.pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(s['proActivatedDemo'])),
-                          );
-                        },
+                if (lastEvent != null) ...[
+                  _BillingNote(event: lastEvent, strings: s),
+                  const SizedBox(height: SsSpace.x3),
+                ],
+
+                // Restore, always: the way back for a purchase made on another
+                // phone, and a Play requirement.
+                Center(
+                  child: TextButton(
+                    onPressed: busy ? null : () => _restore(),
+                    child: Text(s['restorePurchases']),
+                  ),
                 ),
-                const SizedBox(height: SsSpace.x3),
+                Center(
+                  child: TextButton(
+                    onPressed: () => context.pop(),
+                    child: Text(s['maybeLater']),
+                  ),
+                ),
+
+                const SizedBox(height: SsSpace.x2),
+                Center(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: SsSpace.x2,
+                    children: [
+                      TextButton(
+                        onPressed: () => showPrivacySheet(context, ref),
+                        child: Text(s.privacy),
+                      ),
+                      Text(
+                        '·',
+                        style: SsText.caption.copyWith(color: c.textTertiary),
+                      ),
+                      TextButton(
+                        onPressed: () => showTermsSheet(context, ref),
+                        child: Text(s['terms']),
+                      ),
+                    ],
+                  ),
+                ),
                 Center(
                   child: Text(
-                    s['billingNotAvailable'],
-                    style: SsText.micro.copyWith(color: c.textTertiary),
+                    isPro ? s['proActive'] : s['subscriptionFootNote'],
                     textAlign: TextAlign.center,
+                    style: SsText.micro.copyWith(color: c.textTertiary),
                   ),
                 ),
               ],
@@ -221,6 +306,166 @@ class _ProScreenState extends ConsumerState<ProScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _buy(ProPlan plan) async {
+    final s = ref.read(stringsProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    final started = await ref.read(proControllerProvider).buy(plan);
+    if (!started) {
+      // The store could not be reached, or has no such product. Say so; the
+      // button must never look like it did something it did not.
+      messenger.showSnackBar(SnackBar(content: Text(s['billingNotAvailable'])));
+      return;
+    }
+
+    // A successful *sheet* is not a successful purchase: Play answers through
+    // the purchase stream, which the controller listens to, and the screen
+    // simply closes. Claiming success here would be a lie for every pending
+    // payment.
+    messenger.showSnackBar(SnackBar(content: Text(s['purchaseThanks'])));
+    navigator.pop();
+  }
+
+  Future<void> _restore() async {
+    final s = ref.read(stringsProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    await ref.read(proControllerProvider).restore();
+    if (!mounted) return;
+    final event = ref.read(lastBillingEventProvider);
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          event != null && event.grantsAccess
+              ? s['restoreDone']
+              : s['restoreNothing'],
+        ),
+      ),
+    );
+  }
+}
+
+/// The yearly plan's saving, computed from the two prices rather than asserted.
+///
+/// `docs/08 §6` promises "৪২% সাশ্রয়" as an anchor. A percentage typed into a
+/// string is a claim that can quietly become false the day Play's pricing
+/// changes; this one is arithmetic on the numbers on the same screen.
+int _savingPercent(int monthlyPaise, int yearlyPaise) {
+  final twelveMonths = monthlyPaise * 12;
+  if (twelveMonths <= 0) return 0;
+  return (((twelveMonths - yearlyPaise) * 100) / twelveMonths).round();
+}
+
+/// Which plan this is, in the user's language. Used by the paywall's own status
+/// card and by Settings, so the two can never name a plan differently.
+String planLabel(SsStrings strings, ProPlan plan) => switch (plan) {
+  ProPlan.monthly => strings['planMonthly'],
+  ProPlan.yearly => strings['planYearly'],
+  ProPlan.lifetime => strings['planLifetime'],
+};
+
+/// What a paying user sees instead of the tiers: which plan they own, and when
+/// it renews. No price, no timer, nothing to buy.
+class _ProStatusCard extends StatelessWidget {
+  const _ProStatusCard({
+    required this.entitlement,
+    required this.locale,
+    required this.strings,
+  });
+
+  final ProEntitlement entitlement;
+  final String locale;
+  final SsStrings strings;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = SsColors.of(context);
+    final renewsOn = entitlement.expiresAtMs;
+
+    return SsCard(
+      color: c.tintOf(c.gold500),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.verified_rounded, size: 20, color: c.gold500),
+              const SizedBox(width: SsSpace.x2),
+              Expanded(
+                child: Text(strings['proActive'], style: SsText.bodyStrong),
+              ),
+            ],
+          ),
+          const SizedBox(height: SsSpace.x1),
+          Text(
+            planLabel(strings, entitlement.plan),
+            style: SsText.caption.copyWith(color: c.textSecondary),
+          ),
+          if (renewsOn != null) ...[
+            const SizedBox(height: SsSpace.x1),
+            Text(
+              strings.fill('renewsOnTemplate', {
+                'date': shortDate(renewsOn, locale: locale),
+              }),
+              style: SsText.micro.copyWith(color: c.textTertiary),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The store's last word, in the user's language: a payment under review, a
+/// refusal, or a plan that is not on sale in this country yet.
+class _BillingNote extends StatelessWidget {
+  const _BillingNote({required this.event, required this.strings});
+
+  final BillingEvent event;
+  final SsStrings strings;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = SsColors.of(context);
+
+    final (String key, Color color, IconData icon) = switch (event.outcome) {
+      BillingOutcome.pending => (
+        'billingPending',
+        c.gold500,
+        Icons.hourglass_bottom_rounded,
+      ),
+      BillingOutcome.canceled => (
+        'billingCanceled',
+        c.textSecondary,
+        Icons.close_rounded,
+      ),
+      BillingOutcome.error => (
+        'billingFailed',
+        c.danger,
+        Icons.error_outline_rounded,
+      ),
+      BillingOutcome.purchased || BillingOutcome.restored => (
+        'billingSucceeded',
+        c.teal500,
+        Icons.check_circle_outline_rounded,
+      ),
+    };
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 18, color: color),
+        const SizedBox(width: SsSpace.x2),
+        Expanded(
+          child: Text(
+            strings[key],
+            style: SsText.caption.copyWith(color: c.textSecondary),
+          ),
+        ),
+      ],
     );
   }
 }

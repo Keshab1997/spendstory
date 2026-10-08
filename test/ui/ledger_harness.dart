@@ -126,6 +126,7 @@ Future<ProviderContainer> pumpAt(
   String locale = 'en',
   Size size = const Size(390, 844),
   double textScale = 1.0,
+  List<Override> extra = const <Override>[],
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1.0;
@@ -133,7 +134,10 @@ Future<ProviderContainer> pumpAt(
 
   await tester.pumpWidget(
     ProviderScope(
-      overrides: harnessOverrides(locale: locale),
+      overrides: <Override>[
+        ...harnessOverrides(locale: locale),
+        ...extra,
+      ],
       child: MediaQuery(
         data: MediaQueryData(textScaler: TextScaler.linear(textScale)),
         child: const SpendStoryApp(),

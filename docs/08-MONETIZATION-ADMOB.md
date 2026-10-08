@@ -157,16 +157,29 @@ class AdSlot extends ConsumerWidget {
 | Governor | `lib/ads/ad_gate.dart` | 1 trigger · 1/session · 240 s floor · never Pro · shown after the screen is built |
 | Manifest app id | `android/app/src/main/AndroidManifest.xml` + `build.gradle.kts` | debug = test id; release = `admob.appId` from `local.properties` or `-P` |
 | Tests | `test/ads/*` | ids both directions, gate, slot, web stub, and a source audit of every request site |
+| Billing seam | `lib/pro/billing_client.dart` (+ `_mobile` / `_web`) | the paywall and the controller never see the plugin |
+| Three products | `lib/pro/product_ids.dart` | `ss_pro_monthly` · `ss_pro_yearly` · `ss_pro_lifetime`, prices and entitlement windows |
+| Entitlement | `lib/pro/entitlement.dart` | one readable line in `app_meta`; a window, not a boolean; lifetime never expires |
+| Controller | `lib/pro/pro_controller.dart` | `purchaseStream` + one restore per launch; only `purchased`/`restored` grant |
+| Paywall | `lib/ui/screens/pro_screen.dart` | store prices or a labelled estimate, restore, terms + privacy, **no counter, no fake discount** |
+| Placement gate | `lib/pro/paywall_gate.dart` | Settings · 3rd locked tap · 10th session · **max 1 a session** · never Pro |
+| Tests | `test/pro/*`, `test/ui/paywall_test.dart` | entitlement round-trip, all five store outcomes, the gate's arithmetic, the screen's rules |
 
-**Two things Keshab owns, and neither is in the repo:**
+**Three things Keshab owns, and none of them is in the repo:**
 1. Create the six units in the AdMob console and paste their ids into
    `AdLiveIds` (`lib/ads/ad_ids.dart`), plus the app id.
 2. Put the live app id in `android/local.properties` (`admob.appId=…`) — machine
    local and gitignored, like `sdk.dir` — or pass `-Padmob.appId=…` on a release
    build.
+3. Create the three Play Console products with the ids above, the prices in §6,
+   and the 7-day trial **on the yearly plan only**. Until they exist,
+   `queryProductDetails` returns nothing and the paywall shows the documented
+   prices as *estimates* — which is honest, but it is not a working paywall.
 
-Until both are done the app ships **ad-free**, which is the safe direction: an
-empty id requests nothing, and a live id is never reached in debug.
+Until these are done the app ships **ad-free**, which is the safe direction: an
+empty id requests nothing, and a live id is never reached in debug. The paywall
+is the same way — a store that cannot answer changes nothing about what the app
+promises, and no purchase can be granted by anything except Play's own word.
 
 ## 9. Policy-risk watchlist (review before each release)
 

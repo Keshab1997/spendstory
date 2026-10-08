@@ -23,6 +23,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/providers.dart';
 import '../../domain/models.dart';
 import '../../domain/view_models.dart';
+import '../../pro/paywall_gate.dart';
 import '../components/ad_slot.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
@@ -296,7 +297,10 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
             if (!isPro)
               SsCard(
                 color: c.tintOf(c.gold500),
-                onTap: () => context.push('/pro'),
+                onTap: () {
+                  requestPaywall(ref, PaywallTrigger.userAsked);
+                  context.push('/pro');
+                },
                 child: Row(
                   children: [
                     Icon(Icons.auto_graph_rounded, color: c.gold500, size: 22),
@@ -319,7 +323,11 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                             tone: SsButtonTone.gold,
                             height: 40,
                             expanded: false,
-                            onPressed: () => context.push('/pro'),
+                            onPressed: () {
+                              // The button says "See Pro": the user asked.
+                              requestPaywall(ref, PaywallTrigger.userAsked);
+                              context.push('/pro');
+                            },
                           ),
                         ],
                       ),
@@ -400,9 +408,17 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
 
   void _selectPeriod(InsightsPeriod p) {
     if (p == InsightsPeriod.custom && !ref.read(proStatusProvider)) {
-      // The custom range is Pro (see `insightProBody`). Sending the tap to the
-      // paywall is honest; a chip that silently does nothing reads as broken.
-      context.push('/pro');
+      // The custom range is Pro (see `insightProBody`). A chip that silently
+      // does nothing reads as broken, so the tap always answers: on the third
+      // one it opens the paywall (§S-22), and before that it says — in the
+      // app's own words, no nagging — what the range is waiting for.
+      if (requestPaywall(ref, PaywallTrigger.lockedInsight)) {
+        context.push('/pro');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(ref.read(stringsProvider)['insightProBody'])),
+        );
+      }
       return;
     }
     setState(() => _period = p);

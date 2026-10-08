@@ -10,8 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
+import '../../pro/pro_controller.dart';
 import '../components/controls.dart';
-import '../components/lists.dart';
+import '../components/privacy_sheet.dart';
 import '../components/surfaces.dart';
 import '../format.dart';
 import '../tokens.dart';
@@ -194,11 +195,36 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 Divider(color: c.divider, height: 1),
                 SettingTile(
+                  icon: Icons.restore_rounded,
+                  tint: c.textSecondary,
+                  title: s['restorePurchases'],
+                  subtitle: s['subscriptionFootNote'],
+                  onTap: () async {
+                    // Mandatory in Settings as well as on the paywall
+                    // (`docs/08 §6`): somebody who reinstalled has to be able
+                    // to get their Pro back without finding the paywall.
+                    final messenger = ScaffoldMessenger.of(context);
+                    await ref.read(proControllerProvider).restore();
+                    if (!context.mounted) return;
+                    final event = ref.read(lastBillingEventProvider);
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          event != null && event.grantsAccess
+                              ? s['restoreDone']
+                              : s['restoreNothing'],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Divider(color: c.divider, height: 1),
+                SettingTile(
                   icon: Icons.lock_outline_rounded,
                   tint: c.violet600,
                   title: s['privacy'],
                   subtitle: s['privacyBody'],
-                  onTap: () => _showPrivacy(context, ref),
+                  onTap: () => showPrivacySheet(context, ref),
                 ),
               ],
             ),
@@ -240,41 +266,6 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: SsSpace.x4),
         ],
-      ),
-    );
-  }
-
-  void _showPrivacy(BuildContext context, WidgetRef ref) {
-    final c = SsColors.of(context);
-    final s = ref.read(stringsProvider);
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.fromLTRB(
-          SsSpace.x5,
-          SsSpace.x2,
-          SsSpace.x5,
-          SsSpace.x8,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(s.privacy, style: SsText.h2),
-            const SizedBox(height: SsSpace.x3),
-            Text(
-              s['privacyDetails'],
-              style: SsText.body.copyWith(color: c.textSecondary),
-            ),
-            const SizedBox(height: SsSpace.x4),
-            SsBadge(
-              label: s['privacyOnDevice'],
-              color: c.teal500,
-              icon: Icons.shield_outlined,
-            ),
-          ],
-        ),
       ),
     );
   }
