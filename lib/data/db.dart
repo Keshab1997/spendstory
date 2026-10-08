@@ -50,7 +50,7 @@ class AppDb extends _$AppDb {
   factory AppDb.open() => AppDb(openAppConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -62,7 +62,12 @@ class AppDb extends _$AppDb {
       // schema, because a user's ledger is not something we can re-create.
       // Each new schema version adds one `if (from < N)` step here, and gets a
       // test that opens a database seeded at version N-1.
-      throw StateError('no migration registered for v$from → v$to');
+      if (from < 2) {
+        // v2 — recurring rules (T-506). A fresh table, so nothing to backfill.
+        await m.createTable(recurringRules);
+      } else {
+        throw StateError('no migration registered for v$from → v$to');
+      }
     },
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
@@ -116,6 +121,12 @@ class AppDb extends _$AppDb {
   }
 
   /// Reads a setting, or null when it was never written.
+  /// Every setting whose key starts with [prefix] — the recurring pipeline
+  /// records what it has already done one key per due date, and reading them
+  /// back needs the whole set, not a key it would have to guess.
+  Future<List<AppMetaRow>> metaWithPrefix(String prefix) =>
+      (select(appMeta)..where((m) => m.key.like('$prefix%'))).get();
+
   Future<String?> meta(String key) async {
     final row = await (select(
       appMeta,

@@ -188,6 +188,14 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 Divider(color: c.divider, height: 1),
                 SettingTile(
+                  icon: Icons.autorenew_rounded,
+                  tint: c.violet600,
+                  title: s['recurringTitle'],
+                  subtitle: s['recurringSettingBody'],
+                  onTap: () => context.push('/recurring'),
+                ),
+                Divider(color: c.divider, height: 1),
+                SettingTile(
                   icon: Icons.lock_outline_rounded,
                   tint: c.violet600,
                   title: s['privacy'],

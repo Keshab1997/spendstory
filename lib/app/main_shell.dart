@@ -39,7 +39,9 @@ class _MainShellState extends ConsumerState<MainShell> {
     // this process first. The once-a-day cap lives in the runner, which is what
     // makes calling it this often safe.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) unawaited(ref.read(budgetAlertRunnerProvider)());
+      if (!mounted) return;
+      unawaited(ref.read(budgetAlertRunnerProvider)());
+      unawaited(ref.read(recurringRunnerProvider)());
     });
   }
 
@@ -47,6 +49,12 @@ class _MainShellState extends ConsumerState<MainShell> {
   Widget build(BuildContext context) {
     ref.listen(transactionsProvider, (previous, next) {
       if (next.hasValue) unawaited(ref.read(budgetAlertRunnerProvider)());
+    });
+
+    // Recurring rules have the same two triggers, and the same guarantee: a
+    // due date is acted on once, whatever the ledger does afterwards.
+    ref.listen(recurringProvider, (previous, next) {
+      if (next.hasValue) unawaited(ref.read(recurringRunnerProvider)());
     });
 
     final s = ref.watch(stringsProvider);

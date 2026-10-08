@@ -6,6 +6,8 @@
 /// until a web database is wired up).
 library;
 
+import 'recurring_math.dart';
+
 import 'dart:ui' show Color;
 
 import '../capture/rule_engine.dart';
@@ -316,6 +318,102 @@ class BudgetView {
     alertAt100: row.alertAt100,
     startsOn: row.startsOn,
     endsOn: row.endsOn,
+  );
+}
+
+/// One recurring rule — rent, an EMI, a subscription (S-19, T-506).
+///
+/// `nextDueAt` is stored, not derived on every read: it is the one field that
+/// changes as the rule is acted on (posting advances it), and re-deriving it
+/// from `dayOfMonth` would forget that February clamped a 31st.
+class RecurringRuleView {
+  const RecurringRuleView({
+    required this.id,
+    required this.title,
+    required this.amountPaise,
+    this.direction = TxnDirection.expense,
+    this.categoryId,
+    this.accountId,
+    this.frequency = 'monthly',
+    this.interval = 1,
+    this.dayOfMonth,
+    required this.nextDueAt,
+    this.autoPost = false,
+    this.remindDaysBefore = 1,
+  });
+
+  final String id;
+  final String title;
+  final int amountPaise;
+  final TxnDirection direction;
+  final String? categoryId;
+  final String? accountId;
+
+  /// `daily` | `weekly` | `monthly` | `yearly`.
+  final String frequency;
+
+  /// Every N days/weeks/months/years. 1 for most rules.
+  final int interval;
+
+  /// 1–31, for monthly and yearly rules. See `advanceDueDate`: a 31st clamps
+  /// to the last day of a shorter month rather than rolling into the next one.
+  final int? dayOfMonth;
+
+  final int nextDueAt;
+
+  /// When on, the due payment is written into the ledger by itself.
+  final bool autoPost;
+
+  /// `-1` = no reminder; otherwise days before the due date, `0` = that day.
+  final int remindDaysBefore;
+
+  bool get reminds => remindDaysBefore >= 0;
+
+  RecurringFrequency get frequencyEnum => recurringFrequencyFrom(frequency);
+
+  RecurringRuleView copyWith({
+    String? title,
+    int? amountPaise,
+    TxnDirection? direction,
+    String? categoryId,
+    bool clearCategory = false,
+    String? accountId,
+    bool clearAccount = false,
+    String? frequency,
+    int? interval,
+    int? dayOfMonth,
+    bool clearDayOfMonth = false,
+    int? nextDueAt,
+    bool? autoPost,
+    int? remindDaysBefore,
+  }) => RecurringRuleView(
+    id: id,
+    title: title ?? this.title,
+    amountPaise: amountPaise ?? this.amountPaise,
+    direction: direction ?? this.direction,
+    categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
+    accountId: clearAccount ? null : (accountId ?? this.accountId),
+    frequency: frequency ?? this.frequency,
+    interval: interval ?? this.interval,
+    dayOfMonth: clearDayOfMonth ? null : (dayOfMonth ?? this.dayOfMonth),
+    nextDueAt: nextDueAt ?? this.nextDueAt,
+    autoPost: autoPost ?? this.autoPost,
+    remindDaysBefore: remindDaysBefore ?? this.remindDaysBefore,
+  );
+
+  factory RecurringRuleView.fromRow(RecurringRuleRow row) => RecurringRuleView(
+    id: row.id,
+    title: row.title,
+    amountPaise: row.amountPaise,
+    direction: TxnDirection.fromWire(row.direction) ?? TxnDirection.expense,
+    categoryId: row.categoryId,
+    accountId: row.accountId,
+    frequency: row.frequency,
+    interval: row.interval,
+    dayOfMonth: row.dayOfMonth,
+    nextDueAt: row.nextDueAt,
+    autoPost: row.autoPost,
+    remindDaysBefore: row.remindDaysBefore,
   );
 }
 

@@ -18,6 +18,7 @@ import '../data/connection_io.dart'
     if (dart.library.js_interop) '../data/connection_web.dart';
 import '../data/db.dart';
 import '../data/demo_data.dart';
+import '../data/recurring_tasks.dart';
 import '../data/tx_repo.dart';
 import '../domain/budget_math.dart';
 import '../domain/models.dart';
@@ -273,6 +274,7 @@ class TxActions {
     String? accountId,
     PaymentMode mode = PaymentMode.cash,
     String? note,
+    TxSource source = TxSource.manual,
   }) async {
     final db = _ref.read(appDbProvider);
     if (db == null) {
@@ -288,7 +290,11 @@ class TxActions {
                 occurredAtMs: occurredAtMs,
                 merchant: merchant,
                 categoryId: categoryId,
+                // The demo path used to drop this, so a row that named an
+                // account looked account-less in the preview.
+                accountId: accountId,
                 mode: mode,
+                source: source.wire,
                 note: note,
               ),
               ...list,
@@ -305,6 +311,7 @@ class TxActions {
       accountId: accountId,
       mode: mode,
       note: note,
+      source: source,
     );
     _ref.invalidate(transactionsProvider);
     return id;
@@ -447,7 +454,8 @@ final accountBalancesProvider = FutureProvider<Map<String, int>>((ref) async {
 
   final db = ref.watch(appDbProvider);
   if (db == null) {
-    final txns = ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
+    final txns =
+        ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
     final balances = <String, int>{
       for (final a in accounts) a.id: a.openingBalancePaise,
     };
@@ -462,9 +470,7 @@ final accountBalancesProvider = FutureProvider<Map<String, int>>((ref) async {
   }
 
   final repo = TxRepo(db);
-  return {
-    for (final a in accounts) a.id: await repo.balancePaise(a.id),
-  };
+  return {for (final a in accounts) a.id: await repo.balancePaise(a.id)};
 });
 
 /// Create / edit / delete for the accounts screen (S-16).
@@ -615,9 +621,7 @@ class BudgetActions {
       return;
     }
     await (db.update(db.budgets)..where((b) => b.id.equals(id))).write(
-      BudgetsCompanion(
-        deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
-      ),
+      BudgetsCompanion(deletedAt: Value(DateTime.now().millisecondsSinceEpoch)),
     );
     _ref.invalidate(budgetsProvider);
   }
@@ -650,16 +654,23 @@ final budgetStatusesProvider = FutureProvider<List<BudgetStatus>>((ref) async {
   ];
 });
 
-/// What posting an alert actually means. A provider so a test can watch what
-/// the pipeline decided to send without an Android host anywhere near it.
-final budgetAlertSenderProvider =
-    Provider<Future<bool> Function(BudgetAlert)>(
-      (ref) => (alert) => NativeBridge.postNotification(
-        id: alert.notificationId,
-        title: alert.title,
-        body: alert.body,
-      ),
+/// Posting one notification. The seam every notification in the app goes
+/// through, so a test can watch what was sent without an Android host anywhere
+/// near it — budget alerts and recurring reminders alike.
+final notificationPosterProvider =
+    Provider<Future<bool> Function(int id, String title, String body)>(
+      (ref) =>
+          (id, title, body) =>
+              NativeBridge.postNotification(id: id, title: title, body: body),
     );
+
+/// What posting a budget alert actually means.
+final budgetAlertSenderProvider = Provider<Future<bool> Function(BudgetAlert)>((
+  ref,
+) {
+  final post = ref.watch(notificationPosterProvider);
+  return (alert) => post(alert.notificationId, alert.title, alert.body);
+});
 
 /// The day each alert was last delivered, for the demo/web build where there is
 /// no database to write the record to.
@@ -727,15 +738,251 @@ final budgetAlertRunnerProvider = Provider<BudgetAlertRunner>((ref) {
 
       delivered.add(alert);
       if (db == null) {
-        ref.read(sessionAlertsSentProvider.notifier).update(
-          (map) => <String, String>{...map, alert.key: today},
-        );
+        ref
+            .read(sessionAlertsSentProvider.notifier)
+            .update((map) => <String, String>{...map, alert.key: today});
       } else {
         await db.setMeta('alert:${alert.key}', today);
       }
     }
 
     return delivered;
+  };
+});
+
+// -----------------------------------------------------------------------------
+// recurring rules (T-506)
+// -----------------------------------------------------------------------------
+
+final sessionRecurringPatchesProvider =
+    StateProvider<Map<String, RecurringRuleView>>(
+      (ref) => const <String, RecurringRuleView>{},
+    );
+
+final sessionRecurringDeletedProvider = StateProvider<Set<String>>(
+  (ref) => const <String>{},
+);
+
+final sessionRecurringAddedProvider = StateProvider<List<RecurringRuleView>>(
+  (ref) => const <RecurringRuleView>[],
+);
+
+/// What the recurring pipeline has already done, for the demo build where there
+/// is no database to write the record to. On a phone both maps live in
+/// `app_meta`, keyed `recurring-posted:<id>:<due day>` and
+/// `recurring-reminded:<id>:<due day>`.
+final sessionRecurringPostedProvider = StateProvider<Map<String, String>>(
+  (ref) => const <String, String>{},
+);
+
+final sessionRecurringRemindedProvider = StateProvider<Map<String, String>>(
+  (ref) => const <String, String>{},
+);
+
+/// Rent, EMIs, subscriptions — same shape as every other list provider: the
+/// database on a phone, the demo rules on the web, and the session overlay in
+/// both so an edit is visible immediately.
+final recurringProvider = FutureProvider<List<RecurringRuleView>>((ref) async {
+  final db = ref.watch(appDbProvider);
+  final patches = ref.watch(sessionRecurringPatchesProvider);
+  final deleted = ref.watch(sessionRecurringDeletedProvider);
+
+  final base = db == null
+      ? <RecurringRuleView>[
+          ...ref.watch(sessionRecurringAddedProvider),
+          ...ref.watch(demoLedgerProvider).recurring,
+        ]
+      : [
+          for (final r in (await db.select(db.recurringRules).get()).where(
+            (r) => r.deletedAt == null,
+          ))
+            RecurringRuleView.fromRow(r),
+        ];
+  base.sort((a, b) => a.nextDueAt.compareTo(b.nextDueAt));
+
+  final known = {for (final r in base) r.id};
+  return <RecurringRuleView>[
+    for (final r in base)
+      if (!deleted.contains(r.id)) patches[r.id] ?? r,
+    for (final entry in patches.entries)
+      if (!known.contains(entry.key) && !deleted.contains(entry.key))
+        entry.value,
+  ];
+});
+
+/// Create, edit and delete rules (S-19).
+class RecurringActions {
+  const RecurringActions(this._ref);
+
+  final Ref _ref;
+
+  Future<void> save(RecurringRuleView rule) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionRecurringPatchesProvider.notifier)
+          .update((map) => <String, RecurringRuleView>{...map, rule.id: rule});
+      return;
+    }
+    await db
+        .into(db.recurringRules)
+        .insertOnConflictUpdate(
+          RecurringRulesCompanion.insert(
+            id: rule.id,
+            title: rule.title,
+            amountPaise: rule.amountPaise,
+            direction: rule.direction.wire,
+            categoryId: Value(rule.categoryId),
+            accountId: Value(rule.accountId),
+            frequency: rule.frequency,
+            interval: Value(rule.interval),
+            dayOfMonth: Value(rule.dayOfMonth),
+            nextDueAt: rule.nextDueAt,
+            autoPost: Value(rule.autoPost),
+            remindDaysBefore: Value(rule.remindDaysBefore),
+          ),
+        );
+    _ref.invalidate(recurringProvider);
+  }
+
+  /// Stops the rule. Payments it already posted stay in the ledger, because
+  /// they happened.
+  Future<void> delete(String id) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionRecurringDeletedProvider.notifier)
+          .update((ids) => <String>{...ids, id});
+      return;
+    }
+    await (db.update(db.recurringRules)..where((r) => r.id.equals(id))).write(
+      RecurringRulesCompanion(
+        deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
+      ),
+    );
+    _ref.invalidate(recurringProvider);
+  }
+}
+
+final recurringActionsProvider = Provider<RecurringActions>(
+  (ref) => RecurringActions(ref),
+);
+
+/// What one pass of the recurring pipeline did — the return value is what the
+/// tests assert on.
+typedef RecurringRun = ({
+  List<RecurringPost> posted,
+  List<RecurringReminder> reminded,
+});
+
+typedef RecurringRunner = Future<RecurringRun> Function();
+
+const String _kPostedPrefix = 'recurring-posted:';
+const String _kRemindedPrefix = 'recurring-reminded:';
+
+/// Posts what is due: the payments auto-post promised, and the reminders.
+///
+/// Runs on the same two triggers as the budget alerts (shell start-up, ledger
+/// change). Every action is recorded against the due date it belongs to, which
+/// is what makes running this often safe.
+final recurringRunnerProvider = Provider<RecurringRunner>((ref) {
+  return () async {
+    final rules = await ref.read(recurringProvider.future);
+    if (rules.isEmpty) {
+      return (posted: <RecurringPost>[], reminded: <RecurringReminder>[]);
+    }
+
+    final now = ref.read(nowProvider);
+    final nowMs = now.millisecondsSinceEpoch;
+    final today = alertDay(now);
+    final db = ref.read(appDbProvider);
+
+    Future<Map<String, String>> records(String prefix) async {
+      if (db == null) {
+        return Map<String, String>.from(
+          prefix == _kPostedPrefix
+              ? ref.read(sessionRecurringPostedProvider)
+              : ref.read(sessionRecurringRemindedProvider),
+        );
+      }
+      final rows = await db.metaWithPrefix(prefix);
+      return <String, String>{
+        for (final row in rows) row.key.substring(prefix.length): row.value,
+      };
+    }
+
+    Future<void> remember(String prefix, String key, String day) async {
+      if (db == null) {
+        final notifier = prefix == _kPostedPrefix
+            ? ref.read(sessionRecurringPostedProvider.notifier)
+            : ref.read(sessionRecurringRemindedProvider.notifier);
+        notifier.update((map) => <String, String>{...map, key: day});
+        return;
+      }
+      await db.setMeta('$prefix$key', day);
+    }
+
+    final posted = <RecurringPost>[];
+    final toPost = dueRecurringPosts(
+      rules: rules,
+      nowMs: nowMs,
+      postedOn: await records(_kPostedPrefix),
+    );
+
+    for (final post in toPost) {
+      await ref
+          .read(txActionsProvider)
+          .add(
+            amountPaise: post.rule.amountPaise,
+            direction: post.rule.direction,
+            occurredAtMs: post.dueMs,
+            merchant: post.rule.title,
+            categoryId: post.rule.categoryId,
+            accountId: post.rule.accountId,
+            source: TxSource.recurring,
+          );
+      await ref
+          .read(recurringActionsProvider)
+          .save(
+            post.rule.copyWith(
+              nextDueAt: nextDueAfterPost(post: post, nowMs: nowMs),
+            ),
+          );
+      await remember(_kPostedPrefix, post.key, today);
+      posted.add(post);
+    }
+
+    // A rule that just posted itself is not also reminded about.
+    final advanced = <String, RecurringRuleView>{
+      for (final post in posted)
+        post.rule.id: post.rule.copyWith(
+          nextDueAt: nextDueAfterPost(post: post, nowMs: nowMs),
+        ),
+    };
+
+    final reminded = <RecurringReminder>[];
+    final owed = owedRecurringReminders(
+      rules: [for (final rule in rules) advanced[rule.id] ?? rule],
+      strings: ref.read(stringsProvider),
+      locale: ref.read(localeProvider),
+      nowMs: nowMs,
+      sentOn: await records(_kRemindedPrefix),
+    );
+
+    final send = ref.read(notificationPosterProvider);
+    for (final reminder in owed) {
+      var ok = false;
+      try {
+        ok = await send(reminder.notificationId, reminder.title, reminder.body);
+      } catch (_) {
+        ok = false;
+      }
+      if (!ok) continue;
+      await remember(_kRemindedPrefix, reminder.key, today);
+      reminded.add(reminder);
+    }
+
+    return (posted: posted, reminded: reminded);
   };
 });
 

@@ -30,6 +30,7 @@ const List<String> _allRoutes = <String>[
   '/accounts',
   '/categories',
   '/search',
+  '/recurring',
 ];
 
 void main() {

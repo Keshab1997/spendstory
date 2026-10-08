@@ -188,6 +188,7 @@ class TxRepo {
     String? accountId,
     PaymentMode mode = PaymentMode.cash,
     String? note,
+    TxSource source = TxSource.manual,
   }) async {
     final id = _uuid.v4();
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -205,7 +206,7 @@ class TxRepo {
             occurredAt: occurredAt,
             createdAt: now,
             updatedAt: now,
-            source: TxSource.manual.wire,
+            source: source.wire,
             note: Value(note),
             // Unique per row: a manual entry must never collide with another.
             dedupeHash: 'manual:$id',

@@ -207,9 +207,9 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 - [x] **T-503** S-16 Accounts + computed balances
 - [x] **T-504** S-17 Insights — donut, trend, top merchants, deltas
 - [x] **T-505** Budget alert notifications (80%/100%), once-per-day cap
-- [ ] **T-506** S-19 Recurring & reminders (v1.1)
+- [x] **T-506** S-19 Recurring & reminders (v1.1)
 
-**What landed (T-501 … T-505):**
+**What landed (T-501 … T-506):**
 - `lib/domain/budget_math.dart` — the cycle and the status, pure and shared.
   A cycle starts on `startDay` (salary day), not on the 1st; 80/100/120 and the
   daily allowance (left ÷ days remaining) are defined here once.
@@ -237,8 +237,31 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
   refuses (no permission, no host) is **not** marked delivered — it is still
   owed tomorrow. The permission is asked at the moment a user switches a
   warning on, and nowhere else.
+- `lib/domain/recurring_math.dart` + `lib/data/recurring_tasks.dart` — T-506.
+  The dates are the hard part and they are pure: a rule on the 31st clamps to
+  the last day of a short month **and comes back to the 31st** (never drifting
+  to the 3rd), a leap-day yearly rule survives three ordinary years, and an
+  interval a bad edit set to zero still moves forward. Auto-post writes the
+  payment on the day it was **due**, not the day the app noticed one, so a
+  phone that slept through three months owes one rent rather than three; each
+  payment and each reminder is remembered against its own due date
+  (`recurring:<id>:<day>` in `app_meta`, the session map in the demo build).
+- `lib/ui/screens/recurring_screen.dart` + `recurring_edit_sheet.dart` — S-19
+  `/recurring`. Rules with their next due date (and "was due" when it has
+  passed), auto-post/reminder footer, a 30-day strip that counts what is coming,
+  one native in-feed ad under the rules and nothing above them. The editor is
+  one sheet for new and existing rules: name, amount, direction, category,
+  account, frequency with an interval, first payment date, the auto-post switch
+  and the reminder timing — with the day-of-month note said out loud instead of
+  surprising the user in February. Turning a reminder on is the one moment the
+  notification permission is asked for.
+- `lib/data/db.dart` — **schema v2**: `recurring_rules`, with a `if (from < 2)`
+  step and `test/data/migration_test.dart`, which opens a file written as v1 and
+  proves the ledger survived and the new table is writable.
 - `test/` — budgets 21, budget detail 17, accounts 15, insights 33, alerts 17,
-  plus the render smoke pass over every route in 3 languages × 2 text scales.
+  recurring math 20, recurring pipeline 19, recurring screen 16, migration 1
+  (406 total), plus the render smoke pass over every route in 3 languages × 2
+  text scales.
 
 **Bugs the tests surfaced (all fixed):**
 1. `monthProgress()` reads the day off the date it is given; the insights
@@ -252,9 +275,17 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
    purpose — `valueOrNull` on a provider nobody has started is null, and an
    alert pipeline that sees an empty ledger decides there is nothing to warn
    about.
+5. The 30-day strip ended at midnight of its thirtieth day, so a payment due at
+   9 am on that very day was counted out of the strip that was showing it; the
+   window now runs to the end of the day.
+6. The strip header and its day tiles overflowed at 1.3× text scale — "27 due in
+   the next 30 days" has nowhere to shrink in a two-up row. Title and count
+   stack, and a tile caps the text scale inside its own 56 px chip.
+7. A reminder was re-sent every day inside its window; "remind me three days
+   before" now means one nudge, remembered against the due date.
 
-**Next:** T-506 (S-19 recurring & reminders, v1.1) — schema, screen and reminder
-notifications, reusing the alert channel.
+**Next:** Batch 7 — monetization (AdMob init after first frame, the interstitial
+governor, native units, then the paywall and `in_app_purchase`).
 
 ---
 

@@ -27,6 +27,7 @@ import '../ui/screens/onboarding_screen.dart';
 import '../ui/screens/permission_notification_screen.dart';
 import '../ui/screens/permission_sms_screen.dart';
 import '../ui/screens/pro_screen.dart';
+import '../ui/screens/recurring_screen.dart';
 import '../ui/screens/settings_screen.dart';
 import '../ui/screens/splash_screen.dart';
 import '../ui/screens/search_screen.dart';
@@ -191,6 +192,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/search',
         builder: (context, state) => const SearchScreen(),
+      ),
+      GoRoute(
+        path: '/recurring',
+        builder: (context, state) => const RecurringScreen(),
       ),
       GoRoute(
         path: '/pro',

@@ -12,6 +12,7 @@ library;
 
 import '../capture/rule_engine.dart';
 import '../domain/models.dart';
+import '../domain/recurring_math.dart';
 import '../domain/view_models.dart';
 import 'seed.dart';
 
@@ -96,10 +97,7 @@ class DemoLedger {
   /// the user can reach from the preview has to stay reachable.
   List<BudgetView> get budgets => <BudgetView>[
     if (overallBudgetPaise != null)
-      BudgetView(
-        id: 'demo-budget-overall',
-        amountPaise: overallBudgetPaise!,
-      ),
+      BudgetView(id: 'demo-budget-overall', amountPaise: overallBudgetPaise!),
     for (final entry in budgetCaps.entries)
       BudgetView(
         id: 'demo-budget-${entry.key}',
@@ -107,6 +105,52 @@ class DemoLedger {
         amountPaise: entry.value,
       ),
   ];
+
+  /// Three shapes the recurring screen has to handle: rent that is only
+  /// reminded, an EMI that posts itself, and a subscription due later in the
+  /// month. Their due dates are computed from today, so the preview is never
+  /// showing a rent that was due two months ago.
+  List<RecurringRuleView> get recurring => <RecurringRuleView>[
+    RecurringRuleView(
+      id: 'demo-recurring-rent',
+      title: 'House rent',
+      amountPaise: 1800000,
+      categoryId: Cat.rent,
+      accountId: 'acc-hdfc',
+      dayOfMonth: 5,
+      nextDueAt: _nextDueOn(5),
+      remindDaysBefore: 1,
+    ),
+    RecurringRuleView(
+      id: 'demo-recurring-emi',
+      title: 'Home loan EMI',
+      amountPaise: 2350000,
+      categoryId: Cat.emi,
+      accountId: 'acc-hdfc',
+      dayOfMonth: 3,
+      nextDueAt: _nextDueOn(3),
+      autoPost: true,
+      remindDaysBefore: 1,
+    ),
+    RecurringRuleView(
+      id: 'demo-recurring-netflix',
+      title: 'Netflix',
+      amountPaise: 64900,
+      categoryId: Cat.entertainment,
+      accountId: 'acc-hdfc',
+      dayOfMonth: 12,
+      nextDueAt: _nextDueOn(12),
+      remindDaysBefore: 0,
+    ),
+  ];
+
+  /// The next time this day-of-month comes round, from today.
+  int _nextDueOn(int day) => nextDueAfter(
+    frequency: RecurringFrequency.monthly,
+    dayOfMonth: day,
+    dueMs: DateTime(now.year, now.month, day, 9).millisecondsSinceEpoch,
+    fromMs: now.millisecondsSinceEpoch,
+  );
 
   /// Categories that have a cap, for the budget screen.
   List<({CategoryView category, int spentPaise, int capPaise})> get budgeted {

@@ -40,8 +40,8 @@ void main() {
   );
 
   group('schema', () {
-    test('is version 1 and creates all eight tables plus app_meta', () async {
-      expect(db.schemaVersion, 1);
+    test('is version 2 and creates all eight tables plus app_meta', () async {
+      expect(db.schemaVersion, 2);
 
       final rows = await db
           .customSelect(
