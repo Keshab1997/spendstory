@@ -507,6 +507,13 @@ PDF export credit gets spent.
 - [x] **T-703** Category names in 3 languages (seed)
 - [x] **T-704** S-21 About/Privacy — text must match `07` §5
 - [ ] **T-705** S-23 Export/Backup — AES-256-GCM + CSV + rewarded PDF
+      *(recon for the next session: `crypto` in the pubspec has no AES — GCM
+      needs `pointycastle` (pure Dart, no platform code, no web-build risk) or
+      `cryptography`; the PDF statement can be `pdf` (also pure Dart); writing
+      and reading the file wants `share_plus` (share the CSV/backup out) and
+      `file_picker` (restore in) — the only two plugins, and both support web.
+      `path_provider` is already a dependency. Keep the rewarded unlock on
+      `spendPdfCredit()`, which is still unspent.)*
 - [ ] **T-706** Settings data-erase (double confirm) + biometric lock
 - [ ] **T-707** Bengali digits toggle
 
