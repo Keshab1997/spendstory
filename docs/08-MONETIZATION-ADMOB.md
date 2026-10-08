@@ -113,7 +113,12 @@ costs the user nothing, not even the day's one. The PDF export is handed over as
 - ভবিষ্যৎ খরচের পূর্বাভাস (forecast/projection)
 - কাস্টম তারিখ রেঞ্জ + PDF statement
 - সীমাহীন বাজেট ও কাস্টম ক্যাটাগরি
-- এনক্রিপ্টেড Google Drive auto-backup
+- এনক্রিপ্টেড Google Drive auto-backup — **not built yet.** S-23 (T-705) ships the
+  encrypted backup and hands the file to the system share sheet, which is where
+  Drive lives on a phone and what the screen tells the user to pick. An automatic
+  upload needs an OAuth client Keshab owns, so the paywall deliberately claims
+  nothing about Drive: the four rows it shows (`pro_screen.dart`) are the four
+  features that exist.
 
 **Billing:** `in_app_purchase` → Play Billing · server-side verification **na** (no server!) → rely on Play's local `purchaseStream` + `restorePurchases()`. Accept the small risk; document it.
 **Trial:** 7 days free on yearly. Reminder notification 1 day before charge (Play handles email; app also shows a local reminder).
