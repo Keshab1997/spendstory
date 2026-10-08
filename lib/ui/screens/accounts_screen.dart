@@ -100,7 +100,7 @@ class AccountsScreen extends ConsumerWidget {
 
           // One banner unit at the bottom, never between the cards: comparing
           // two balances across an ad is not a thing anyone should have to do.
-          if (showAds) const AdSlot(placement: AdPlacement.sectionBanner),
+          if (showAds) const AdSlot(placement: AdPlacement.accountsBanner),
 
           const SizedBox(height: SsSpace.x4),
           SsActionButton(

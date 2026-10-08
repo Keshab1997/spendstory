@@ -12,10 +12,13 @@
 /// 6. **Recent transactions** — proof the capture pipeline is working.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../ads/ad_gate.dart';
 import '../../app/providers.dart';
 import '../../domain/view_models.dart';
 import '../components/ad_slot.dart';
@@ -26,6 +29,20 @@ import '../components/surfaces.dart';
 import '../format.dart';
 import '../tokens.dart';
 import 'tx_edit_sheet.dart';
+
+/// Insights, and — at most once a session — the interstitial that may follow it.
+///
+/// The order is the whole point (`docs/08 §4`): navigate first, let the screen
+/// build, and only then ask the gate. An interstitial that appears mid-transition
+/// is the one users remember, and an interstitial over a screen that never
+/// arrived is worse.
+void _openInsights(BuildContext context, WidgetRef ref) {
+  context.go('/insights');
+  final gate = ref.read(adGateProvider);
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    unawaited(gate.maybeShow(AdTrigger.homeToInsights));
+  });
+}
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -209,7 +226,7 @@ class HomeScreen extends ConsumerWidget {
                   icon: Icons.insights_outlined,
                   label: s.reports,
                   tint: c.rose500,
-                  onTap: () => context.go('/insights'),
+                  onTap: () => _openInsights(context, ref),
                 ),
               ),
             ],

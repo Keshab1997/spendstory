@@ -113,7 +113,7 @@ class RecurringScreen extends ConsumerWidget {
 
           // One ad, above the last thing on the screen — never between the
           // strip and the rule it belongs to.
-          if (showAds) const AdSlot(placement: AdPlacement.sectionBanner),
+          if (showAds) const AdSlot(placement: AdPlacement.recurringNative),
 
           const SizedBox(height: SsSpace.x4),
           SsActionButton(

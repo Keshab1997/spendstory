@@ -146,6 +146,28 @@ class AdSlot extends ConsumerWidget {
 | Battery | no ad refresh < 60s |
 | Offline | `AdSlot` shows nothing; app fully usable (offline-first by design) |
 
+## 8b. What is implemented (T-601 … T-609)
+
+| Piece | Where | Note |
+|---|---|---|
+| Placements + shapes | `lib/ads/ad_placement.dart` | six placements, one per `docs/08 §2` unit; heights reserved here |
+| Ids + flavor switch | `lib/ads/ad_ids.dart` | debug → Google test ids only; release → live ids only, **empty until Keshab fills them in** |
+| SDK seam | `lib/ads/ad_client.dart` (+ `_mobile` / `_web`) | screens name a placement; nothing else may build an `AdRequest` |
+| Slot | `lib/ui/components/ad_slot.dart` | Pro → `SizedBox.shrink()`; failed load collapses; label painted over the creative |
+| Governor | `lib/ads/ad_gate.dart` | 1 trigger · 1/session · 240 s floor · never Pro · shown after the screen is built |
+| Manifest app id | `android/app/src/main/AndroidManifest.xml` + `build.gradle.kts` | debug = test id; release = `admob.appId` from `local.properties` or `-P` |
+| Tests | `test/ads/*` | ids both directions, gate, slot, web stub, and a source audit of every request site |
+
+**Two things Keshab owns, and neither is in the repo:**
+1. Create the six units in the AdMob console and paste their ids into
+   `AdLiveIds` (`lib/ads/ad_ids.dart`), plus the app id.
+2. Put the live app id in `android/local.properties` (`admob.appId=…`) — machine
+   local and gitignored, like `sdk.dir` — or pass `-Padmob.appId=…` on a release
+   build.
+
+Until both are done the app ships **ad-free**, which is the safe direction: an
+empty id requests nothing, and a live id is never reached in debug.
+
 ## 9. Policy-risk watchlist (review before each release)
 
 - [ ] No ad on any screen that also has a permission CTA

@@ -284,22 +284,74 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 7. A reminder was re-sent every day inside its window; "remind me three days
    before" now means one nudge, remembered against the due date.
 
-**Next:** Batch 7 — monetization (AdMob init after first frame, the interstitial
-governor, native units, then the paywall and `in_app_purchase`).
-
 ---
 
-## 🔜 Batch 7 — Monetization
+## 🔜 Batch 7 — Monetization (in progress)
 
-- [ ] **T-601** AdMob SDK init **after first frame**, test IDs in debug flavor
-- [ ] **T-602** `AdGate` interstitial governor (max 1/session) + unit test
-- [ ] **T-603** Native ad units (budget list, recurring)
+- [x] **T-601** AdMob SDK init **after first frame**, test IDs in debug flavor
+- [x] **T-602** `AdGate` interstitial governor (max 1/session) + unit test
+- [x] **T-603** Native ad units (budget list, recurring)
 - [ ] **T-604** S-22 Paywall — 3 tiers, restore button, no dark patterns
 - [ ] **T-605** `in_app_purchase` — 3 products + `purchaseStream` + restore
 - [ ] **T-606** Rewarded: 24h Pro taste + free PDF export + daily caps
 - [ ] **T-607** UMP consent form (first ad request) + India personalized-ads toggle
-- [ ] **T-608** `test/ads/ad_slot_test.dart` — Pro user → `SizedBox.shrink()`
-- [ ] **T-609** Audit: grep every `AdRequest` site → **zero** financial data passed
+- [x] **T-608** `test/ads/ad_slot_test.dart` — Pro user → `SizedBox.shrink()`
+- [x] **T-609** Audit: grep every `AdRequest` site → **zero** financial data passed
+- [ ] **T-610** Settings toggle: "personalized ads" (off by default in India)
+
+**What landed (T-601 … T-603, T-608, T-609):**
+- `lib/ads/` — the whole ads layer, and the only place that knows the SDK
+  exists. `ad_placement.dart` names the six placements as *screens* (`ss_home_banner`,
+  `ss_budget_native`, …), `ad_ids.dart` is the flavor switch, `ad_client.dart` is
+  the seam, `ad_client_mobile.dart` is the SDK, `ad_client_web.dart` is the web
+  preview's honest "nothing". The conditional import came across from
+  `lib/data/db.dart` unchanged — the preview still builds with no SDK in it.
+- **The flavor is the switch.** A debug build can only ever resolve to Google's
+  test ids and a release build can only resolve to the live ones; the check is
+  `test/ads/ad_ids_test.dart`, in both directions. The live ids are **empty in
+  the repo** until Keshab creates the units — an unset id means that placement
+  shows nothing, never a test ad in production.
+- **`AdSlot` is now the only widget an ad can appear in.** Screens name a
+  placement; the widget asks `adsVisibleProvider`, gets the unit from the client,
+  and renders nothing for Pro, nothing before onboarding, nothing on web, and
+  nothing when the load fails — a failed ad collapses the slot instead of
+  leaving a 56 dp hole. A native unit's reserved height is a *floor*, never a
+  ceiling, or the ad's own click target would be clipped.
+- **The manifest app id comes from Gradle**, not from the XML: debug gets the
+  test app id, release reads `admob.appId` from `android/local.properties` (the
+  gitignored, machine-local file) or `-Padmob.appId=…`, so the live id never
+  lands in the repo. A missing id falls
+  back to the test one at *manifest* level only — the app still requests nothing,
+  because the live unit ids are empty.
+- **The SDK initializes after the first frame**, never on the splash, and only
+  when `adsVisibleProvider` is true — a Pro user's phone never starts the SDK.
+- **The interstitial governor** (`AdGateRules`) is pure: one trigger
+  (`homeToInsights`), one per session, a 240-second floor, never for Pro, never
+  before onboarding. The gate shows it *after* the destination screen is built,
+  and an attempt that fails to load does **not** spend the session's one
+  interstitial.
+- **The audit is a test.** `test/ads/ad_request_audit_test.dart` reads `lib/` as
+  text and fails if a second `AdRequest` site appears, if that request grows a
+  targeting field, if the SDK client mentions an amount or a merchant, if
+  `AdSpec` grows a fifth field, if a screen outside the `✅` list in `docs/03`
+  imports `AdSlot`, or if the manifest stops taking its app id from Gradle.
+
+**Bugs the tests surfaced (all fixed):**
+1. `AdSlot` rebuilt its ad request on every `build`. Invisible in a fake, fatal
+   on a device: the second request lands after the first was already paid for.
+   The creative is now created once per slot.
+2. The interstitial unit was being borrowed from a banner placement. The audit
+   test is what caught it — a whole-screen format is not a placement, and
+   `AdFormat` now says so.
+3. `docs/03` and the code had drifted: budget detail and accounts both declared
+   `sectionBanner`, which resolved to the insights unit. Each screen now has the
+   placement its own spec names, and S-20 Settings — which has **no** unit —
+   lost the slot it had grown.
+4. The `240s` floor was off by a boundary (`<` where `docs/08 §4` writes `>`),
+   so an interstitial could fire exactly four minutes later.
+
+**Next:** T-604 → T-605 — the paywall and `in_app_purchase`. T-606/T-607 (rewarded
+offers, UMP consent) come after, and T-610 is the India-facing consent toggle.
 
 ---
 

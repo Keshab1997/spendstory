@@ -27,6 +27,11 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // AdMob app id (T-601). Google's published test id, and only the test
+        // id: a live id in a debug build is invalid traffic, and the debug
+        // flavor is what gets installed from a laptop.
+        manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
     }
 
     buildTypes {
@@ -34,6 +39,25 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+
+            // The live app id, read from android/local.properties (machine-
+            // local and gitignored, like sdk.dir) or from `-Padmob.appId=...`,
+            // so it never lands in the repo. Until Keshab fills it in, the
+            // fallback is the test id: the SDK then initializes happily and the
+            // app shows no ads at all, because the live *unit* ids in
+            // lib/ads/ad_ids.dart are empty and nothing is requested. A missing
+            // id must not be a release-day crash.
+            val localProps = java.util.Properties()
+            val localFile = project.rootProject.file("local.properties")
+            if (localFile.exists()) {
+                localFile.inputStream().use { localProps.load(it) }
+            }
+            val liveAppId = (project.findProperty("admob.appId") as String?)
+                ?: localProps.getProperty("admob.appId")
+                ?: ""
+            manifestPlaceholders["admobAppId"] = liveAppId.ifEmpty {
+                "ca-app-pub-3940256099942544~3347511713"
+            }
         }
     }
 }

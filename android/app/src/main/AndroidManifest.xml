@@ -62,6 +62,14 @@
         </service>
 
 
+        <!-- AdMob (T-601, Batch 7). The value comes from Gradle rather than
+             being written here, so a debug build can only ever carry Google's
+             test app id and a release build only the live one — and so the live
+             id never lands in the repo. See android/app/build.gradle.kts. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${admobAppId}"/>
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

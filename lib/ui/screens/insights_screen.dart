@@ -361,7 +361,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
           // Under everything, never between two numbers being compared — and
           // only for a window that has something in it.
           if (showAds && summary.count > 0)
-            const AdSlot(placement: AdPlacement.sectionBanner),
+            const AdSlot(placement: AdPlacement.insightsBanner),
           const SizedBox(height: SsSpace.x6),
         ],
       ),

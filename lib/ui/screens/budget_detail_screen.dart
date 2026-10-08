@@ -237,7 +237,7 @@ class BudgetDetailScreen extends ConsumerWidget {
 
           // One native unit, below everything it could interrupt: a chart or a
           // list of someone's spending is not an ad break.
-          if (showAds) const AdSlot(placement: AdPlacement.detailNative),
+          if (showAds) const AdSlot(placement: AdPlacement.budgetDetailBanner),
 
           const SizedBox(height: SsSpace.x4),
           SsActionButton(

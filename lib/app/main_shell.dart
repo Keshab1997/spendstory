@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ads/ad_client.dart';
 import '../ui/format.dart';
 import '../ui/tokens.dart';
 import 'providers.dart';
@@ -42,6 +43,13 @@ class _MainShellState extends ConsumerState<MainShell> {
       if (!mounted) return;
       unawaited(ref.read(budgetAlertRunnerProvider)());
       unawaited(ref.read(recurringRunnerProvider)());
+
+      // The ads SDK comes up here too — after the first frame, never on the
+      // splash, and only when an ad could actually be shown to this user. A Pro
+      // user's phone never starts the SDK at all (`docs/08 §8`).
+      if (ref.read(adsVisibleProvider)) {
+        unawaited(ref.read(adClientProvider).initialize());
+      }
     });
   }
 

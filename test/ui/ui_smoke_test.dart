@@ -226,14 +226,16 @@ void main() {
 
       expect(container.read(localeProvider), 'en');
       expect(find.text('Spent this month'), findsOneWidget);
-      expect(find.text('Advertisement — banner 320×50'), findsOneWidget);
+      // The home banner's debug placeholder now names its AdMob unit instead of
+      // its pixel size (`docs/08 §2`) — same slot, same reserved height.
+      expect(find.text('Advertisement — ss_home_banner'), findsOneWidget);
       expect(find.textContaining('Groceries'), findsWidgets);
       expect(find.text('এই মাসের খরচ'), findsNothing);
 
       container.read(localeProvider.notifier).state = 'hi';
       await tester.pumpAndSettle();
       expect(find.text('इस महीने का खर्च'), findsOneWidget);
-      expect(find.text('विज्ञापन — बैनर ३२०×५०'), findsOneWidget);
+      expect(find.text('विज्ञापन — ss_home_banner'), findsOneWidget);
 
       container.read(localeProvider.notifier).state = 'en';
       await tester.pumpAndSettle();

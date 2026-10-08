@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
-import '../components/ad_slot.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/surfaces.dart';
@@ -27,7 +26,6 @@ class SettingsScreen extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
     final themeMode = ref.watch(themeModeProvider);
     final isPro = ref.watch(proStatusProvider);
-    final showAds = ref.watch(adsVisibleProvider);
 
     return SsScaffold(
       floatingNav: true,
@@ -220,8 +218,6 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => _confirmErase(context, ref),
             ),
           ),
-
-          if (showAds) const AdSlot(placement: AdPlacement.sectionBanner),
 
           const SizedBox(height: SsSpace.x6),
           Center(
