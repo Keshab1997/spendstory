@@ -1,3 +1,9 @@
+// Explicit import, not `java.util.Properties()`: inside the Android DSL block
+// `java` resolves to the Java plugin's extension, not to the package, and the
+// fully-qualified call fails script compilation (it did — see the T-706 note in
+// docs/11).
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -47,7 +53,7 @@ android {
             // app shows no ads at all, because the live *unit* ids in
             // lib/ads/ad_ids.dart are empty and nothing is requested. A missing
             // id must not be a release-day crash.
-            val localProps = java.util.Properties()
+            val localProps = Properties()
             val localFile = project.rootProject.file("local.properties")
             if (localFile.exists()) {
                 localFile.inputStream().use { localProps.load(it) }
