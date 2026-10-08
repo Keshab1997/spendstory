@@ -52,6 +52,43 @@ class AdSpec {
 /// leaving a hole.
 enum AdOutcome { loaded, failed }
 
+/// What became of a rewarded ad the user chose to watch (T-606, `docs/08 §5`).
+///
+/// Three answers, because the app has to be able to tell them apart: an ad that
+/// was watched to the end earns something, an ad the user closed early earns
+/// nothing, and an ad that never arrived owes the user nothing either. Only the
+/// first one may grant — and only when the SDK says so, never when the user taps.
+enum RewardedOutcome {
+  /// The SDK reported the reward.
+  earned,
+
+  /// The ad was shown and dismissed before the reward was earned.
+  dismissed,
+
+  /// Nothing was shown: no unit in this build, no consent, no fill, offline.
+  unavailable,
+}
+
+/// Where the consent flow stands (T-607).
+///
+/// `required` is the one that matters: the user was asked and the answer was not
+/// a yes, so the app may not request an ad. Everything else is a yes of some
+/// kind — `notRequired` is most of the world, where Google's SDK reports that no
+/// form is needed.
+enum ConsentState {
+  /// The flow has not run yet (or there is no consent SDK on this platform).
+  unknown,
+
+  /// Google says this user needs no form.
+  notRequired,
+
+  /// The form was shown and answered.
+  obtained,
+
+  /// Consent is needed and has not been obtained. **No ad requests.**
+  required,
+}
+
 /// The ads SDK, as the app sees it.
 abstract class AdClient {
   /// True when this platform and build can show an ad at all: Android/iOS, and
@@ -92,6 +129,26 @@ abstract class AdClient {
   /// which is what the gate records — a request that fails must not burn the
   /// session's one interstitial.
   Future<bool> showInterstitial({required bool nonPersonalized});
+
+  /// The unit id for a rewarded ad, or null when this build has none — in which
+  /// case the offer is not shown at all, rather than shown and then broken.
+  String? get rewardedUnitId;
+
+  /// Loads and shows a rewarded ad the user asked for. Only
+  /// [RewardedOutcome.earned] may grant anything (`docs/08 §5`).
+  Future<RewardedOutcome> showRewarded({required bool nonPersonalized});
+
+  /// Runs Google's consent flow — the UMP form, if one is required — before the
+  /// first ad request, and answers what this user's consent state now is.
+  ///
+  /// Called once per launch, after the first frame, and *before* the SDK is
+  /// initialized: Google's own guidance is consent first, requests second.
+  Future<ConsentState> ensureConsent();
+
+  /// Whether this platform requires a "privacy options" entry point — the UMP
+  /// requirement that a user can change their mind later (T-610 puts the door in
+  /// Settings).
+  Future<bool> privacyOptionsRequired();
 }
 
 /// The client for this platform: the real SDK on Android/iOS, a stub on the web.

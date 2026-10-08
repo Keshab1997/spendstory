@@ -9,8 +9,15 @@
 /// wherever it is shown.
 library;
 
-/// What the user is buying.
-enum ProPlan { monthly, yearly, lifetime }
+/// What the user has.
+///
+/// The three purchasable plans, plus the 24-hour taste that a rewarded ad earns
+/// (T-606). The taste is a plan rather than a flag on purpose: it then shares the
+/// window arithmetic, the expiry and the clearing with everything else, instead
+/// of being a second kind of "Pro" that every reader of the entitlement has to
+/// know about. It has no product id — see [productIdFor] — because it is not for
+/// sale.
+enum ProPlan { monthly, yearly, lifetime, taste }
 
 /// Play Console product ids. `ss_pro_…` matches the ad units' `ss_` prefix so
 /// the console reads consistently.
@@ -28,11 +35,25 @@ class ProProductIds {
   static const Set<String> subscriptions = <String>{monthly, yearly};
 }
 
-String productIdFor(ProPlan plan) => switch (plan) {
+/// The plan a store product can buy, or null when the plan is not for sale.
+///
+/// Null is the answer for the taste: there is no product to query, nothing to
+/// charge, and a build that somehow asked for one would be refused by
+/// `RuestController.buy` rather than shown an empty store sheet.
+String? productIdFor(ProPlan plan) => switch (plan) {
   ProPlan.monthly => ProProductIds.monthly,
   ProPlan.yearly => ProProductIds.yearly,
   ProPlan.lifetime => ProProductIds.lifetime,
+  ProPlan.taste => null,
 };
+
+/// The plans a paywall may offer, in the order `docs/08 §6` lists them. Derived
+/// from the product ids, so a fourth product in the console is a one-line change
+/// here rather than a second list to keep in step.
+final List<ProPlan> purchasablePlans = <ProPlan>[
+  for (final plan in ProPlan.values)
+    if (productIdFor(plan) != null) plan,
+];
 
 /// The plan a product id belongs to, or null for an id this build does not know
 /// — a product retired from the console, or a typo in the Play listing.
@@ -43,12 +64,18 @@ ProPlan? planForProductId(String id) {
   return null;
 }
 
+/// Whether this plan was bought (or earned) — the taste is the one that is
+/// neither.
+
 /// `docs/08 §6`. Shown when the store has not answered yet, and marked as an
 /// estimate on screen — never used to charge anyone.
 int fallbackPricePaise(ProPlan plan) => switch (plan) {
   ProPlan.monthly => 9900,
   ProPlan.yearly => 69900,
   ProPlan.lifetime => 149900,
+  // Nothing. The taste is earned, never sold, and the paywall's tiers are built
+  // from [purchasablePlans] so it is never asked to price one.
+  ProPlan.taste => 0,
 };
 
 /// The free trial, on the yearly plan only (`docs/08 §6`). Play is what actually
@@ -70,7 +97,13 @@ Duration entitlementWindow(ProPlan plan) => switch (plan) {
   ProPlan.monthly => const Duration(days: 31),
   ProPlan.yearly => const Duration(days: 372), // 365 + the 7-day trial
   ProPlan.lifetime => const Duration(days: 365 * 100),
+  // A taste is exactly a day long — a reward has no grace period, and giving it
+  // one would only make "24 hours" a lie (`docs/08 §5`).
+  ProPlan.taste => const Duration(hours: 24),
 };
 
-/// Whether this plan can end. Lifetime is the one the user keeps forever.
-bool isRenewing(ProPlan plan) => plan != ProPlan.lifetime;
+/// Whether the store will charge for this plan again. Lifetime does not, and a
+/// taste is not a subscription at all — which is why the paywall only promises a
+/// renewal date for the two plans that have one.
+bool isRenewing(ProPlan plan) =>
+    plan == ProPlan.monthly || plan == ProPlan.yearly;

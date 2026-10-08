@@ -293,8 +293,8 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 - [x] **T-603** Native ad units (budget list, recurring)
 - [x] **T-604** S-22 Paywall — 3 tiers, restore button, no dark patterns
 - [x] **T-605** `in_app_purchase` — 3 products + `purchaseStream` + restore
-- [ ] **T-606** Rewarded: 24h Pro taste + free PDF export + daily caps
-- [ ] **T-607** UMP consent form (first ad request) + India personalized-ads toggle
+- [x] **T-606** Rewarded: 24h Pro taste + free PDF export + daily caps
+- [x] **T-607** UMP consent form (first ad request) + India personalized-ads toggle
 - [x] **T-608** `test/ads/ad_slot_test.dart` — Pro user → `SizedBox.shrink()`
 - [x] **T-609** Audit: grep every `AdRequest` site → **zero** financial data passed
 - [ ] **T-610** Settings toggle: "personalized ads" (off by default in India)
@@ -391,6 +391,71 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 4. The `240s` floor was off by a boundary (`<` where `docs/08 §4` writes `>`),
    so an interstitial could fire exactly four minutes later.
 
+**What landed (T-606, T-607):**
+- **`lib/pro/rewards.dart`** — the two offers of `docs/08 §5` as arithmetic and a
+  ledger. The caps are 1 taste a day and 2 PDF credits a day; the counters live
+  in `app_meta` per kind **and per day**, so yesterday's taste cannot be spent
+  today and a ledger left open across midnight rolls itself. `RewardRules.offers`
+  says no to a Pro user, to a build with no rewarded unit, and before onboarding
+  — three ways the offer must not exist.
+- **Only the store's word grants.** `RewardedOutcome.earned` comes from the SDK's
+  `onUserEarnedReward`; a dismissed ad grants nothing *and does not spend the
+  day's one*, because the cap is on grants, not on attempts. Three outcomes, three
+  tests, and three different sentences on screen.
+- **The 24-hour taste is an entitlement, not a flag.** `ProPlan.taste` goes
+  through the same `ProController._write` as a purchase — same window arithmetic,
+  same expiry, same clearing on the next launch — so the forecast, the ad slots
+  and the paywall cannot tell a taste from a subscription and do not have to.
+  What they *can* tell is when it ends, and the paywall says "24-hour taste" and
+  no renewal date rather than promising a payment nobody will make.
+- **The taste is not for sale**: `productIdFor` returns null for it, the store is
+  never queried, and `buy()` refuses it. The paywall's tiers come from
+  `purchasablePlans`, so the three prices are still the three prices.
+- **The offer is opt-in and labelled**, on the locked insight it unlocks
+  (Insights → the Pro card): "Watch an ad for 24 hours of Pro" — the sentence
+  `docs/08 §5` asks for, in all three languages, as a *secondary* button next to
+  "See Pro" and never inside the paywall (§S-22 forbids ads there, and the
+  `never` list in the audit test holds it). When the day's one is spent the
+  button is replaced by a sentence that says so.
+- **The free PDF export is a credit S-23 spends** (`pdfExportCreditsProvider` +
+  `RewardLedger.spendPdfCredit`), granted twice a day, and spending one cannot
+  buy a third ad — the cap counts grants, not what is left. **T-705 consults it.**
+- **`lib/ads/ad_consent.dart` + the seam (T-607)** — the consent flow runs
+  *before* the SDK is initialized (`docs/08 §7`), and the mobile client starts
+  with `_mayRequestAds = false`: nothing is requested until Google's own
+  `canRequestAds()` says it may be. A user in the EEA who was asked and did not
+  agree gets no ads at all, and the SDK is never even started on their phone.
+  A failed consent call leaves the gate closed, which is the cheap direction.
+- **India gets non-personalized ads by default.** The choice is stored in
+  `app_meta` (`personalizedAds`), read on every launch, and handed to every
+  request as `nonPersonalizedAds` — and only ever from there: the audit test
+  still finds exactly one place in the app that can build a request. T-610 puts
+  the switch in Settings; `ConsentController.setPersonalized` and
+  `privacyOptionsRequired()` (the UMP "change your mind later" door) are already
+  there for it.
+- **A debug build is treated as the EEA** (`ConsentDebugSettings`), so the form
+  can actually be seen and tested from India. Release builds always get the real
+  geography — the same rule the ad ids follow.
+
+**Bugs the tests surfaced (T-606/T-607, all fixed):**
+9. The paywall built its tiers from `ProPlan.values`, so adding the taste plan
+   put a fourth, priceless tier on the screen and crashed on a null `plans[plan]`.
+   Tiers now come from `purchasablePlans`, which is derived from the product ids.
+10. `expiresAtMs` used `isRenewing(plan)` to mean "this has an end", and a taste
+    is not renewing — so it would have been treated as a lifetime unlock and
+    never expired. Worse, the first fix (making the taste "renewing") made the
+    paywall promise "Renews on…" to somebody who was never going to be charged.
+    Lifetime is now the only plan without an end, and a renewal line is only
+    drawn for the two plans the store will bill again.
+11. The ad offer sat in a `Row` beside "See Pro", which overflowed at 360 dp in
+    Bengali (the label is a whole sentence, because that is what "clear label"
+    means). It is full-width below the paid action now — and `docs/08 §5`'s
+    Bengali is on the button, not in a tooltip.
+12. The very first version of the offer could be tapped before the day's ledger
+    had loaded, which read an empty counter as "nothing granted yet". The shell
+    loads the ledger with the rest of the launch work, and the button reads what
+    the ledger published rather than guessing.
+
 **Bugs the tests surfaced (T-604/T-605, all fixed):**
 5. `billingClientProvider` was read before the store had answered in tests, so a
    *cancelled* purchase still wrote `proEntitlement` — the controller now
@@ -405,8 +470,11 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
    the gate reads `proStatusProvider` first and Pro users get their own card
    (plan + renewal), with nothing to buy and restore still offered.
 
-**Next:** T-606 → T-607 — rewarded offers (24h Pro taste, one free PDF export,
-daily caps) and the UMP consent form; T-610 is the India-facing ads toggle.
+**Next:** T-610 — the Settings half: the "personalized ads" switch (off by
+default in India, which is the default `lib/ads/ad_consent.dart` already
+applies) plus the "privacy options" row when UMP says the app has to offer one.
+The mechanism is in place; what is missing is the door. After that Batch 7 is
+done, and Batch 8's T-705 is where the free PDF export credit gets spent.
 
 ---
 

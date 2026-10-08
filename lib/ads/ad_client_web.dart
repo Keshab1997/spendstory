@@ -41,4 +41,21 @@ class WebAdClient implements AdClient {
 
   @override
   Future<bool> showInterstitial({required bool nonPersonalized}) async => false;
+
+  @override
+  String? get rewardedUnitId => null;
+
+  @override
+  Future<RewardedOutcome> showRewarded({required bool nonPersonalized}) async =>
+      RewardedOutcome.unavailable;
+
+  /// There is no consent SDK here — and nothing to consent to, because there are
+  /// no ads. Saying `notRequired` rather than `unknown` keeps the web preview
+  /// out of the "consent has not run yet, request nothing" state, which is what
+  /// this client does anyway for its own reasons.
+  @override
+  Future<ConsentState> ensureConsent() async => ConsentState.notRequired;
+
+  @override
+  Future<bool> privacyOptionsRequired() async => false;
 }

@@ -456,6 +456,18 @@ const Map<String, String> _en = <String, String>{
   'billingCanceled': 'Purchase cancelled. Nothing was charged.',
   'billingFailed': 'The store refused the payment. No money left your account.',
   'billingSucceeded': 'Payment received. Pro is on.',
+  // ---- Batch 7: rewarded offers (T-606) ----
+  'planTaste': '24-hour taste',
+  'proTasteBody':
+      'Pro is on for 24 hours. No ads, and the forecast is open — thanks for '
+      'watching.',
+  'watchAdForTaste': 'Watch an ad for 24 hours of Pro',
+  'tasteEarned': 'Pro is on for 24 hours. Enjoy it.',
+  'tasteMissed':
+      'The ad was closed before it finished, so nothing was granted. Try again '
+      'any time.',
+  'tasteUnavailable': 'No ad is available right now. Try again in a while.',
+  'tasteTomorrow': 'You have used today’s 24-hour Pro. It comes back tomorrow.',
   'trialEndsTitle': 'Free trial ending',
   'trialEndsBody':
       'Your free trial is nearly over. Cancel any time in the Play Store — '
@@ -844,6 +856,13 @@ const Map<String, String> _hi = <String, String>{
   'billingCanceled': 'ख़रीद रद्द। कुछ नहीं कटा।',
   'billingFailed': 'स्टोर ने भुगतान नहीं लिया। आपके खाते से कुछ नहीं गया।',
   'billingSucceeded': 'भुगतान मिल गया। Pro चालू है।',
+  'planTaste': '24 घंटे का टेस्ट',
+  'proTasteBody': '24 घंटे के लिए Pro चालू है। विज्ञापन बंद, पूर्वानुमान खुला — देखने के लिए शुक्रिया।',
+  'watchAdForTaste': 'विज्ञापन देखें, 24 घंटे का Pro पाएँ',
+  'tasteEarned': '24 घंटे के लिए Pro चालू है। मज़े करें।',
+  'tasteMissed': 'विज्ञापन पूरा होने से पहले बंद हो गया, इसलिए कुछ नहीं मिला। कभी भी फिर कोशिश करें।',
+  'tasteUnavailable': 'अभी कोई विज्ञापन उपलब्ध नहीं है। थोड़ी देर बाद देखें।',
+  'tasteTomorrow': 'आज का 24 घंटे वाला Pro ले लिया गया है। कल फिर मिलेगा।',
   'trialEndsTitle': 'फ़्री ट्रायल ख़त्म हो रहा है',
   'trialEndsBody': 'आपका फ़्री ट्रायल लगभग पूरा हो गया। Play Store से कभी भी रद्द करें — हिसाब हर हाल में इसी फ़ोन पर रहेगा।',
   'sourceAutoSms': 'SMS से अपने आप जोड़ा गया',
@@ -1229,6 +1248,13 @@ const Map<String, String> _bn = <String, String>{
   'billingCanceled': 'কেনা বাতিল হয়েছে। কোনো টাকা কাটা হয়নি।',
   'billingFailed': 'স্টোর পেমেন্ট নেয়নি। আপনার অ্যাকাউন্ট থেকে টাকা যায়নি।',
   'billingSucceeded': 'পেমেন্ট পেয়ে গেছি। Pro চালু।',
+  'planTaste': '২৪ ঘণ্টার টেস্ট',
+  'proTasteBody': '২৪ ঘণ্টার জন্য Pro চালু। বিজ্ঞাপন বন্ধ, পূর্বাভাস খোলা — দেখার জন্য ধন্যবাদ।',
+  'watchAdForTaste': 'বিজ্ঞাপন দেখে ২৪ ঘণ্টার Pro নিন',
+  'tasteEarned': '২৪ ঘণ্টার জন্য Pro চালু হলো। উপভোগ করুন।',
+  'tasteMissed': 'বিজ্ঞাপন শেষ হওয়ার আগেই বন্ধ হয়ে গেল, তাই কিছু পাওয়া গেল না। যখন খুশি আবার চেষ্টা করুন।',
+  'tasteUnavailable': 'এখন কোনো বিজ্ঞাপন নেই। কিছুক্ষণ পরে দেখুন।',
+  'tasteTomorrow': 'আজকের ২৪ ঘণ্টার Pro নেওয়া হয়ে গেছে। কাল আবার আসবে।',
   'trialEndsTitle': 'ফ্রি ট্রায়াল শেষের পথে',
   'trialEndsBody': 'আপনার ফ্রি ট্রায়াল প্রায় শেষ। Play Store থেকে যখন খুশি বাতিল করুন — হিসাব তো এই ফোনেই থাকবে।',
   'sourceAutoSms': 'SMS থেকে নিজে থেকেই যোগ হয়েছে',

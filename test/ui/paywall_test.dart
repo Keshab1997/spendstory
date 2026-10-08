@@ -248,6 +248,34 @@ void main() {
       expect(find.text('Restore a purchase'), findsOneWidget);
     });
 
+    testWidgets('a 24-hour taste owner is told what they have, not sold to', (
+      tester,
+    ) async {
+      await _pumpPaywall(
+        tester,
+        entitlement: ProEntitlement(
+          plan: ProPlan.taste,
+          confirmedAtMs: _now.millisecondsSinceEpoch,
+          source: ProSource.taste,
+        ),
+      );
+
+      expect(find.text('Pro is active'), findsWidgets);
+      expect(find.text('24-hour taste'), findsOneWidget);
+      expect(
+        find.textContaining('Pro is on for 24 hours'),
+        findsOneWidget,
+        reason: 'a taste is not a subscription, so it has no renewal date',
+      );
+      expect(find.textContaining('Renews on'), findsNothing);
+
+      // Nothing to buy, and no tiers: they are Pro right now, however they got
+      // here.
+      expect(find.text('Lifetime'), findsNothing);
+      expect(find.textContaining('₹'), findsNothing);
+      expect(find.text('Restore a purchase'), findsOneWidget);
+    });
+
     testWidgets('a lifetime owner is not shown a renewal date', (tester) async {
       await _pumpPaywall(
         tester,

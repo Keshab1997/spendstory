@@ -19,17 +19,19 @@ library;
 
 import 'product_ids.dart';
 
-/// Where this record came from. Kept because "I paid" and "the store handed it
-/// back to me" are different stories to tell a user on the paywall.
-enum ProSource { purchase, restore }
+/// Where this record came from. Kept because "I paid", "the store handed it back
+/// to me" and "I watched an ad for it" are three different stories to tell a
+/// user — on the paywall, in Settings, and in a bug report.
+enum ProSource { purchase, restore, taste }
 
 const Map<ProSource, String> _sourceWires = <ProSource, String>{
   ProSource.purchase: 'purchase',
   ProSource.restore: 'restore',
+  ProSource.taste: 'taste',
 };
 
-ProSource proSourceFrom(String? wire) => _sourceWires[ProSource.restore] == wire
-    ? ProSource.restore
+ProSource proSourceFrom(String? wire) => _sourceWires.values.contains(wire)
+    ? ProSource.values.firstWhere((s) => _sourceWires[s] == wire)
     : ProSource.purchase;
 
 class ProEntitlement {
@@ -48,8 +50,11 @@ class ProEntitlement {
   final ProSource source;
 
   /// When this record stops being trusted, or null for a lifetime unlock.
+  ///
+  /// Lifetime is the only plan without an end. A taste does end — 24 hours after
+  /// it was granted, to the second, because that is what the offer promised.
   int? get expiresAtMs {
-    if (!isRenewing(plan)) return null;
+    if (plan == ProPlan.lifetime) return null;
     return confirmedAtMs + entitlementWindow(plan).inMilliseconds;
   }
 

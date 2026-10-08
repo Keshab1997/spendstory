@@ -8,6 +8,7 @@ library;
 import 'dart:async';
 import 'dart:io' show Platform;
 
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart' as gma;
 
@@ -27,8 +28,19 @@ class MobileAdClient implements AdClient {
 
   bool _initialized = false;
 
+  /// Starts false: **nothing is requested until consent says it may be**. The
+  /// consent flow (`ensureConsent`) is the only thing that opens this gate, and
+  /// it runs before the SDK is initialized (T-607).
+  bool _mayRequestAds = false;
+
+  bool _consentChecked = false;
+
   @override
   bool get hasAds => _android || _ios;
+
+  @override
+  String? get rewardedUnitId =>
+      hasAds ? ids.rewardedUnitId(testIds: ids.adTestMode) : null;
 
   @override
   String? get appId => hasAds ? ids.appIdFor(testIds: ids.adTestMode) : null;
@@ -51,6 +63,87 @@ class MobileAdClient implements AdClient {
     // throws on Android, which is why the Gradle placeholder always resolves to
     // something (test id in debug, checked in release).
     await gma.MobileAds.instance.initialize();
+  }
+
+  /// The consent flow, once per launch, before any request (T-607).
+  ///
+  /// Google's UMP SDK answers three questions in a row: may the app ask this
+  /// user at all, does this user need a form, and — after the form — may the app
+  /// request ads. Only the last one opens [_mayRequestAds], and a failure
+  /// anywhere in the flow leaves it closed: an ad that is not shown costs
+  /// nothing, an ad shown without consent costs the account.
+  @override
+  Future<ConsentState> ensureConsent() async {
+    if (!hasAds) return ConsentState.notRequired;
+    if (_consentChecked) {
+      return _mayRequestAds ? ConsentState.obtained : ConsentState.required;
+    }
+    _consentChecked = true;
+
+    final info = gma.ConsentInformation.instance;
+    try {
+      await _requestConsentInfo(info);
+      if (await info.isConsentFormAvailable()) {
+        await gma.ConsentForm.loadAndShowConsentFormIfRequired((_) {});
+      }
+      _mayRequestAds = await info.canRequestAds();
+      if (!_mayRequestAds) return ConsentState.required;
+      final status = await info.getConsentStatus();
+      return status == gma.ConsentStatus.notRequired
+          ? ConsentState.notRequired
+          : ConsentState.obtained;
+    } catch (_) {
+      // No Play services, no network, a debug device with no test identifiers:
+      // the flow could not run, so nothing may be requested.
+      _mayRequestAds = false;
+      return ConsentState.unknown;
+    }
+  }
+
+  Future<void> _requestConsentInfo(gma.ConsentInformation info) {
+    final done = Completer<void>();
+    info.requestConsentInfoUpdate(
+      gma.ConsentRequestParameters(
+        tagForUnderAgeOfConsent: false,
+        // A debug build is treated as the EEA so the form can actually be seen
+        // and tested from India, which is where this app is developed. Release
+        // builds get the real geography, always.
+        consentDebugSettings: kDebugMode
+            ? gma.ConsentDebugSettings(
+                debugGeography: gma.DebugGeography.debugGeographyEea,
+              )
+            : null,
+      ),
+      done.complete,
+      // A failed update is not a crash: `canRequestAds` below is the answer
+      // that matters, and it stays closed.
+      (_) => done.complete(),
+    );
+    return done.future;
+  }
+
+  @override
+  Future<bool> privacyOptionsRequired() async {
+    if (!hasAds) return false;
+    try {
+      final status = await gma.ConsentInformation.instance
+          .getPrivacyOptionsRequirementStatus();
+      return status == gma.PrivacyOptionsRequirementStatus.required;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Shows the privacy-options form, for a user who wants to change their mind
+  /// (Settings, T-610). Returns true when a form was shown.
+  Future<bool> showPrivacyOptions() async {
+    if (!hasAds) return false;
+    try {
+      await gma.ConsentForm.showPrivacyOptionsForm((_) {});
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   /// The one place in the app that builds an ad request.
@@ -80,7 +173,7 @@ class MobileAdClient implements AdClient {
     required bool nonPersonalized,
     required ValueChanged<AdOutcome> onOutcome,
   }) {
-    if (!hasAds) return null;
+    if (!hasAds || !_mayRequestAds) return null;
     final spec = _specFor(placement, nonPersonalized: nonPersonalized);
     if (spec == null) return null;
     return _SdkAdView(client: this, spec: spec, onOutcome: onOutcome);
@@ -88,7 +181,7 @@ class MobileAdClient implements AdClient {
 
   @override
   Future<bool> showInterstitial({required bool nonPersonalized}) async {
-    if (!hasAds) return false;
+    if (!hasAds || !_mayRequestAds) return false;
 
     final unitId = interstitialUnitId;
     if (unitId == null) return false;
@@ -119,6 +212,53 @@ class MobileAdClient implements AdClient {
         },
         onAdFailedToLoad: (error) {
           if (!done.isCompleted) done.complete(false);
+        },
+      ),
+    );
+    return done.future;
+  }
+
+  /// Loads and shows a rewarded ad. The reward is whatever the SDK reports, and
+  /// the caller may only act on [RewardedOutcome.earned] — a tap is not a
+  /// reward, and neither is a partially watched ad (`docs/08 §5`).
+  @override
+  Future<RewardedOutcome> showRewarded({required bool nonPersonalized}) async {
+    if (!hasAds || !_mayRequestAds) return RewardedOutcome.unavailable;
+    final unitId = rewardedUnitId;
+    if (unitId == null) return RewardedOutcome.unavailable;
+
+    final spec = AdSpec(
+      unitId: unitId,
+      format: AdFormat.rewarded,
+      reservedHeight: 0,
+      nonPersonalized: nonPersonalized,
+    );
+
+    final done = Completer<RewardedOutcome>();
+    var earned = false;
+
+    await gma.RewardedAd.load(
+      adUnitId: spec.unitId,
+      request: _request(spec),
+      rewardedAdLoadCallback: gma.RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = gma.FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              if (done.isCompleted) return;
+              done.complete(
+                earned ? RewardedOutcome.earned : RewardedOutcome.dismissed,
+              );
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              if (!done.isCompleted) done.complete(RewardedOutcome.unavailable);
+            },
+          );
+          ad.show(onUserEarnedReward: (ad, reward) => earned = true);
+        },
+        onAdFailedToLoad: (error) {
+          if (!done.isCompleted) done.complete(RewardedOutcome.unavailable);
         },
       ),
     );

@@ -94,6 +94,12 @@ Indian users won't pay ₹99 easily, but they *will* watch a 30s ad for value. T
 
 Rewarded is **always opt-in** with a clear label: *"বিজ্ঞাপন দেখে ২৪ ঘণ্টার জন্য Pro ব্যবহার করুন"*. Never auto-play. Never after the user already paid.
 
+**Implemented in T-606** (`lib/pro/rewards.dart`): the button on the locked
+insight says exactly what it buys, the caps are enforced per day in `app_meta`,
+and only the SDK's own `onUserEarnedReward` grants anything — a dismissed ad
+costs the user nothing, not even the day's one. The PDF export is handed over as
+**credits** for S-23 (T-705) to spend, so the cap is implemented once.
+
 ## 6. Pro tiers
 
 | Plan | Price | Positioning |
@@ -132,7 +138,7 @@ class AdSlot extends ConsumerWidget {
 }
 ```
 **Packages:** `google_mobile_ads` (+ `flutter_native_admob`/custom platform view for native) · `in_app_purchase`.
-**Consent:** Google **UMP SDK** (`ConsentForm`) shown before the first ad request for EEA/UK; India gets the standard flow.
+**Consent:** Google **UMP SDK** (`ConsentForm`) shown before the first ad request for EEA/UK; India gets the standard flow — and **non-personalized ads by default** there, which is the app's own default rather than the SDK's. T-607 implements the order (consent → `canRequestAds()` → start the SDK) and the stored choice; T-610 is the Settings switch that changes it.
 **App ID:** `AndroidManifest.xml` `<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID">`. Test ID during dev: `ca-app-pub-3940256099942544~3347511713`.
 **ATT:** iOS n/a for v1 (Android-first). Keep the door open.
 
@@ -164,8 +170,12 @@ class AdSlot extends ConsumerWidget {
 | Paywall | `lib/ui/screens/pro_screen.dart` | store prices or a labelled estimate, restore, terms + privacy, **no counter, no fake discount** |
 | Placement gate | `lib/pro/paywall_gate.dart` | Settings · 3rd locked tap · 10th session · **max 1 a session** · never Pro |
 | Tests | `test/pro/*`, `test/ui/paywall_test.dart` | entitlement round-trip, all five store outcomes, the gate's arithmetic, the screen's rules |
+| Rewarded offers | `lib/pro/rewards.dart` | §5's two offers: 1 taste a day, 2 PDF credits a day, counters per kind **and per day** in `app_meta` |
+| The 24-hour taste | `ProPlan.taste` + `ProController.grantTaste` | an entitlement like any other — same window, same expiry, and **not for sale** |
+| Consent | `lib/ads/ad_consent.dart` + `AdClient.ensureConsent` | UMP form **before** the SDK starts; the client opens only on Google's `canRequestAds()` |
+| Tests | `test/ads/ad_rewards_test.dart`, `test/ads/ad_consent_test.dart`, `test/ui/rewarded_offer_test.dart` | the caps, the three outcomes, the launch order, and the labelled offer on screen |
 
-**Three things Keshab owns, and none of them is in the repo:**
+**Four things Keshab owns, and none of them is in the repo:**
 1. Create the six units in the AdMob console and paste their ids into
    `AdLiveIds` (`lib/ads/ad_ids.dart`), plus the app id.
 2. Put the live app id in `android/local.properties` (`admob.appId=…`) — machine
@@ -175,6 +185,11 @@ class AdSlot extends ConsumerWidget {
    and the 7-day trial **on the yearly plan only**. Until they exist,
    `queryProductDetails` returns nothing and the paywall shows the documented
    prices as *estimates* — which is honest, but it is not a working paywall.
+4. In AdMob → **Privacy & messaging**, publish the consent message (the UMP
+   form `ensureConsent()` shows), and paste the rewarded unit id into
+   `AdLiveIds.rewarded`. Until the form exists, `isConsentFormAvailable()` is
+   false and the app simply requests no ads in the regions that need one; until
+   the unit id exists, the 24-hour taste offer is not shown at all.
 
 Until these are done the app ships **ad-free**, which is the safe direction: an
 empty id requests nothing, and a live id is never reached in debug. The paywall

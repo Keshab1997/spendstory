@@ -15,11 +15,25 @@ int at(int y, int m, int d, [int h = 12]) =>
 
 void main() {
   group('product ids', () {
-    test('every plan has an id, and every id maps back to its plan', () {
-      for (final plan in ProPlan.values) {
-        expect(planForProductId(productIdFor(plan)), plan);
+    test('every purchasable plan has an id, and every id maps back', () {
+      for (final plan in purchasablePlans) {
+        expect(planForProductId(productIdFor(plan)!), plan);
       }
-      expect(ProProductIds.all, hasLength(ProPlan.values.length));
+      expect(ProProductIds.all, hasLength(purchasablePlans.length));
+      expect(purchasablePlans, hasLength(3));
+    });
+
+    test('the taste is not for sale', () {
+      // T-606: it is earned by watching an ad. No id means no product to query,
+      // which is what makes "buy the taste" impossible rather than merely
+      // discouraged.
+      expect(productIdFor(ProPlan.taste), isNull);
+      expect(purchasablePlans, isNot(contains(ProPlan.taste)));
+      expect(
+        planForProductId('ss_pro_taste'),
+        isNull,
+        reason: 'an id that does not exist must never decode into a plan',
+      );
     });
 
     test(
@@ -50,6 +64,7 @@ void main() {
       expect(trialFor(ProPlan.yearly), const Duration(days: 7));
       expect(trialFor(ProPlan.monthly), isNull);
       expect(trialFor(ProPlan.lifetime), isNull);
+      expect(trialFor(ProPlan.taste), isNull);
     });
   });
 
@@ -75,6 +90,9 @@ void main() {
       expect(isRenewing(ProPlan.lifetime), isFalse);
       expect(isRenewing(ProPlan.monthly), isTrue);
       expect(isRenewing(ProPlan.yearly), isTrue);
+      // A taste is not a subscription: nothing will be charged for it, so the
+      // paywall must never promise the user a renewal date for one.
+      expect(isRenewing(ProPlan.taste), isFalse);
     });
   });
 

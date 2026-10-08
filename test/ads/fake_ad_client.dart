@@ -18,8 +18,12 @@ class FakeAdClient implements AdClient {
     this.hasAds = true,
     this.unitIds = const <AdPlacement, String>{},
     this.interstitial = 'test-interstitial-unit',
+    this.rewarded = 'test-rewarded-unit',
     this.loads = true,
     this.showsInterstitial = true,
+    this.rewardOutcome = RewardedOutcome.earned,
+    this.consentState = ConsentState.notRequired,
+    this.privacyOptions = false,
   });
 
   @override
@@ -31,11 +35,24 @@ class FakeAdClient implements AdClient {
 
   final String? interstitial;
 
+  /// The rewarded unit, or null for a build that has none.
+  final String? rewarded;
+
   /// Whether an inline ad ever finishes loading.
   final bool loads;
 
   /// Whether the interstitial actually reaches the screen.
   final bool showsInterstitial;
+
+  /// What watching a rewarded ad turns out to be: earned, dismissed, or nothing
+  /// available at all.
+  final RewardedOutcome rewardOutcome;
+
+  /// What the consent flow reports.
+  final ConsentState consentState;
+
+  /// Whether a privacy-options entry point is required of the app.
+  final bool privacyOptions;
 
   @override
   String? get appId => hasAds ? AdTestIds.appId : null;
@@ -69,6 +86,30 @@ class FakeAdClient implements AdClient {
     interstitialConsent.add(nonPersonalized);
     return showsInterstitial;
   }
+
+  int rewardedCalls = 0;
+  final List<bool> rewardedConsent = <bool>[];
+  int consentChecks = 0;
+
+  @override
+  String? get rewardedUnitId => hasAds ? rewarded : null;
+
+  @override
+  Future<RewardedOutcome> showRewarded({required bool nonPersonalized}) async {
+    rewardedCalls += 1;
+    rewardedConsent.add(nonPersonalized);
+    if (!hasAds || rewarded == null) return RewardedOutcome.unavailable;
+    return rewardOutcome;
+  }
+
+  @override
+  Future<ConsentState> ensureConsent() async {
+    consentChecks += 1;
+    return consentState;
+  }
+
+  @override
+  Future<bool> privacyOptionsRequired() async => privacyOptions;
 }
 
 /// A client with ads on and every placement configured, which is what a device

@@ -23,7 +23,9 @@ import 'package:go_router/go_router.dart';
 import '../../app/providers.dart';
 import '../../domain/models.dart';
 import '../../domain/view_models.dart';
+import '../../ads/ad_client.dart';
 import '../../pro/paywall_gate.dart';
+import '../../pro/rewards.dart';
 import '../components/ad_slot.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
@@ -329,6 +331,8 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                               context.push('/pro');
                             },
                           ),
+                          const SizedBox(height: SsSpace.x2),
+                          _tasteOffer(context, s),
                         ],
                       ),
                     ),
@@ -372,6 +376,53 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
             const AdSlot(placement: AdPlacement.insightsBanner),
           const SizedBox(height: SsSpace.x6),
         ],
+      ),
+    );
+  }
+
+  /// The opt-in half of `docs/08 §5`: watch one ad, get 24 hours of Pro. Never
+  /// automatic, never hidden behind a countdown, and gone the moment the day's
+  /// one is spent — where it is replaced by a line that says so, rather than a
+  /// button that looks alive and does nothing.
+  Widget _tasteOffer(BuildContext context, SsStrings s) {
+    final ledger = ref.read(rewardLedgerProvider);
+    if (!ledger.canOffer(RewardKind.proTaste)) {
+      // Spent (or nothing to show an ad in this build): a line that says why,
+      // rather than a button that looks alive and does nothing.
+      return Text(
+        s['tasteTomorrow'],
+        style: SsText.micro.copyWith(color: SsColors.of(context).textTertiary),
+      );
+    }
+
+    // Secondary and full-width on purpose: "See Pro" is the action the card
+    // wants, and the ad is the alternative the user may choose instead. A card
+    // with two gold buttons has no primary action — and the label is a whole
+    // sentence, so it gets the whole width (Bengali wraps it on a 360dp phone).
+    return SsActionButton(
+      label: s['watchAdForTaste'],
+      tone: SsButtonTone.secondary,
+      height: 40,
+      onPressed: _watchForTaste,
+    );
+  }
+
+  Future<void> _watchForTaste() async {
+    final s = ref.read(stringsProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    // The ad is the reward's only source of truth: `earned` comes from the SDK,
+    // never from this tap (`docs/08 §5`).
+    final outcome = await ref
+        .read(rewardLedgerProvider)
+        .watch(RewardKind.proTaste);
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(switch (outcome) {
+          RewardedOutcome.earned => s['tasteEarned'],
+          RewardedOutcome.dismissed => s['tasteMissed'],
+          RewardedOutcome.unavailable => s['tasteUnavailable'],
+        }),
       ),
     );
   }

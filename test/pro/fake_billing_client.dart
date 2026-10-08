@@ -19,7 +19,7 @@ class FakeBillingClient implements BillingClient {
   }) : _products =
            products ??
            <ProProduct>[
-             for (final plan in ProPlan.values)
+             for (final plan in purchasablePlans)
                ProProduct(
                  plan: plan,
                  priceLabel: _label(plan),
@@ -74,5 +74,8 @@ class FakeBillingClient implements BillingClient {
     ProPlan.monthly => '₹99.00',
     ProPlan.yearly => '₹699.00',
     ProPlan.lifetime => '₹1,499.00',
+    // Not for sale: a fake store that could sell one would make the ledger's
+    // "the taste cannot be bought" test meaningless.
+    ProPlan.taste => 'not for sale',
   };
 }

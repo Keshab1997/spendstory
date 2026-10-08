@@ -13,7 +13,8 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:spendstory/ads/ad_client.dart' show AdClient;
+import 'package:spendstory/ads/ad_client.dart'
+    show AdClient, ConsentState, RewardedOutcome;
 import 'package:spendstory/ads/ad_client_web.dart'
     show WebAdClient, createAdClient;
 import 'package:spendstory/ads/ad_placement.dart';
@@ -56,6 +57,25 @@ void main() {
 
       expect(await client.showInterstitial(nonPersonalized: false), isFalse);
     });
+
+    test('there is no rewarded ad to watch either (T-606)', () async {
+      expect(client.rewardedUnitId, isNull);
+      expect(
+        await client.showRewarded(nonPersonalized: true),
+        RewardedOutcome.unavailable,
+      );
+    });
+
+    test(
+      'there is nothing to consent to, and no privacy door to offer (T-607)',
+      () async {
+        // `notRequired`, not `unknown`: the preview must not be stuck in the
+        // "consent has not run, request nothing" state that the mobile client
+        // starts in, because it has nothing to request either way.
+        expect(await client.ensureConsent(), ConsentState.notRequired);
+        expect(await client.privacyOptionsRequired(), isFalse);
+      },
+    );
 
     test('initializing is a no-op rather than a crash', () async {
       await client.initialize();

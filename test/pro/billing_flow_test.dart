@@ -338,7 +338,7 @@ void main() {
       final container = _container(client: client);
       final products = await container.read(proProductsProvider.future);
 
-      expect(products.map((p) => p.plan), ProPlan.values);
+      expect(products.map((p) => p.plan), purchasablePlans);
       expect(products[1].priceLabel, '₹699.00');
     });
 

@@ -221,7 +221,9 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                     strings: s,
                   )
                 else ...[
-                  for (final plan in ProPlan.values) ...[
+                  // The three things that are for sale — never the taste, which
+                  // cannot be bought and is not offered here (`docs/08 §5`).
+                  for (final plan in purchasablePlans) ...[
                     _PlanTile(
                       title: plans[plan]!.title,
                       price: priceFor(plan),
@@ -365,6 +367,7 @@ String planLabel(SsStrings strings, ProPlan plan) => switch (plan) {
   ProPlan.monthly => strings['planMonthly'],
   ProPlan.yearly => strings['planYearly'],
   ProPlan.lifetime => strings['planLifetime'],
+  ProPlan.taste => strings['planTaste'],
 };
 
 /// What a paying user sees instead of the tiers: which plan they own, and when
@@ -383,7 +386,13 @@ class _ProStatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
-    final renewsOn = entitlement.expiresAtMs;
+    // A renewal date is a promise about a payment, so only the two plans that
+    // will actually be charged again get one. A taste ends after 24 hours and
+    // says that instead (`docs/08 §5`); lifetime has nothing to say.
+    final renewsOn = isRenewing(entitlement.plan)
+        ? entitlement.expiresAtMs
+        : null;
+    final isTaste = entitlement.plan == ProPlan.taste;
 
     return SsCard(
       color: c.tintOf(c.gold500),
@@ -411,6 +420,13 @@ class _ProStatusCard extends StatelessWidget {
                 'date': shortDate(renewsOn, locale: locale),
               }),
               style: SsText.micro.copyWith(color: c.textTertiary),
+            ),
+          ],
+          if (isTaste) ...[
+            const SizedBox(height: SsSpace.x2),
+            Text(
+              strings['proTasteBody'],
+              style: SsText.caption.copyWith(color: c.textSecondary),
             ),
           ],
         ],

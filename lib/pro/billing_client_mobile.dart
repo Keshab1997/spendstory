@@ -133,6 +133,8 @@ class MobileBillingClient implements BillingClient {
     await initialize();
 
     final id = productIdFor(plan);
+    // A plan with no id is not for sale — the taste, for one. Nothing to query.
+    if (id == null) return false;
     final response = await _store.queryProductDetails(<String>{id});
     if (response.productDetails.isEmpty) return false;
 

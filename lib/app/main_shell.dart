@@ -16,9 +16,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../ads/ad_client.dart';
+import '../ads/ad_consent.dart';
 import '../pro/paywall_gate.dart';
 import '../pro/pro_controller.dart';
+import '../pro/rewards.dart';
 import '../pro/trial_reminder.dart';
 import '../ui/format.dart';
 import '../ui/tokens.dart';
@@ -72,12 +73,17 @@ class _MainShellState extends ConsumerState<MainShell> {
         }),
       );
 
-      // The ads SDK comes up here too — after the first frame, never on the
-      // splash, and only when an ad could actually be shown to this user. A Pro
-      // user's phone never starts the SDK at all (`docs/08 §8`).
+      // Consent first, then the SDK (T-607). Google's flow decides whether this
+      // user may be shown an ad at all, and the SDK is started only when it may
+      // be — the ordering is the policy, not a preference (`docs/08 §7`). A Pro
+      // user's phone starts neither.
       if (ref.read(adsVisibleProvider)) {
-        unawaited(ref.read(adClientProvider).initialize());
+        unawaited(ref.read(consentControllerProvider).start());
       }
+
+      // Today's reward counters, so an offer the user has already used is not
+      // drawn as an offer (T-606).
+      unawaited(ref.read(rewardLedgerProvider).start());
     });
   }
 

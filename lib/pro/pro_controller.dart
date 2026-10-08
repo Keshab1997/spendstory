@@ -91,6 +91,8 @@ class ProController {
 
     final plan = event.plan;
     if (plan == null) return; // a product this build does not know
+    // An earned plan can never arrive from a store.
+    if (productIdFor(plan) == null) return;
 
     _write(
       ProEntitlement(
@@ -106,6 +108,10 @@ class ProController {
   /// The user's own tap on "buy". False when there is nothing to buy on this
   /// device — the paywall says so rather than looking broken.
   Future<bool> buy(ProPlan plan) async {
+    // A plan with no product id is not for sale. The taste is the one that
+    // exists: it is earned by watching an ad, and there is nothing to charge.
+    if (productIdFor(plan) == null) return false;
+
     if (!_client.available) {
       // No store on this device: record it as a failure so the screen has the
       // same note to show as it would for any other refusal.
@@ -153,6 +159,22 @@ class ProController {
     } finally {
       _ref.read(billingBusyProvider.notifier).state = false;
     }
+  }
+
+  /// Records the 24-hour taste won by watching a rewarded ad (T-606).
+  ///
+  /// It goes through the same [_write] as a purchase, which is the point: the ad
+  /// slots, the forecast and the paywall cannot tell a taste from a subscription
+  /// and do not need to. What they *can* tell is when it ends, and that is
+  /// arithmetic on the plan.
+  void grantTaste() {
+    _write(
+      ProEntitlement(
+        plan: ProPlan.taste,
+        confirmedAtMs: _nowMs,
+        source: ProSource.taste,
+      ),
+    );
   }
 
   /// What the store will sell right now, with its own prices.
