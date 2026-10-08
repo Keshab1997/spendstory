@@ -504,7 +504,7 @@ PDF export credit gets spent.
 
 - [x] **T-701** `lib/l10n/*.arb` — en/hi/bn full key set
 - [x] **T-702** `test/l10n/l10n_test.dart` — key parity across locales
-- [ ] **T-703** Category names in 3 languages (seed)
+- [x] **T-703** Category names in 3 languages (seed)
 - [ ] **T-704** S-21 About/Privacy — text must match `07` §5
 - [ ] **T-705** S-23 Export/Backup — AES-256-GCM + CSV + rewarded PDF
 - [ ] **T-706** Settings data-erase (double confirm) + biometric lock
@@ -538,6 +538,16 @@ PDF export credit gets spent.
   typed getters, and a header that says where copy now lives. No screen changed
   in this commit: 267 `s['key']` call sites and the 22 `SsStrings(locale)`
   constructions the tests build still work untouched.
+- `test/l10n/category_names_test.dart` — 11 tests. The seed already carried
+  `nameEn/nameHi/nameBn` for all 18 categories and the screens already read
+  `CategoryView.label(locale)`, so this task became the guard rather than the
+  feature: every category has three trimmed names, ids are unique, **no seeded
+  name is the English one in disguise** (all 18 have a real Hindi and Bengali
+  name), `label()` maps each locale to its own column and falls back to Bengali
+  - not to a blank label - for an unknown code, and the screens are driven
+  through the real router: the same bigbasket row reads `Grocery` / `किराना` /
+  `বাজার`, and the categories grid agrees. One locale per widget test, because a
+  second `pumpAt` in the same test reuses the first app's router state.
 - `test/l10n/l10n_test.dart` — 12 tests over four groups: the ARB files agree
   (keys, order, no blanks, no `⟦` pasted in, placeholder metadata covers every
   `{placeholder}` in all three languages and nothing more); the generated table
