@@ -1381,7 +1381,7 @@ abstract class AppLocalizations {
   /// No description provided for @featureExportBody.
   ///
   /// In en, this message translates to:
-  /// **'Unlock CSV and PDF exports with a rewarded ad, or get them included with Pro.'**
+  /// **'CSV export is free for everyone. The PDF statement comes with Pro, or with one rewarded ad.'**
   String get featureExportBody;
 
   /// No description provided for @trialDisclaimer.
@@ -2583,6 +2583,293 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Read the full policy'**
   String get privacyReadAll;
+
+  /// No description provided for @exportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export & backup'**
+  String get exportTitle;
+
+  /// No description provided for @exportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything here leaves the phone in a file you control. Nothing is uploaded — there is no server to upload it to.'**
+  String get exportBody;
+
+  /// No description provided for @exportBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up now'**
+  String get exportBackupTitle;
+
+  /// No description provided for @exportBackupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your ledger is locked with AES-256 under a password you choose. We cannot recover that password, so keep it somewhere you trust.'**
+  String get exportBackupBody;
+
+  /// No description provided for @exportPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get exportPassword;
+
+  /// No description provided for @exportPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters. You will need it to restore.'**
+  String get exportPasswordHint;
+
+  /// No description provided for @exportPasswordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters.'**
+  String get exportPasswordTooShort;
+
+  /// No description provided for @exportCreateBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create backup file'**
+  String get exportCreateBackup;
+
+  /// No description provided for @exportWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypting…'**
+  String get exportWorking;
+
+  /// No description provided for @exportBackupReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup ready. Choose where to save it.'**
+  String get exportBackupReady;
+
+  /// No description provided for @exportBackupDismissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was shared.'**
+  String get exportBackupDismissed;
+
+  /// No description provided for @exportBackupUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no share sheet to hand the file to.'**
+  String get exportBackupUnavailable;
+
+  /// No description provided for @exportBackupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The file could not be written.'**
+  String get exportBackupFailed;
+
+  /// No description provided for @exportLastBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: {when}'**
+  String exportLastBackup(String when);
+
+  /// No description provided for @exportNeverBackedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'No backup yet.'**
+  String get exportNeverBackedUp;
+
+  /// No description provided for @exportDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Your weekly backup is due.'**
+  String get exportDue;
+
+  /// No description provided for @exportAutoBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly reminder'**
+  String get exportAutoBackup;
+
+  /// No description provided for @exportAutoBackupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Without your password the app cannot open its own backup, so it reminds you once a week instead of writing a file you could not read.'**
+  String get exportAutoBackupBody;
+
+  /// No description provided for @exportRestoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from a backup'**
+  String get exportRestoreTitle;
+
+  /// No description provided for @exportRestoreBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a backup file and type the password you used. Everything in the file is added; what is already on this phone stays.'**
+  String get exportRestoreBody;
+
+  /// No description provided for @exportPickFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get exportPickFile;
+
+  /// No description provided for @exportRestoreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get exportRestoreAction;
+
+  /// No description provided for @exportRestoreNeedFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a backup file first.'**
+  String get exportRestoreNeedFile;
+
+  /// No description provided for @exportRestoreNeedPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Type the password for this file.'**
+  String get exportRestoreNeedPassword;
+
+  /// No description provided for @exportRestoreDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored {tx} transactions, {cats} categories, {budgets} budgets and {accounts} accounts.'**
+  String exportRestoreDone(
+    String tx,
+    String cats,
+    String budgets,
+    String accounts,
+  );
+
+  /// No description provided for @exportRestoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'That file could not be opened. Check the password and try again.'**
+  String get exportRestoreFailed;
+
+  /// No description provided for @exportCsvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV export'**
+  String get exportCsvTitle;
+
+  /// No description provided for @exportCsvBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every transaction as a spreadsheet file. Free, for everyone, always.'**
+  String get exportCsvBody;
+
+  /// No description provided for @exportCsvFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get exportCsvFree;
+
+  /// No description provided for @exportCsvAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CSV'**
+  String get exportCsvAction;
+
+  /// No description provided for @exportCsvEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'There is nothing to export yet.'**
+  String get exportCsvEmpty;
+
+  /// No description provided for @exportPdfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF statement'**
+  String get exportPdfTitle;
+
+  /// No description provided for @exportPdfPro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get exportPdfPro;
+
+  /// No description provided for @exportPdfBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A printable statement for one month, with totals — part of Pro.'**
+  String get exportPdfBody;
+
+  /// No description provided for @exportPdfAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF'**
+  String get exportPdfAction;
+
+  /// No description provided for @exportPdfWatchAd.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an ad for a free PDF'**
+  String get exportPdfWatchAd;
+
+  /// No description provided for @exportPdfCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Free PDF exports left today: {n}'**
+  String exportPdfCredits(String n);
+
+  /// No description provided for @exportPdfNoCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s free PDFs are used. Tomorrow they reset.'**
+  String get exportPdfNoCredits;
+
+  /// No description provided for @exportPdfEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Free PDF unlocked.'**
+  String get exportPdfEarned;
+
+  /// No description provided for @exportPdfMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'No reward this time, so the PDF stays Pro.'**
+  String get exportPdfMissed;
+
+  /// No description provided for @exportPdfUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No ad to show right now.'**
+  String get exportPdfUnavailable;
+
+  /// No description provided for @exportPdfProOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'The PDF statement is part of Pro.'**
+  String get exportPdfProOnly;
+
+  /// No description provided for @exportMonthPrev.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get exportMonthPrev;
+
+  /// No description provided for @exportMonthNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get exportMonthNext;
+
+  /// No description provided for @exportDemoUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Backups need the installed app — the web preview keeps no ledger.'**
+  String get exportDemoUnavailable;
+
+  /// No description provided for @exportShareDrive.
+  ///
+  /// In en, this message translates to:
+  /// **'In the share sheet, pick Drive to keep a copy there. SpendStory never uploads the file itself.'**
+  String get exportShareDrive;
+
+  /// No description provided for @exportSettingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted backup, restore, CSV and PDF'**
+  String get exportSettingBody;
 }
 
 class _AppLocalizationsDelegate

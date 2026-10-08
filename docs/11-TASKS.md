@@ -506,14 +506,10 @@ PDF export credit gets spent.
 - [x] **T-702** `test/l10n/l10n_test.dart` — key parity across locales
 - [x] **T-703** Category names in 3 languages (seed)
 - [x] **T-704** S-21 About/Privacy — text must match `07` §5
-- [ ] **T-705** S-23 Export/Backup — AES-256-GCM + CSV + rewarded PDF
-      *(recon for the next session: `crypto` in the pubspec has no AES — GCM
-      needs `pointycastle` (pure Dart, no platform code, no web-build risk) or
-      `cryptography`; the PDF statement can be `pdf` (also pure Dart); writing
-      and reading the file wants `share_plus` (share the CSV/backup out) and
-      `file_picker` (restore in) — the only two plugins, and both support web.
-      `path_provider` is already a dependency. Keep the rewarded unlock on
-      `spendPdfCredit()`, which is still unspent.)*
+- [x] **T-705** S-23 Export/Backup — AES-256-GCM + CSV + rewarded PDF
+      *(the recon held: `pointycastle` + `pdf` are pure Dart, `share_plus` and
+      `file_picker` are the only two new plugins, and the rewarded unlock runs
+      through `spendPdfCredit()` unchanged. See the landing block below.)*
 - [ ] **T-706** Settings data-erase (double confirm) + biometric lock
 - [ ] **T-707** Bengali digits toggle
 
@@ -605,6 +601,84 @@ PDF export credit gets spent.
   it — half the screens reach `SsStrings` through `stringsProvider` with an
   inferred type and never import the file, which is 81 `undefined_getter`
   errors. Instance members are the only shape that works everywhere.
+
+
+**What landed (T-705):**
+- `lib/export/backup_codec.dart` — the file format, on its own, with a test that
+  only knows bytes. AES-256-GCM over a PBKDF2-HMAC-SHA256 key (120,000
+  iterations), with **a self-describing header**: `SSBK`, a format version, a KDF
+  id, the iteration count, then a 16-byte salt and a 12-byte nonce. Everything a
+  future release might want to change is a number in the file rather than an
+  assumption in the reader, so today's backups still open after the defaults
+  move; the format string is bound in as associated data, so a blob from
+  somewhere else cannot be passed off as one of ours. A wrong password, a
+  truncated file and an edited file are deliberately the *same* failure — GCM
+  cannot tell them apart, and pretending otherwise would leak.
+- `lib/export/backup_repo.dart` — `BackupRepo` (`docs/05 §4`): `collect()`,
+  `encrypted()`, `csv()`, `restore()`. Restore is an **upsert in one
+  transaction**, never a wipe: ids are stable, so a fresh install ends up with
+  exactly what the file holds (the `docs/03 §S-23` acceptance line), a phone
+  that already has data keeps it, and pressing restore twice changes nothing.
+  Nothing is written until the whole file has decrypted and decoded.
+- **Three things are deliberately not in the file**, and the restore filters for
+  them rather than trusting the payload: any entitlement or reward state
+  (`proStatus`, `proEntitlement`, `reward:…`, `sessionCount`, the trial key, the
+  ads-consent flag), the SMS sender allowlist (seed data with its own
+  `ruleVersion`), and the built-in merchant rules (only `isUserDefined` travels).
+  A doctored backup — tested by doctoring one — therefore restores the ledger and
+  cannot make anybody Pro. `app_meta` round-trips through an allowlist
+  (`locale`, `theme`, `lastBackupAt`).
+- **CSV export is free, as `docs/03 §S-23` says.** The Pro card's copy said
+  otherwise ("unlock CSV and PDF with a rewarded ad") and that was the bug: the
+  string was rewritten in all three languages in this commit. The CSV itself is
+  built for a spreadsheet rather than for the screen — UTF-8 BOM, CRLF, RFC 4180
+  quoting, ISO dates, plain rupees with two decimals and no thousands separators
+  to guess at — while the category and account *names* stay in the user's
+  language, because a Bengali household recognises `মুদি` and not `Grocery`.
+- `lib/export/pdf_statement.dart` — the Pro statement: a month, its totals, and
+  every row, with Manrope embedded so `₹` is real. **It is a Latin document on
+  purpose.** `pdf` is pure Dart and has an Arabic/RTL pass but no Indic shaping
+  engine, so Bengali and Devanagari would print with their matras in the wrong
+  order; a statement that misprints `ক্যাটাগরি` is worse than one that prints
+  `Groceries`, and the CSV argument ("the screen is translated, the file is
+  portable") applies here too. The Bengali face is loaded only when the *data*
+  needs it (a merchant name typed in Bengali).
+- `lib/ui/screens/export_screen.dart` + `/export` — S-23, with the four cards the
+  spec lists (back up · restore · CSV · PDF) plus the weekly switch. The rewarded
+  unlock is the one ad on the screen and it is opt-in and labelled
+  ("watch an ad for a free PDF"); the credit is spent only *after* the statement
+  has been built, so a failed build never costs the user one of the day's two,
+  and a Pro user sees no ad button at all. In the demo build the screen says
+  backups need the installed app and renders no buttons — the web preview keeps
+  no ledger, and exporting demo data would be a lie with a file name on it.
+- **Two honest deviations from the spec sentence, both stated in the UI.** The
+  weekly toggle is a **reminder, not a silent writer**: an automatic backup would
+  have to encrypt itself with a password the app does not have — plaintext would
+  break `docs/07 §5`, and storing the password would break it worse — so the
+  switch makes the app ask once a week (and Settings' row shows "your weekly
+  backup is due" without opening anything, which a switch hidden in a screen
+  nobody opens could not). And there is **no Drive SDK**: the file goes through
+  the system share sheet, which is where Drive lives on a phone, and the screen
+  says so. `docs/08 §6`'s "encrypted Google Drive auto-backup" therefore remains
+  the one Pro bullet that is not built — it needs an OAuth client Keshab owns.
+- `lib/export/export_files.dart` + `export_io.dart` / `export_web.dart` — the two
+  moments S-23 touches the outside world, behind seams (`shareBytesProvider`,
+  `pickFileProvider`) so the screen can be driven in a test without a share
+  sheet. The platform halves exist because `dart:io` cannot be imported in a
+  browser; the web half is imported by name in a test (`export_files_test.dart`)
+  so the orphan scan keeps seeing it.
+- **50 new strings × 3 languages** (461 keys each now) and `backupDue()` — the
+  weekly rule as a pure function of two dates.
+- Tests: `test/export/` (42) — the envelope's nine cases, the CSV's twelve, the
+  repository's nine including the acceptance comparison row-for-row and the
+  doctored-file case, the statement's seven, plus the platform contract — and
+  `test/ui/export_test.dart` (15): the password gate, the free CSV, the rewarded
+  credit and its cap, the Pro path, the month stepper, a restore through the
+  screen that reports what came back, a wrong password that reports nothing came
+  back and writes nothing, the weekly line appearing and clearing, the demo build
+  offering nothing, the Bengali layout at 360 dp, and Settings reaching the
+  screen. `/export` was added to the render-smoke route list in all six
+  configurations.
 
 ---
 

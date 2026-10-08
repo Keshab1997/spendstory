@@ -684,7 +684,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get featureExportBody =>
-      'Unlock CSV and PDF exports with a rewarded ad, or get them included with Pro.';
+      'CSV export is free for everyone. The PDF statement comes with Pro, or with one rewarded ad.';
 
   @override
   String get trialDisclaimer => '7 days free, cancel anytime.';
@@ -1357,4 +1357,168 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyReadAll => 'Read the full policy';
+
+  @override
+  String get exportTitle => 'Export & backup';
+
+  @override
+  String get exportBody =>
+      'Everything here leaves the phone in a file you control. Nothing is uploaded — there is no server to upload it to.';
+
+  @override
+  String get exportBackupTitle => 'Back up now';
+
+  @override
+  String get exportBackupBody =>
+      'Your ledger is locked with AES-256 under a password you choose. We cannot recover that password, so keep it somewhere you trust.';
+
+  @override
+  String get exportPassword => 'Password';
+
+  @override
+  String get exportPasswordHint =>
+      'At least 8 characters. You will need it to restore.';
+
+  @override
+  String get exportPasswordTooShort => 'Use at least 8 characters.';
+
+  @override
+  String get exportCreateBackup => 'Create backup file';
+
+  @override
+  String get exportWorking => 'Encrypting…';
+
+  @override
+  String get exportBackupReady => 'Backup ready. Choose where to save it.';
+
+  @override
+  String get exportBackupDismissed => 'Nothing was shared.';
+
+  @override
+  String get exportBackupUnavailable =>
+      'This device has no share sheet to hand the file to.';
+
+  @override
+  String get exportBackupFailed => 'The file could not be written.';
+
+  @override
+  String exportLastBackup(String when) {
+    return 'Last backup: $when';
+  }
+
+  @override
+  String get exportNeverBackedUp => 'No backup yet.';
+
+  @override
+  String get exportDue => 'Your weekly backup is due.';
+
+  @override
+  String get exportAutoBackup => 'Weekly reminder';
+
+  @override
+  String get exportAutoBackupBody =>
+      'Without your password the app cannot open its own backup, so it reminds you once a week instead of writing a file you could not read.';
+
+  @override
+  String get exportRestoreTitle => 'Restore from a backup';
+
+  @override
+  String get exportRestoreBody =>
+      'Pick a backup file and type the password you used. Everything in the file is added; what is already on this phone stays.';
+
+  @override
+  String get exportPickFile => 'Choose file';
+
+  @override
+  String get exportRestoreAction => 'Restore';
+
+  @override
+  String get exportRestoreNeedFile => 'Choose a backup file first.';
+
+  @override
+  String get exportRestoreNeedPassword => 'Type the password for this file.';
+
+  @override
+  String exportRestoreDone(
+    String tx,
+    String cats,
+    String budgets,
+    String accounts,
+  ) {
+    return 'Restored $tx transactions, $cats categories, $budgets budgets and $accounts accounts.';
+  }
+
+  @override
+  String get exportRestoreFailed =>
+      'That file could not be opened. Check the password and try again.';
+
+  @override
+  String get exportCsvTitle => 'CSV export';
+
+  @override
+  String get exportCsvBody =>
+      'Every transaction as a spreadsheet file. Free, for everyone, always.';
+
+  @override
+  String get exportCsvFree => 'Free';
+
+  @override
+  String get exportCsvAction => 'Export CSV';
+
+  @override
+  String get exportCsvEmpty => 'There is nothing to export yet.';
+
+  @override
+  String get exportPdfTitle => 'PDF statement';
+
+  @override
+  String get exportPdfPro => 'Pro';
+
+  @override
+  String get exportPdfBody =>
+      'A printable statement for one month, with totals — part of Pro.';
+
+  @override
+  String get exportPdfAction => 'Export PDF';
+
+  @override
+  String get exportPdfWatchAd => 'Watch an ad for a free PDF';
+
+  @override
+  String exportPdfCredits(String n) {
+    return 'Free PDF exports left today: $n';
+  }
+
+  @override
+  String get exportPdfNoCredits =>
+      'Today’s free PDFs are used. Tomorrow they reset.';
+
+  @override
+  String get exportPdfEarned => 'Free PDF unlocked.';
+
+  @override
+  String get exportPdfMissed => 'No reward this time, so the PDF stays Pro.';
+
+  @override
+  String get exportPdfUnavailable => 'No ad to show right now.';
+
+  @override
+  String get exportPdfProOnly => 'The PDF statement is part of Pro.';
+
+  @override
+  String get exportMonthPrev => 'Previous month';
+
+  @override
+  String get exportMonthNext => 'Next month';
+
+  @override
+  String get exportDemoUnavailable =>
+      'Backups need the installed app — the web preview keeps no ledger.';
+
+  @override
+  String get exportShareDrive =>
+      'In the share sheet, pick Drive to keep a copy there. SpendStory never uploads the file itself.';
+
+  @override
+  String get exportSettingBody => 'Encrypted backup, restore, CSV and PDF';
 }

@@ -58,6 +58,10 @@ dependencies:
   collection: ^1.19.0
   google_mobile_ads: ^9.1.0
   in_app_purchase: ^3.3.1
+  pointycastle: ^4.0.0
+  pdf: ^3.13.1
+  share_plus: ^13.3.1
+  file_picker: ^13.1.0
 
 dev_dependencies:
   flutter_test:

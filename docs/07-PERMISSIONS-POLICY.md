@@ -127,6 +127,16 @@ Rules notified **13 Nov 2025** (G.S.R. 846(E)); substantive obligations enforcea
 | **Children's data** | App targets 18+; no child-directed content |
 | **Consent Manager** | Not applicable (not a Consent Manager; storing locally without a fiduciary transfer) |
 
+**Implemented (T-705).** The security row is real: S-23 (`/export`) writes the
+whole ledger as a single file encrypted with AES-256-GCM under a password the
+user chooses (PBKDF2-HMAC-SHA256, 120,000 iterations, a fresh salt and nonce per
+file) and hands it to the share sheet, so the copy ends up wherever the user
+sends it — their Drive included — and never on a server, because there is none.
+Nothing about the phone's entitlements or counters travels in that file, and the
+password is never stored, so nobody but the user can open a backup. The one thing
+the app will not do is encrypt a backup it cannot ask about: the weekly switch
+reminds the user instead of writing a file they could not reopen.
+
 **Positioning:** because processing is 100% on-device and no personal data is transmitted, SpendStory's DPDP exposure is minimal — but the **notice + consent + erasure triad must still exist in-app** (they do).
 
 **Implemented (T-704).** The notice is S-21 (`/about`, `lib/ui/screens/about_screen.dart`), written in all three languages and reachable **at the moment of the first permission ask** — the SMS permission screen links to it — as well as from Settings. Each row of the table above has a section on that screen: purpose limitation and minimisation (one permission at a time, including the ones we do not request), storage limitation (on this phone, three steps to delete), access / correction / erasure / withdrawal, and the grievance contact. The contact address is a constant (`AppInfo.grievanceEmail`) and is **empty until Keshab sets it** — the screen states the gap and falls back to the public repository rather than inventing a mailbox. Testing: `test/ui/about_test.dart`.

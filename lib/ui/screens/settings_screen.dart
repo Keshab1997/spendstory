@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../ads/ad_consent.dart';
 import '../../app/app_info.dart';
 import '../../app/providers.dart';
+import '../../export/backup_repo.dart';
 import '../../pro/pro_controller.dart';
 import '../components/controls.dart';
 import '../components/surfaces.dart';
@@ -187,6 +188,26 @@ class SettingsScreen extends ConsumerWidget {
                   title: s.accounts,
                   subtitle: s['accountsSettingBody'],
                   onTap: () => context.push('/accounts'),
+                ),
+                Divider(color: c.divider, height: 1),
+                SettingTile(
+                  icon: Icons.ios_share_rounded,
+                  tint: c.violet600,
+                  title: s['featureExportTitle'],
+                  // The weekly reminder has to be visible without opening S-23,
+                  // or it is not a reminder — just a switch in a room nobody
+                  // walks into.
+                  subtitle:
+                      (ref.watch(autoBackupProvider).valueOrNull ?? false) &&
+                          backupDue(
+                            lastBackupAt: ref
+                                .watch(lastBackupAtProvider)
+                                .valueOrNull,
+                            now: ref.watch(nowProvider),
+                          )
+                      ? s['exportDue']
+                      : s['exportSettingBody'],
+                  onTap: () => context.push('/export'),
                 ),
                 Divider(color: c.divider, height: 1),
                 SettingTile(

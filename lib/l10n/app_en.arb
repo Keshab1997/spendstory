@@ -213,7 +213,7 @@
   "featureForecastTitle": "Spending forecast",
   "featureForecastBody": "See how much you are likely to spend by the end of the month.",
   "featureExportTitle": "Exports and reports",
-  "featureExportBody": "Unlock CSV and PDF exports with a rewarded ad, or get them included with Pro.",
+  "featureExportBody": "CSV export is free for everyone. The PDF statement comes with Pro, or with one rewarded ad.",
   "trialDisclaimer": "7 days free, cancel anytime.",
   "popular": "Most popular",
   "proActive": "Pro is active",
@@ -543,5 +543,82 @@
   "aboutSourceBody": "The whole app is public. Every sentence on this screen can be checked against it.",
   "aboutTapToCopy": "Tap to copy",
   "aboutCopied": "Copied",
-  "privacyReadAll": "Read the full policy"
+  "privacyReadAll": "Read the full policy",
+  "exportTitle": "Export & backup",
+  "exportBody": "Everything here leaves the phone in a file you control. Nothing is uploaded — there is no server to upload it to.",
+  "exportBackupTitle": "Back up now",
+  "exportBackupBody": "Your ledger is locked with AES-256 under a password you choose. We cannot recover that password, so keep it somewhere you trust.",
+  "exportPassword": "Password",
+  "exportPasswordHint": "At least 8 characters. You will need it to restore.",
+  "exportPasswordTooShort": "Use at least 8 characters.",
+  "exportCreateBackup": "Create backup file",
+  "exportWorking": "Encrypting…",
+  "exportBackupReady": "Backup ready. Choose where to save it.",
+  "exportBackupDismissed": "Nothing was shared.",
+  "exportBackupUnavailable": "This device has no share sheet to hand the file to.",
+  "exportBackupFailed": "The file could not be written.",
+  "exportLastBackup": "Last backup: {when}",
+  "@exportLastBackup": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "exportNeverBackedUp": "No backup yet.",
+  "exportDue": "Your weekly backup is due.",
+  "exportAutoBackup": "Weekly reminder",
+  "exportAutoBackupBody": "Without your password the app cannot open its own backup, so it reminds you once a week instead of writing a file you could not read.",
+  "exportRestoreTitle": "Restore from a backup",
+  "exportRestoreBody": "Pick a backup file and type the password you used. Everything in the file is added; what is already on this phone stays.",
+  "exportPickFile": "Choose file",
+  "exportRestoreAction": "Restore",
+  "exportRestoreNeedFile": "Choose a backup file first.",
+  "exportRestoreNeedPassword": "Type the password for this file.",
+  "exportRestoreDone": "Restored {tx} transactions, {cats} categories, {budgets} budgets and {accounts} accounts.",
+  "@exportRestoreDone": {
+    "placeholders": {
+      "tx": {
+        "type": "String"
+      },
+      "cats": {
+        "type": "String"
+      },
+      "budgets": {
+        "type": "String"
+      },
+      "accounts": {
+        "type": "String"
+      }
+    }
+  },
+  "exportRestoreFailed": "That file could not be opened. Check the password and try again.",
+  "exportCsvTitle": "CSV export",
+  "exportCsvBody": "Every transaction as a spreadsheet file. Free, for everyone, always.",
+  "exportCsvFree": "Free",
+  "exportCsvAction": "Export CSV",
+  "exportCsvEmpty": "There is nothing to export yet.",
+  "exportPdfTitle": "PDF statement",
+  "exportPdfPro": "Pro",
+  "exportPdfBody": "A printable statement for one month, with totals — part of Pro.",
+  "exportPdfAction": "Export PDF",
+  "exportPdfWatchAd": "Watch an ad for a free PDF",
+  "exportPdfCredits": "Free PDF exports left today: {n}",
+  "@exportPdfCredits": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "exportPdfNoCredits": "Today’s free PDFs are used. Tomorrow they reset.",
+  "exportPdfEarned": "Free PDF unlocked.",
+  "exportPdfMissed": "No reward this time, so the PDF stays Pro.",
+  "exportPdfUnavailable": "No ad to show right now.",
+  "exportPdfProOnly": "The PDF statement is part of Pro.",
+  "exportMonthPrev": "Previous month",
+  "exportMonthNext": "Next month",
+  "exportDemoUnavailable": "Backups need the installed app — the web preview keeps no ledger.",
+  "exportShareDrive": "In the share sheet, pick Drive to keep a copy there. SpendStory never uploads the file itself.",
+  "exportSettingBody": "Encrypted backup, restore, CSV and PDF"
 }

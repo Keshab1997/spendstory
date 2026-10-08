@@ -108,6 +108,23 @@ final stringsProvider = Provider<SsStrings>(
 /// tests; never overridden in the app.
 final nowProvider = Provider<DateTime>((ref) => DateTime.now());
 
+/// When the last encrypted backup was written, or null for never (S-23).
+///
+/// Settings and the export screen both read it: the weekly reminder has to be
+/// visible without opening the screen that owns the switch.
+final lastBackupAtProvider = FutureProvider<DateTime?>((ref) async {
+  final db = ref.watch(appDbProvider);
+  final raw = await db?.meta('lastBackupAt');
+  final ms = int.tryParse(raw ?? '');
+  return ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
+});
+
+/// `app_meta` flag behind S-23's weekly reminder toggle.
+final autoBackupProvider = FutureProvider<bool>((ref) async {
+  final db = ref.watch(appDbProvider);
+  return (await db?.meta('autoBackup')) == 'on';
+});
+
 /// Light / dark / system. The design ships both themes; the user picks.
 final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
 

@@ -96,7 +96,13 @@ openingBalancePaise
 → Settings → "কিছু ভুল হয়েছে? রিপোর্ট করুন" e JSON export (user-initiated, no auto upload)
 
 ### `app_meta` (kv)
-`onboarded` · `locale` · `theme` · `smsPermAsked` · `notifPermAsked` · `lastBackupAt` · `proStatus` · `ruleVersion` · `sessionCount`
+`onboarded` · `locale` · `theme` · `smsPermAsked` · `notifPermAsked` · `lastBackupAt` · `autoBackup` · `proStatus` · `ruleVersion` · `sessionCount`
+
+`BackupRepo` (T-705) reads and writes `lastBackupAt` and the weekly-reminder flag
+`autoBackup`. The payload carries `locale`, `theme` and `lastBackupAt` and
+nothing else from this table: entitlements, reward counters, alert markers and
+the ads-consent choice belong to the phone and the store account, never to a file
+the user can copy — a hand-edited backup must not be able to grant Pro.
 
 ## 3. Drift setup
 

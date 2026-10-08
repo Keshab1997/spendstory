@@ -681,7 +681,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get featureExportBody =>
-      'Rewarded ad দেখে CSV ও PDF আনলক করুন, অথবা Pro-তে সরাসরি পান।';
+      'CSV এক্সপোর্ট সবার জন্য ফ্রি। PDF স্টেটমেন্ট Pro-তে পাওয়া যায়, নয়তো একটা rewarded ad দেখে।';
 
   @override
   String get trialDisclaimer => '৭ দিন ফ্রি, যেকোনো সময় বাতিল করুন।';
@@ -1349,4 +1349,165 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get privacyReadAll => 'পুরো প্রাইভেসি নীতি দেখো';
+
+  @override
+  String get exportTitle => 'এক্সপোর্ট ও ব্যাকআপ';
+
+  @override
+  String get exportBody =>
+      'এখান থেকে সব ডেটা তোমার নিজের ফাইলে যায়। কিছুই আপলোড হয় না — আপলোড করার সার্ভারই নেই।';
+
+  @override
+  String get exportBackupTitle => 'এখনই ব্যাকআপ নাও';
+
+  @override
+  String get exportBackupBody =>
+      'তোমার খাতা তোমার বেছে নেওয়া পাসওয়ার্ডে AES-256 দিয়ে বন্ধ করা হয়। পাসওয়ার্ডটা আমরা ফেরাতে পারি না, তাই ভরসার জায়গায় রেখো।';
+
+  @override
+  String get exportPassword => 'পাসওয়ার্ড';
+
+  @override
+  String get exportPasswordHint => 'অন্তত ৮ অক্ষর। ফিরিয়ে আনতে এটাই লাগবে।';
+
+  @override
+  String get exportPasswordTooShort => 'অন্তত ৮ অক্ষর দাও।';
+
+  @override
+  String get exportCreateBackup => 'ব্যাকআপ ফাইল বানাও';
+
+  @override
+  String get exportWorking => 'এনক্রিপ্ট হচ্ছে…';
+
+  @override
+  String get exportBackupReady => 'ব্যাকআপ তৈরি। কোথায় রাখবে বেছে নাও।';
+
+  @override
+  String get exportBackupDismissed => 'কিছু শেয়ার হয়নি।';
+
+  @override
+  String get exportBackupUnavailable => 'এই ফোনে ফাইল পাঠানোর শেয়ার শিট নেই।';
+
+  @override
+  String get exportBackupFailed => 'ফাইল লেখা গেল না।';
+
+  @override
+  String exportLastBackup(String when) {
+    return 'শেষ ব্যাকআপ: $when';
+  }
+
+  @override
+  String get exportNeverBackedUp => 'এখনো কোনো ব্যাকআপ নেই।';
+
+  @override
+  String get exportDue => 'সাপ্তাহিক ব্যাকআপের সময় হয়েছে।';
+
+  @override
+  String get exportAutoBackup => 'সপ্তাহে একবার মনে করিয়ে দাও';
+
+  @override
+  String get exportAutoBackupBody =>
+      'তোমার পাসওয়ার্ড ছাড়া অ্যাপ নিজের ব্যাকআপ খুলতে পারে না, তাই ফাইল লেখার বদলে সপ্তাহে একবার মনে করিয়ে দেয়।';
+
+  @override
+  String get exportRestoreTitle => 'ব্যাকআপ থেকে ফিরিয়ে আনো';
+
+  @override
+  String get exportRestoreBody =>
+      'ব্যাকআপ ফাইল বেছে নিয়ে সেই পাসওয়ার্ড দাও। ফাইলের সব ডেটা যোগ হবে; এই ফোনের ডেটা মুছবে না।';
+
+  @override
+  String get exportPickFile => 'ফাইল বাছো';
+
+  @override
+  String get exportRestoreAction => 'ফিরিয়ে আনো';
+
+  @override
+  String get exportRestoreNeedFile => 'আগে একটা ব্যাকআপ ফাইল বাছো।';
+
+  @override
+  String get exportRestoreNeedPassword => 'এই ফাইলের পাসওয়ার্ড দাও।';
+
+  @override
+  String exportRestoreDone(
+    String tx,
+    String cats,
+    String budgets,
+    String accounts,
+  ) {
+    return '$txটি লেনদেন, $catsটি ক্যাটাগরি, $budgetsটি বাজেট আর $accountsটি অ্যাকাউন্ট ফিরে এসেছে।';
+  }
+
+  @override
+  String get exportRestoreFailed =>
+      'ফাইলটা খোলা গেল না। পাসওয়ার্ড মিলিয়ে আবার চেষ্টা করো।';
+
+  @override
+  String get exportCsvTitle => 'CSV এক্সপোর্ট';
+
+  @override
+  String get exportCsvBody =>
+      'প্রতিটি লেনদেন একটা স্প্রেডশিট ফাইলে। সবার জন্য ফ্রি, সবসময়।';
+
+  @override
+  String get exportCsvFree => 'ফ্রি';
+
+  @override
+  String get exportCsvAction => 'CSV এক্সপোর্ট করো';
+
+  @override
+  String get exportCsvEmpty => 'এখনো এক্সপোর্ট করার মতো কিছু নেই।';
+
+  @override
+  String get exportPdfTitle => 'PDF স্টেটমেন্ট';
+
+  @override
+  String get exportPdfPro => 'Pro';
+
+  @override
+  String get exportPdfBody =>
+      'এক মাসের ছাপার মতো স্টেটমেন্ট, টোটালসহ — Pro-তে আছে।';
+
+  @override
+  String get exportPdfAction => 'PDF এক্সপোর্ট করো';
+
+  @override
+  String get exportPdfWatchAd => 'বিজ্ঞাপন দেখে একটা ফ্রি PDF নাও';
+
+  @override
+  String exportPdfCredits(String n) {
+    return 'আজ বাকি ফ্রি PDF: $n';
+  }
+
+  @override
+  String get exportPdfNoCredits => 'আজকের ফ্রি PDF শেষ। কাল আবার পাবে।';
+
+  @override
+  String get exportPdfEarned => 'ফ্রি PDF পাওয়া গেছে।';
+
+  @override
+  String get exportPdfMissed => 'এবার পুরস্কার মেলেনি, PDFটা Pro-তেই রইল।';
+
+  @override
+  String get exportPdfUnavailable => 'এখন দেখানোর মতো বিজ্ঞাপন নেই।';
+
+  @override
+  String get exportPdfProOnly => 'PDF স্টেটমেন্ট Pro-তে পাওয়া যায়।';
+
+  @override
+  String get exportMonthPrev => 'আগের মাস';
+
+  @override
+  String get exportMonthNext => 'পরের মাস';
+
+  @override
+  String get exportDemoUnavailable =>
+      'ব্যাকআপের জন্য অ্যাপটা লাগবে — ওয়েব প্রিভিউ কোনো খাতা রাখে না।';
+
+  @override
+  String get exportShareDrive =>
+      'শেয়ার শিটে Drive বেছে নিয়ে সেখানে কপি রেখে দাও। SpendStory নিজে কখনো ফাইল আপলোড করে না।';
+
+  @override
+  String get exportSettingBody => 'এনক্রিপ্ট করা ব্যাকআপ, ফেরানো, CSV আর PDF';
 }

@@ -63,6 +63,9 @@ const Set<String> _sameInEveryLanguage = <String>{
   'proTitle',
   'notFoundSubtitle',
   'modeUpi',
+  // S-23's Pro badge on the PDF card. "Pro" is the plan's name in all three
+  // languages, exactly like `proTitle` above.
+  'exportPdfPro',
 };
 
 void main() {

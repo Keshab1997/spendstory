@@ -419,6 +419,17 @@ it, and both contact rows copy rather than open a browser.
 **Ads:** ✅ 1 rewarded ad option: "watch ad → 1 free PDF export" (India te khub kaj kore).
 **Accept:** restore on fresh install returns 100% of tx, categories, budgets, accounts.
 
+**Implemented (T-705):** `lib/ui/screens/export_screen.dart`, route `/export`,
+reached from Settings. Backup writes the whole ledger encrypted with AES-256-GCM
+under a password the user chooses and hands the file to the share sheet; restore
+picks a file and adds it without wiping what is on the phone. CSV is free for
+everyone — the Pro card's copy said otherwise and was corrected here. The PDF
+statement is Pro, or one rewarded credit earned on the screen itself. Two
+sentences of this spec are knowingly not built as written: the weekly
+"auto-backup to a folder" is a weekly *reminder* (an unattended encrypted write
+needs a stored password, which would break `07 §5`), and "Drive" is the share
+sheet rather than a Drive SDK, so `08 §6`'s Drive auto-backup is still open.
+
 ---
 
 ## 🚫 Ads summary (what the policy doc will enforce)

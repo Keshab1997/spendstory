@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../ui/screens/about_screen.dart';
+import '../ui/screens/export_screen.dart';
 import '../ui/screens/accounts_screen.dart';
 import '../ui/screens/budget_detail_screen.dart';
 import '../ui/screens/budgets_screen.dart';
@@ -202,6 +203,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       // a worried user both want to read in full, and it is reachable from the
       // permission screen *before* the first ask (docs/07 §5, notice).
       GoRoute(path: '/about', builder: (context, state) => const AboutScreen()),
+      // S-23. A pushed route rather than a sheet: a password field in a bottom
+      // sheet is a keyboard fighting a drag handle.
+      GoRoute(
+        path: '/export',
+        builder: (context, state) => const ExportScreen(),
+      ),
       GoRoute(
         path: '/pro',
         pageBuilder: (context, state) =>
