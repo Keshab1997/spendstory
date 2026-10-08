@@ -76,6 +76,8 @@ dev_dependencies:
   analyzer: 13.3.0
 
 flutter:
+  # Enables flutter gen-l10n: lib/l10n/*.arb -> AppLocalizations (docs/09 §1).
+  generate: true
   uses-material-design: true
 
   # 3D illustrations (T-051). Dark-bg set ships first; the light variants are

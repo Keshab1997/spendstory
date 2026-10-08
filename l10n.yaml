@@ -1,0 +1,15 @@
+# Flutter gen-l10n configuration (docs/09-LOCALIZATION.md §1).
+#
+# lib/l10n/app_en.arb is the template — a key exists there first, and the other
+# two files must follow it exactly (test/l10n/l10n_test.dart enforces that).
+# The generated AppLocalizations is what MaterialApp hands to Flutter, so the
+# framework's own widgets (date pickers, tooltips, text selection) speak the
+# user's language too.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+# A device whose language is none of the three falls back to English, not to
+# whichever locale gen-l10n happens to sort first.
+preferred-supported-locales: [en, hi, bn]
+nullable-getter: false

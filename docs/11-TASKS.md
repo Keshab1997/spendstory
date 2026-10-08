@@ -502,13 +502,48 @@ PDF export credit gets spent.
 
 ## 🔜 Batch 8 — Localization + compliance screens
 
-- [ ] **T-701** `lib/l10n/*.arb` — en/hi/bn full key set
+- [x] **T-701** `lib/l10n/*.arb` — en/hi/bn full key set
 - [ ] **T-702** `test/l10n/l10n_test.dart` — key parity across locales
 - [ ] **T-703** Category names in 3 languages (seed)
 - [ ] **T-704** S-21 About/Privacy — text must match `07` §5
 - [ ] **T-705** S-23 Export/Backup — AES-256-GCM + CSV + rewarded PDF
 - [ ] **T-706** Settings data-erase (double confirm) + biometric lock
 - [ ] **T-707** Bengali digits toggle
+
+**What landed (T-701):**
+- `lib/l10n/app_en.arb` (template) + `app_hi.arb` + `app_bn.arb` — **377 keys
+  each, exact parity**, migrated 1:1 from the interim table in
+  `lib/ui/strings.dart`. The 16 `{placeholder}` templates carry their
+  `placeholders` metadata in the template file, so `flutter gen-l10n` accepts
+  them. Copy was moved, never retyped: the migration was done by a parser that
+  reads the old Dart map (adjacent-literal concatenation included) and a parity
+  check that refuses to emit unless all three languages have the same keys in
+  the same order.
+- `l10n.yaml` + `flutter: generate: true` → `flutter gen-l10n` writes
+  `lib/l10n/app_localizations{,_en,_hi,_bn}.dart`, which `MaterialApp` now hands
+  to Flutter through `localizationsDelegates` / `supportedLocales` / `locale`.
+  That is the real gain of the task for a phone in Bengaluru or Kolkata: the
+  framework's own widgets — date picker, text selection, tooltips, back-button
+  label — were English-only before, because the app never had a locale at all.
+  `en` is first in the list (`preferred-supported-locales`), so a device with
+  none of the three languages falls back to English.
+- `tool/l10n_gen.py` → `lib/l10n/strings_table.g.dart`: the
+  `Map<locale, Map<key, String>>` that `SsStrings[...]` reads, plus
+  `ssStringKeys` in template order. Two generators read the same ARB files, so
+  neither can drift from the other; the script refuses to emit when the three
+  files disagree, formats its own output with `dart format`, and is
+  idempotent (a re-run leaves `git status` clean).
+- `lib/ui/strings.dart` — 978 lines of hand-maintained table deleted; what is
+  left is the facade: `operator[]`, `fill()`, `daysLeft()`, `missingKeys`, the
+  typed getters, and a header that says where copy now lives. No screen changed
+  in this commit: 267 `s['key']` call sites and the 22 `SsStrings(locale)`
+  constructions the tests build still work untouched.
+- One approach was tried and dropped, and it is worth remembering: generating
+  **typed getters** as an `extension` in the .g.dart. Extensions resolve only
+  where their own library is imported, and export-chain re-exports do not save
+  it — half the screens reach `SsStrings` through `stringsProvider` with an
+  inferred type and never import the file, which is 81 `undefined_getter`
+  errors. Instance members are the only shape that works everywhere.
 
 ---
 

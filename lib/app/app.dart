@@ -9,6 +9,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/app_localizations.dart';
 import '../ui/theme.dart';
 import 'providers.dart';
 import 'router.dart';
@@ -27,10 +28,21 @@ class SpendStoryApp extends ConsumerWidget {
 
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
 
     return MaterialApp.router(
-      title: 'SpendStory',
+      // The title is copy too, so it comes from the ARB files like everything
+      // else — `onGenerateTitle` runs inside the Localizations scope, `title:`
+      // does not.
+      onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       debugShowCheckedModeBanner: false,
+      // `AppLocalizations` carries the copy Flutter's own widgets use — the
+      // date picker, text-selection menus, tooltips, the back button label.
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // Sorted by gen-l10n; `en` first is what a device with none of the three
+      // languages falls back to (l10n.yaml, preferred-supported-locales).
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(locale),
       routerConfig: router,
       themeMode: themeMode,
       theme: buildSsTheme(Brightness.light),

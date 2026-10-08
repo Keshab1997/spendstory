@@ -1,0 +1,510 @@
+{
+  "@@locale": "en",
+  "ob1Title": "Every payment files itself",
+  "ob1Body": "SpendStory reads your bank's transaction SMS and your payment apps' notifications, and writes the expense down for you. No typing.",
+  "ob1B1": "Works with 50 bank senders",
+  "ob1B2": "Reads lakh-format amounts correctly",
+  "ob1B3": "An OTP is never read, ever",
+  "ob2Title": "See where the money goes",
+  "ob2Body": "Category by category, month by month, with the one number that changes behaviour: what is left in the budget.",
+  "ob2B1": "Category split and top merchants",
+  "ob2B2": "Monthly budget with an 80% warning",
+  "ob2B3": "Forecast for the end of the month",
+  "ob3Title": "Your data stays on your phone",
+  "ob3Body": "There is no server, no account and no sign-in. Everything is stored on this device and nowhere else.",
+  "ob3B1": "Nothing is uploaded — not one byte",
+  "ob3B2": "Delete everything, any time",
+  "ob3B3": "Works with no internet at all",
+  "obNext": "Next",
+  "obBack": "Back",
+  "obSkip": "Skip",
+  "obStart": "Get started",
+  "permTitle": "Let SpendStory read bank SMS?",
+  "permWhy": "This is how the app captures spending without you typing. Android will ask for permission in the next step.",
+  "permReads": "What it reads",
+  "permReadsBody": "Transaction alerts from banks, cards and wallets — the amount, the merchant and the date.",
+  "permNever": "What it never touches",
+  "permNeverBody": "OTPs, passwords, PINs and personal messages. OTPs are dropped before anything else looks at them, and no message is ever sent anywhere.",
+  "permAllow": "Allow reading SMS",
+  "permTryAgain": "Try again",
+  "permNotNow": "Not now",
+  "permDenied": "No problem — you can add expenses by hand, and turn this on later from Settings.",
+  "permWebNote": "On the web preview there is no Android to ask — the real prompt only appears in the phone build. Use “Not now” to carry on.",
+  "manualLink": "I would rather not give SMS access",
+  "notifTitle": "One more, and it is optional",
+  "notifWhy": "Payment apps like Google Pay and PhonePe send their own notification. With access, those are captured too — otherwise a UPI payment may be missed if the bank's SMS is delayed.",
+  "notifOn": "Notification access is on",
+  "notifOff": "Notification access is off",
+  "notifApps": "Only these six apps are ever looked at:",
+  "notifOnlyThese": "Every other notification on your phone is ignored completely. SpendStory never reads WhatsApp, email or personal messages.",
+  "notifOpen": "Open notification settings",
+  "notifSkip": "Skip this",
+  "notifContinue": "Continue",
+  "notifManualHint": "Open Settings → Notifications → Notification access, and turn on SpendStory.",
+  "manualTitle": "Use it by hand",
+  "manualBody": "Perfectly fine — the ledger, budgets and insights all work with expenses you enter yourself. You can switch capture on later from Settings.",
+  "manualP1": "Add in three taps",
+  "manualP1Body": "Amount, category, done.",
+  "manualP2": "Everything still works",
+  "manualP2Body": "Budgets, categories, insights, export.",
+  "manualP3": "Turn on capture later",
+  "manualP3Body": "Settings → SMS capture, any time.",
+  "manualStart": "Start using SpendStory",
+  "manualBack": "Actually, let me give SMS access",
+  "appName": "SpendStory",
+  "appTagline": "Your money's story, right on your phone",
+  "greeting": "Hello",
+  "heroLabel": "Spent this month",
+  "income": "Income",
+  "expense": "Spent",
+  "recentTx": "Recent transactions",
+  "seeAll": "See all",
+  "addTx": "Add",
+  "budget": "Budget",
+  "categories": "Categories",
+  "reports": "Reports",
+  "vsLastMonth": "vs last month",
+  "monthlyBudget": "Monthly budget",
+  "budgetLeft": "left",
+  "over": "over",
+  "txTitle": "Transactions",
+  "insights": "Insights",
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "theme": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "language": "Language",
+  "languagePrompt": "Choose a language. You can change it anytime.",
+  "start": "Get started",
+  "home": "Home",
+  "uncategorised": "Uncategorised",
+  "thisMonth": "This month",
+  "trend": "Last 6 months",
+  "topCategories": "Where the money went",
+  "noDataTitle": "Nothing here yet",
+  "noDataBody": "Your transactions will appear here as soon as you spend.",
+  "addFirst": "Add the first one",
+  "emptyTxTitle": "No transactions yet",
+  "emptyTxBody": "Turn on SMS capture and every payment files itself. Or add one by hand.",
+  "demoBanner": "Web preview",
+  "demoBannerBody": "Demo data. The phone build reads your bank SMS — on device only.",
+  "about": "About SpendStory",
+  "aboutBody": "Nothing leaves your phone",
+  "privacy": "Privacy",
+  "privacyBody": "Reads only bank SMS. Never uploaded.",
+  "privacyDetails": "SpendStory reads bank transaction SMS only — never OTPs. Your data is never sent to a server, and no account is needed. Uninstall the app to remove its data from your phone.",
+  "privacyOnDevice": "100% on-device",
+  "version": "Version",
+  "proTitle": "SpendStory Pro",
+  "proBody": "No ads, unlimited budgets, forecasts",
+  "search": "Search",
+  "accounts": "Accounts",
+  "savings": "Net saved",
+  "comingSoon": "Coming in the next batch",
+  "comingSoonBody": "This screen is built in Batch 4–6. The shell, theme and demo data are live now.",
+  "adLabel": "Advertisement",
+  "adBanner": "banner",
+  "adNative": "native",
+  "unknownCategory": "Unknown",
+  "budgetExceeded": "You've gone over budget — time to rein in spending.",
+  "forecast": "Estimated spending by month-end",
+  "addEditUnavailable": "Adding and editing transactions are coming soon.",
+  "activeNoAds": "Active · ad-free",
+  "budgetSettingBody": "Set monthly limits by category",
+  "categoriesSettingBody": "Create your own categories",
+  "accountsSettingBody": "Bank · cash · wallet",
+  "deleteAllData": "Delete all data",
+  "deleteAllDataSubtitle": "Permanently erase everything after two confirmations",
+  "eraseTitle": "Delete all data?",
+  "eraseBody": "All transactions, budgets and categories will be deleted. This cannot be undone.",
+  "keep": "Keep it",
+  "erase": "Delete",
+  "confirm": "Are you sure?",
+  "lastChance": "Last chance — everything will be erased after this.",
+  "no": "No",
+  "yesErase": "Yes, delete everything",
+  "demoEraseUnavailable": "Data deletion is disabled in demo mode. Use the phone app to erase your data.",
+  "transactionDetailTitle": "Transaction details",
+  "transactionDetailSubtitle": "S-11 · Transaction detail",
+  "transactionDetailBody": "Original SMS, category changes, notes and deletion will appear here. Coming in Batch 5 (T-403).",
+  "categoryPageSubtitle": "S-13 · Category manager",
+  "categoryPageBody": "Create your own categories and choose their icons and colours. Coming in Batch 5 (T-405).",
+  "searchPageSubtitle": "S-18 · Search and filters",
+  "searchPageBody": "Find transactions by merchant, amount or date. Coming in Batch 5 (T-406).",
+  "notFoundTitle": "Page not found",
+  "notFoundSubtitle": "404",
+  "notFoundBody": "Return to Home from Settings.",
+  "txFilterAll": "All",
+  "txDelete": "Delete",
+  "txRecategorise": "Change category",
+  "txPickCategory": "Which category?",
+  "txDeleted": "Deleted",
+  "txUndo": "Undo",
+  "txSwipeHint": "Swipe a row — left to delete, right to change its category.",
+  "txMonthEmptyTitle": "Nothing in this month",
+  "txMonthEmptyBody": "Pick another month, or clear the filter.",
+  "detailTitle": "Transaction",
+  "detailDate": "Date",
+  "detailCategory": "Category",
+  "detailAccount": "Account",
+  "detailMode": "Mode",
+  "detailSource": "Source",
+  "detailNote": "Note",
+  "detailChange": "Change",
+  "detailRawTitle": "Original message",
+  "detailRawHint": "This is the exact text this entry was read from. It never leaves your phone.",
+  "detailNoRaw": "You typed this one in, so there is no message to show.",
+  "detailEdit": "Edit",
+  "detailDeleteConfirmTitle": "Delete this transaction?",
+  "detailDeleteConfirmBody": "It leaves your totals right away. You can undo it from the list.",
+  "detailNotFound": "That transaction is no longer here.",
+  "cancel": "Cancel",
+  "addTitle": "New transaction",
+  "editTitle": "Edit transaction",
+  "amountLabel": "Amount",
+  "merchantHint": "Where? (optional)",
+  "noteHint": "Note (optional)",
+  "save": "Save",
+  "saved": "Saved",
+  "amountRequired": "Enter an amount first",
+  "today": "Today",
+  "modeCash": "Cash",
+  "modeUpi": "UPI",
+  "modeCard": "Card",
+  "modeNetbanking": "Netbanking",
+  "modeWallet": "Wallet",
+  "modeOther": "Other",
+  "catManagerTitle": "Categories",
+  "catNew": "New category",
+  "catEditTitle": "Edit category",
+  "catNameEn": "Name (English)",
+  "catNameHi": "Name (Hindi)",
+  "catNameBn": "Name (Bengali)",
+  "catIcon": "Icon",
+  "catColor": "Colour",
+  "catMonthlyCap": "Monthly limit (optional)",
+  "catDelete": "Delete category",
+  "catDeleteWarn": "Transactions already filed here keep their history — they just lose the label.",
+  "catNameRequired": "A category needs at least one name",
+  "catEmpty": "No categories here yet",
+  "catEmptyBody": "Add one with the + button.",
+  "searchTitle": "Search",
+  "searchHint": "Merchant, note or amount",
+  "searchResultCount": "results",
+  "searchNoResults": "Nothing matched",
+  "searchNoResultsBody": "Try a shorter word, or clear a filter.",
+  "searchStartTitle": "Search your ledger",
+  "searchStartBody": "Type a merchant, a note, or an amount like 1240.",
+  "filterSourceAuto": "Auto only",
+  "filterSourceManual": "Typed only",
+  "filterClear": "Clear",
+  "planMonthly": "Monthly",
+  "planYearly": "Yearly",
+  "planLifetime": "Lifetime",
+  "planMonthlyNote": "Per month",
+  "planYearlyNote": "Per year · 41% savings",
+  "planLifetimeNote": "One payment, forever",
+  "featureNoAdsTitle": "No ads",
+  "featureNoAdsBody": "Removes ads from Home, Budgets and Insights.",
+  "featureUnlimitedBudgetsTitle": "Unlimited budgets",
+  "featureUnlimitedBudgetsBody": "Create as many category budgets as you need, each with alerts.",
+  "featureForecastTitle": "Spending forecast",
+  "featureForecastBody": "See how much you are likely to spend by the end of the month.",
+  "featureExportTitle": "Exports and reports",
+  "featureExportBody": "Unlock CSV and PDF exports with a rewarded ad, or get them included with Pro.",
+  "trialDisclaimer": "7 days free, cancel anytime.",
+  "popular": "Most popular",
+  "proActive": "Pro is active",
+  "startTrial": "Start your 7-day free trial",
+  "proActivatedDemo": "Demo: Pro is active and ads are hidden. Real billing is coming in Batch 7 (T-601).",
+  "billingNotAvailable": "The store could not be reached. Check your connection and try again.",
+  "savePercentTemplate": "Save {pct}%",
+  "@savePercentTemplate": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "priceEstimateNote": "Estimates — the store shows the exact price in your currency before you pay.",
+  "purchasePending": "Waiting for the store…",
+  "purchaseThanks": "Opening the store… your purchase will appear in a moment.",
+  "restorePurchases": "Restore a purchase",
+  "restoreDone": "Pro is active again on this device.",
+  "restoreNothing": "No purchase found for this account.",
+  "maybeLater": "Maybe later",
+  "terms": "Terms",
+  "termsBody": "SpendStory keeps your ledger on this phone. Pro removes ads and unlocks the forecast, custom date ranges, PDF export and unlimited budgets. Subscriptions renew automatically until you cancel in the Play Store; cancel any time and Pro stays until the period you paid for ends. Lifetime is a one-time payment. Refunds follow the Play Store policy. Your spending data is never sent to us, so cancelling never costs you your ledger.",
+  "subscriptionFootNote": "Cancel any time in the Play Store.",
+  "proActiveBody": "Pro is on. Thanks for paying for an app with no ads.",
+  "renewsOnTemplate": "Renews on {date}",
+  "@renewsOnTemplate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "billingPending": "The store is holding this payment for review — common for a first purchase. Pro turns on by itself when it clears.",
+  "billingCanceled": "Purchase cancelled. Nothing was charged.",
+  "billingFailed": "The store refused the payment. No money left your account.",
+  "billingSucceeded": "Payment received. Pro is on.",
+  "personalizedAds": "Personalized ads",
+  "personalizedAdsBody": "Off by default in India. With it off, ads still pay for the app — they just know less about you. Your spending is never sent anywhere either way.",
+  "privacyOptions": "Ad privacy options",
+  "privacyOptionsBody": "Change your consent choices at any time.",
+  "privacyOptionsShown": "Your choices are open.",
+  "privacyOptionsMissing": "The form could not be opened right now. Try again later.",
+  "planTaste": "24-hour taste",
+  "proTasteBody": "Pro is on for 24 hours. No ads, and the forecast is open — thanks for watching.",
+  "watchAdForTaste": "Watch an ad for 24 hours of Pro",
+  "tasteEarned": "Pro is on for 24 hours. Enjoy it.",
+  "tasteMissed": "The ad was closed before it finished, so nothing was granted. Try again any time.",
+  "tasteUnavailable": "No ad is available right now. Try again in a while.",
+  "tasteTomorrow": "You have used today’s 24-hour Pro. It comes back tomorrow.",
+  "trialEndsTitle": "Free trial ending",
+  "trialEndsBody": "Your free trial is nearly over. Cancel any time in the Play Store — your ledger stays on this phone either way.",
+  "sourceAutoSms": "Automatically added from SMS",
+  "sourceAutoNotification": "Automatically added from notification",
+  "sourceRecurring": "Recurring payment",
+  "budgetThisMonth": "This month's budget",
+  "budgetUsed": "used",
+  "budgetNew": "New budget",
+  "budgetSetTitle": "Set a budget",
+  "budgetEmptyTitle": "No budget set",
+  "budgetEmptyBody": "One overall cap, or limits per category. SpendStory warns you at 80% and again when you cross.",
+  "budgetOverallCap": "Overall monthly budget",
+  "budgetCategoryCap": "Category budget",
+  "budgetWhichCategory": "Which category?",
+  "budgetAmountLabel": "Monthly limit",
+  "budgetStartDay": "Cycle starts on",
+  "budgetStartDayBody": "Pick the day your salary arrives.",
+  "budgetAlertsLabel": "Alerts",
+  "budgetAlert80": "Warn me at 80%",
+  "budgetAlert100": "Warn me when I cross it",
+  "budgetSave": "Save budget",
+  "budgetDelete": "Delete budget",
+  "budgetDeleteTitle": "Delete this budget?",
+  "budgetDeleteBody": "The spending already counted stays in the ledger.",
+  "budgetDailyTitle": "Daily allowance",
+  "budgetDailyTemplate": "Spend about {amt} a day to stay inside the budget.",
+  "@budgetDailyTemplate": {
+    "placeholders": {
+      "amt": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetAllSpent": "The budget is used up — anything more goes over.",
+  "budgetDaysLeftTemplate": "{n} days left",
+  "@budgetDaysLeftTemplate": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetSpentLabel": "Spent",
+  "budgetRemainingLabel": "Left",
+  "budgetTotalLabel": "Limit",
+  "budgetSuggestTemplate": "This one is {pct}% over. Raise the cap, or slow the spending?",
+  "@budgetSuggestTemplate": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetRecentTx": "Recent spending here",
+  "budgetNoTx": "Nothing counted against this budget yet.",
+  "budgetEdit": "Edit budget",
+  "budgetAmountRequired": "Enter an amount",
+  "budgetOverallName": "Overall",
+  "accountsTotalNet": "Total balance",
+  "accountAdd": "Add account",
+  "accountEdit": "Edit account",
+  "accountName": "Name",
+  "accountType": "Type",
+  "accountTypeBank": "Bank",
+  "accountTypeCash": "Cash",
+  "accountTypeWallet": "Wallet",
+  "accountTypeCard": "Card",
+  "accountOpeningBalance": "Opening balance",
+  "accountLast4": "Last 4 digits (optional)",
+  "accountColor": "Colour",
+  "accountBalanceNote": "Balance = opening + credits − debits, worked out on this phone.",
+  "accountNoTx": "No transactions through this account yet.",
+  "accountDeleteTitle": "Remove this account?",
+  "accountDeleteBody": "Its transactions stay in the ledger — only the card disappears.",
+  "accountSave": "Save account",
+  "accountNameRequired": "Give the account a name",
+  "periodWeek": "Week",
+  "periodMonth": "Month",
+  "periodYear": "Year",
+  "periodCustom": "Custom",
+  "trend30": "Daily spending, last 30 days",
+  "topMerchants": "Where the money goes",
+  "monthCompare": "This month vs last",
+  "biggestJump": "Biggest jump",
+  "patternTitle": "Pattern",
+  "patternWeekend": "Weekends cost more than weekdays.",
+  "patternSteady": "Your spending is steady through the week.",
+  "insightProTitle": "Where this month ends",
+  "insightProBody": "The forecast and a custom date range are part of Pro.",
+  "insightProCta": "See Pro",
+  "deltaMoreTemplate": "{pct}% more than last month",
+  "@deltaMoreTemplate": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "deltaLessTemplate": "{pct}% less than last month",
+  "@deltaLessTemplate": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "deltaSame": "About the same as last month",
+  "insightTapSlice": "Tap a slice for the details",
+  "shareOfSpendingTemplate": "{pct}% of spending",
+  "@shareOfSpendingTemplate": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "txCountTemplate": "{n} transactions",
+  "@txCountTemplate": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "alert80Title": "80% of your budget is used",
+  "alert80BodyTemplate": "{cat}: {amt} left",
+  "@alert80BodyTemplate": {
+    "placeholders": {
+      "amt": {
+        "type": "String"
+      },
+      "cat": {
+        "type": "String"
+      }
+    }
+  },
+  "alert100Title": "Budget crossed",
+  "alert100BodyTemplate": "{cat}: {amt} over",
+  "@alert100BodyTemplate": {
+    "placeholders": {
+      "amt": {
+        "type": "String"
+      },
+      "cat": {
+        "type": "String"
+      }
+    }
+  },
+  "recurringTitle": "Recurring & reminders",
+  "recurringStripTitle": "Next 30 days",
+  "recurringEmptyTitle": "Nothing recurring yet",
+  "recurringEmptyBody": "Rent, EMIs and subscriptions — set them once, and they either post themselves or remind you.",
+  "recurringAdd": "Add a recurring payment",
+  "recurringNextDueTemplate": "Next on {date}",
+  "@recurringNextDueTemplate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "recurringDueCountTemplate": "{n} due in the next 30 days",
+  "@recurringDueCountTemplate": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "recurringAutoPost": "Post it automatically",
+  "recurringAutoPostNote": "Writes the payment into the ledger on the day.",
+  "recurringRemindNote": "No reminder is set for this one.",
+  "recurringDueToday": "due today",
+  "recurringOverdue": "was due",
+  "freqDaily": "Daily",
+  "freqWeekly": "Weekly",
+  "freqMonthly": "Monthly",
+  "freqYearly": "Yearly",
+  "recurringEveryTemplate": "Every {n} {unit}",
+  "@recurringEveryTemplate": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "unitDays": "days",
+  "unitWeeks": "weeks",
+  "unitMonths": "months",
+  "unitYears": "years",
+  "recurringNameLabel": "What is it?",
+  "recurringNameHint": "House rent",
+  "recurringAmountLabel": "Amount",
+  "recurringCategoryLabel": "Category",
+  "recurringAccountLabel": "Account",
+  "recurringAccountNone": "Not set",
+  "recurringFrequencyLabel": "How often",
+  "recurringIntervalLabel": "Every",
+  "recurringDayLabel": "Day of the month",
+  "recurringDayNote": "A month without that day uses its last one.",
+  "recurringFirstDue": "First payment",
+  "recurringRemindLabel": "Remind me",
+  "recurringRemindNone": "Not at all",
+  "recurringRemindSameDay": "On the day",
+  "recurringRemindOneDay": "A day before",
+  "recurringRemindThreeDays": "Three days before",
+  "recurringSave": "Save",
+  "recurringDelete": "Delete this rule",
+  "recurringDeleteTitle": "Delete this recurring payment?",
+  "recurringDeleteBody": "Payments already posted stay in the ledger.",
+  "recurringNameRequired": "Give it a name",
+  "recurringAmountRequired": "Enter an amount",
+  "recurringSettingBody": "Rent, EMIs, subscriptions",
+  "reminderTitle": "Upcoming payment",
+  "reminderTodayBodyTemplate": "{title}: {amt} due today",
+  "@reminderTodayBodyTemplate": {
+    "placeholders": {
+      "amt": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderSoonBodyTemplate": "{title}: {amt} in {n} days",
+  "@reminderSoonBodyTemplate": {
+    "placeholders": {
+      "amt": {
+        "type": "String"
+      },
+      "n": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "sourceManual": "Added manually"
+}
