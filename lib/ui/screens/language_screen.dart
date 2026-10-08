@@ -50,7 +50,9 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
     final String selected = _selected ?? ref.watch(localeProvider);
-    final s = SsStrings(selected);
+    // The preview shows what the app will look like, digits included: with the
+    // numerals switch on, the Bengali card reads `১২৪০` the way the ledger will.
+    final s = SsStrings(selected, nativeDigits: ref.watch(numeralsProvider));
 
     // The button stays pinned to the bottom and the options scroll: this is the
     // first screen a user ever sees, and at 1.3× text scale the three cards plus

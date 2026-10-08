@@ -207,3 +207,15 @@ Overflow instead of goldens: `test/ui/ui_smoke_test.dart` renders **every route
 in 3 languages × 2 text scales at 360 dp** and fails on overflow, which is the
 failure a golden would catch — without pinning font rasterisation, so a new
 Noto release cannot turn the suite red.
+
+**`test/ui/numerals_test.dart` (T-707, 12 tests)** guards the other direction —
+that the copy is the *only* place a numeral is written: no `.dart` under `lib/`
+may call `localizeDigits` or a bare `shortDate`/`dayLabel`/`monthLabel`/
+`timeOfDay` (outside the two files that define and wrap them, plus the PDF's
+English period, which has no digit choice to make), and **no ARB value may
+contain a Bengali or Devanagari digit** — a `৩০` baked into an approved
+translation cannot be switched back off, so the files hold `30` and
+`SsStrings.digits()` writes `৩০` only when the user asked for it. It also moves
+the whole app on screen: the Settings tap turns the harness ledger from
+`₹1,240` into `₹১,২৪০`, writes `app_meta.numerals`, and a stored `true` is in
+force before the first frame.
