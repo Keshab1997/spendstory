@@ -153,14 +153,12 @@ Then: feature sections · privacy section · how-permissions-work section · FAQ
 
 ## 5. What's-new files (Play release notes)
 
-`distribution/whatsnew/` — seeded by the installer.
-| File | Action |
+`distribution/whatsnew/` — three files, one per store listing.
+| File | State |
 |---|---|
 | `whatsnew-en-US` | ✅ exists — edit per release |
-| `whatsnew-bn-BD` | ⚠️ **rename to `whatsnew-bn-IN`** (our target is West Bengal) |
-| `whatsnew-hi-IN` | ➕ **create** (missing) |
-
-**Create now:** `whatsnew-hi-IN` + `whatsnew-bn-IN`, delete `whatsnew-bn-BD`.
+| `whatsnew-hi-IN` | ✅ exists |
+| `whatsnew-bn-IN` | ✅ exists (the installer's `whatsnew-bn-BD` was renamed: our target is West Bengal) |
 
 ```
 whatsnew-en-US: "First release: automatic expense tracking from bank SMS & UPI, 3 languages, offline & private."
@@ -170,15 +168,23 @@ whatsnew-bn-IN: "প্রথম রিলিজ: ব্যাংক SMS ও UPI
 
 ## 6. Testing
 
-```dart
-// test/l10n/l10n_test.dart
-test('all locales have every key', () {
-  final en = json.decode(File('lib/l10n/app_en.arb').readAsStringSync());
-  for (final f in ['app_hi.arb', 'app_bn.arb']) {
-    final other = json.decode(File('lib/l10n/$f').readAsStringSync());
-    final missing = en.keys.where((k) => !k.startsWith('@') && !other.containsKey(k));
-    expect(missing, isEmpty, reason: '$f missing: $missing');
-  }
-});
-```
-Plus: golden test at `bn` locale (longest strings) for Home, Tx list, Paywall — catches overflow before users see it.
+`test/l10n/l10n_test.dart` — **12 tests**, and the parity check is the smallest
+of them. Beyond it:
+
+| Guard | What it stops |
+|---|---|
+| the three ARB files hold the same keys **in the same order** | a key that only English has |
+| the generated table equals the ARB files, key for key | an ARB edit nobody regenerated |
+| `SsStrings.missingKeys` is empty, no key renders `⟦key⟧` | a missing string reaching a screen |
+| gen-l10n emitted a member for every key | a key the framework never learned |
+| every key behind `s['…']` / `strings['…']` / `ref.read(stringsProvider)['…']` / `SsStrings(…)['…']` exists | a typo in a call site, which the `⟦⟧` fallback would otherwise hide until a user saw it |
+| the hand-written getters and the table agree | a getter pointing at a renamed key |
+| `hi`/`bn` are not word-for-word English, except an explicit list | a translation that did not happen |
+
+Every one of these was proved by breaking it (delete a key, paste English, add a
+typo) before it was committed.
+
+Overflow instead of goldens: `test/ui/ui_smoke_test.dart` renders **every route
+in 3 languages × 2 text scales at 360 dp** and fails on overflow, which is the
+failure a golden would catch — without pinning font rasterisation, so a new
+Noto release cannot turn the suite red.

@@ -503,7 +503,7 @@ PDF export credit gets spent.
 ## 🔜 Batch 8 — Localization + compliance screens
 
 - [x] **T-701** `lib/l10n/*.arb` — en/hi/bn full key set
-- [ ] **T-702** `test/l10n/l10n_test.dart` — key parity across locales
+- [x] **T-702** `test/l10n/l10n_test.dart` — key parity across locales
 - [ ] **T-703** Category names in 3 languages (seed)
 - [ ] **T-704** S-21 About/Privacy — text must match `07` §5
 - [ ] **T-705** S-23 Export/Backup — AES-256-GCM + CSV + rewarded PDF
@@ -538,6 +538,21 @@ PDF export credit gets spent.
   typed getters, and a header that says where copy now lives. No screen changed
   in this commit: 267 `s['key']` call sites and the 22 `SsStrings(locale)`
   constructions the tests build still work untouched.
+- `test/l10n/l10n_test.dart` — 12 tests over four groups: the ARB files agree
+  (keys, order, no blanks, no `⟦` pasted in, placeholder metadata covers every
+  `{placeholder}` in all three languages and nothing more); the generated table
+  is the ARB files byte for byte, `ssStringKeys` is the template in order,
+  `SsStrings` never needs its `⟦key⟧` fallback, gen-l10n emitted a member for
+  every key, and the app offers exactly the locales Flutter was given with `en`
+  first; and the copy the screens read (every key behind `s['…']`,
+  `strings['…']`, `ref.read(stringsProvider)['…']`, `SsStrings(…)['…']` exists in
+  the ARB, the hand-written getters and the table agree key for key, and Bengali
+  and Hindi are translations rather than English pasted in - the four keys that
+  are identical on purpose are an explicit list).
+- Each guard was proved by breaking it: a key deleted from `app_bn.arb`, an ARB
+  value edited without regenerating, an English string pasted into `app_bn.arb`,
+  and a typo in a call site (`s['serach']`) - each one turns exactly the
+  intended test red and nothing else. A test that cannot fail is not a guard.
 - One approach was tried and dropped, and it is worth remembering: generating
   **typed getters** as an `extension` in the .g.dart. Extensions resolve only
   where their own library is imported, and export-chain re-exports do not save
