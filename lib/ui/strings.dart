@@ -456,6 +456,10 @@ const Map<String, String> _en = <String, String>{
   'billingCanceled': 'Purchase cancelled. Nothing was charged.',
   'billingFailed': 'The store refused the payment. No money left your account.',
   'billingSucceeded': 'Payment received. Pro is on.',
+  'trialEndsTitle': 'Free trial ending',
+  'trialEndsBody':
+      'Your free trial is nearly over. Cancel any time in the Play Store — '
+      'your ledger stays on this phone either way.',
   'sourceAutoSms': 'Automatically added from SMS',
   'sourceAutoNotification': 'Automatically added from notification',
   'sourceRecurring': 'Recurring payment',
@@ -840,6 +844,8 @@ const Map<String, String> _hi = <String, String>{
   'billingCanceled': 'ख़रीद रद्द। कुछ नहीं कटा।',
   'billingFailed': 'स्टोर ने भुगतान नहीं लिया। आपके खाते से कुछ नहीं गया।',
   'billingSucceeded': 'भुगतान मिल गया। Pro चालू है।',
+  'trialEndsTitle': 'फ़्री ट्रायल ख़त्म हो रहा है',
+  'trialEndsBody': 'आपका फ़्री ट्रायल लगभग पूरा हो गया। Play Store से कभी भी रद्द करें — हिसाब हर हाल में इसी फ़ोन पर रहेगा।',
   'sourceAutoSms': 'SMS से अपने आप जोड़ा गया',
   'sourceAutoNotification': 'सूचना से अपने आप जोड़ा गया',
   'sourceRecurring': 'नियमित भुगतान',
@@ -1223,6 +1229,8 @@ const Map<String, String> _bn = <String, String>{
   'billingCanceled': 'কেনা বাতিল হয়েছে। কোনো টাকা কাটা হয়নি।',
   'billingFailed': 'স্টোর পেমেন্ট নেয়নি। আপনার অ্যাকাউন্ট থেকে টাকা যায়নি।',
   'billingSucceeded': 'পেমেন্ট পেয়ে গেছি। Pro চালু।',
+  'trialEndsTitle': 'ফ্রি ট্রায়াল শেষের পথে',
+  'trialEndsBody': 'আপনার ফ্রি ট্রায়াল প্রায় শেষ। Play Store থেকে যখন খুশি বাতিল করুন — হিসাব তো এই ফোনেই থাকবে।',
   'sourceAutoSms': 'SMS থেকে নিজে থেকেই যোগ হয়েছে',
   'sourceAutoNotification': 'নোটিফিকেশন থেকে নিজে থেকেই যোগ হয়েছে',
   'sourceRecurring': 'নিয়মিত পেমেন্ট',

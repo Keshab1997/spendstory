@@ -332,6 +332,13 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
   prices**, and the tests say so by pattern, not by eye:
   `test/ui/paywall_test.dart` searches every string on the screen for
   `\bleft\b`, `\bending\b`, `was ₹`, `hurry`, `limited time`.
+- **The trial reminder** (`lib/pro/trial_reminder.dart`) is S-22's last rule:
+  Play charges on the eighth day of a yearly trial, so on the *last* day of one
+  — and only on that day, only for a trial bought in this app, only once — the
+  next launch posts a notification that says where to cancel. It says **no
+  price**: the store's price is the store's to state, and a notification is not
+  a place to guess at money. A notification the host refuses stays owed, the
+  same bargain T-505 makes.
 
 **What landed (T-601 … T-603, T-608, T-609):**
 - `lib/ads/` — the whole ads layer, and the only place that knows the SDK

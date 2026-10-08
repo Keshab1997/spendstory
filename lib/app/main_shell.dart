@@ -19,6 +19,7 @@ import 'package:go_router/go_router.dart';
 import '../ads/ad_client.dart';
 import '../pro/paywall_gate.dart';
 import '../pro/pro_controller.dart';
+import '../pro/trial_reminder.dart';
 import '../ui/format.dart';
 import '../ui/tokens.dart';
 import 'providers.dart';
@@ -49,7 +50,14 @@ class _MainShellState extends ConsumerState<MainShell> {
       // Reading what this install already owns is also a start-up job: it is
       // what gives a reinstall its Pro back, and what stops a subscription that
       // lapsed in the store from living on in `app_meta` (T-605).
-      unawaited(ref.read(proControllerProvider).start());
+      unawaited(
+        ref.read(proControllerProvider).start()
+        // …and once that is known, the last-day reminder §S-22 asks for.
+        .then((_) async {
+          if (!mounted) return;
+          await ref.read(trialReminderRunnerProvider)();
+        }),
+      );
 
       // The paywall's own counters, and §S-22's last placement: after the tenth
       // session the app may offer itself once — never more than one a session,
