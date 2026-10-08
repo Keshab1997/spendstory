@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ui/screens/budgets_screen.dart';
 import '../ui/screens/categories_screen.dart';
 import '../ui/screens/coming_soon_screen.dart';
 import '../ui/screens/home_screen.dart';
@@ -166,11 +167,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Outside the shell: pushed on top of the tabs, with a real back stack.
       GoRoute(
         path: '/budgets',
-        builder: (context, state) => const ComingSoonScreen(
-          titleKey: 'budget',
-          subtitleKey: 'budgetPageSubtitle',
-          bodyKey: 'budgetPageBody',
-        ),
+        builder: (context, state) => const BudgetsScreen(),
       ),
       GoRoute(
         path: '/accounts',

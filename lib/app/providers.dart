@@ -142,6 +142,24 @@ final sessionCategoryDeletedProvider = StateProvider<Set<String>>(
   (ref) => const <String>{},
 );
 
+/// Budgets created or edited in this session while there is no database.
+final sessionBudgetPatchesProvider = StateProvider<Map<String, BudgetView>>(
+  (ref) => const <String, BudgetView>{},
+);
+
+final sessionBudgetDeletedProvider = StateProvider<Set<String>>(
+  (ref) => const <String>{},
+);
+
+/// Accounts created or edited in this session while there is no database.
+final sessionAccountPatchesProvider = StateProvider<Map<String, AccountView>>(
+  (ref) => const <String, AccountView>{},
+);
+
+final sessionAccountDeletedProvider = StateProvider<Set<String>>(
+  (ref) => const <String>{},
+);
+
 final transactionsProvider = FutureProvider<List<TxnView>>((ref) async {
   final db = ref.watch(appDbProvider);
   final deleted = ref.watch(sessionDeletedIdsProvider);
@@ -376,49 +394,228 @@ final categoryActionsProvider = Provider<CategoryActions>(
 
 final accountsProvider = FutureProvider<List<AccountView>>((ref) async {
   final db = ref.watch(appDbProvider);
-  if (db == null) return ref.watch(demoLedgerProvider).accounts;
-  final rows = await db.select(db.accounts).get();
-  return [
-    for (final r in rows.where((r) => r.deletedAt == null))
-      AccountView(
-        id: r.id,
-        name: r.name,
-        type: r.type,
-        openingBalancePaise: r.openingBalancePaise,
-        last4: r.last4,
+  final patches = ref.watch(sessionAccountPatchesProvider);
+  final deleted = ref.watch(sessionAccountDeletedProvider);
+
+  final base = db == null
+      ? ref.watch(demoLedgerProvider).accounts
+      : [
+          for (final r in (await db.select(db.accounts).get()).where(
+            (r) => r.deletedAt == null,
+          ))
+            AccountView(
+              id: r.id,
+              name: r.name,
+              type: r.type,
+              openingBalancePaise: r.openingBalancePaise,
+              last4: r.last4,
+              colorHex: r.colorHex,
+            ),
+        ];
+
+  final known = {for (final a in base) a.id};
+  return <AccountView>[
+    for (final a in base)
+      if (!deleted.contains(a.id)) patches[a.id] ?? a,
+    // Accounts created in this session, which have no row behind them yet.
+    for (final entry in patches.entries)
+      if (!known.contains(entry.key) && !deleted.contains(entry.key))
+        entry.value,
+  ];
+});
+
+/// Computed balances, accountId → paise.
+///
+/// Balance is *opening + income − expense* and is never stored
+/// (`docs/05-DATA-MODEL.md` §2). With a database the sum runs in SQL over the
+/// whole table; without one it is folded from the same transaction list every
+/// screen already reads, so the web preview shows a balance that moves when the
+/// user adds a row.
+final accountBalancesProvider = FutureProvider<Map<String, int>>((ref) async {
+  final accounts = ref.watch(accountsProvider).valueOrNull;
+  if (accounts == null || accounts.isEmpty) return const <String, int>{};
+
+  final db = ref.watch(appDbProvider);
+  if (db == null) {
+    final txns = ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
+    final balances = <String, int>{
+      for (final a in accounts) a.id: a.openingBalancePaise,
+    };
+    for (final t in txns) {
+      final id = t.accountId;
+      if (id == null || !balances.containsKey(id)) continue;
+      balances[id] =
+          balances[id]! +
+          (t.direction == TxnDirection.income ? t.amountPaise : -t.amountPaise);
+    }
+    return balances;
+  }
+
+  final repo = TxRepo(db);
+  return {
+    for (final a in accounts) a.id: await repo.balancePaise(a.id),
+  };
+});
+
+/// Create / edit / delete for the accounts screen (S-16).
+class AccountActions {
+  const AccountActions(this._ref);
+
+  final Ref _ref;
+
+  Future<void> save(AccountView account) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionAccountPatchesProvider.notifier)
+          .update((map) => <String, AccountView>{...map, account.id: account});
+      return;
+    }
+    await db
+        .into(db.accounts)
+        .insertOnConflictUpdate(
+          AccountsCompanion.insert(
+            id: account.id,
+            name: account.name,
+            type: account.type,
+            openingBalancePaise: Value(account.openingBalancePaise),
+            last4: Value(account.last4),
+            colorHex: Value(account.colorHex),
+          ),
+        );
+    _ref.invalidate(accountsProvider);
+  }
+
+  /// Soft-hides an account, like a category. The transactions that ran through
+  /// it keep their `accountId`: a hidden account must not silently rewrite the
+  /// history it holds.
+  Future<void> delete(String id) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionAccountDeletedProvider.notifier)
+          .update((ids) => <String>{...ids, id});
+      return;
+    }
+    await (db.update(db.accounts)..where((a) => a.id.equals(id))).write(
+      AccountsCompanion(
+        deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
+    );
+    _ref.invalidate(accountsProvider);
+  }
+}
+
+final accountActionsProvider = Provider<AccountActions>(
+  (ref) => AccountActions(ref),
+);
+
+/// Every budget row, database or demo.
+final budgetsProvider = FutureProvider<List<BudgetView>>((ref) async {
+  final db = ref.watch(appDbProvider);
+  final patches = ref.watch(sessionBudgetPatchesProvider);
+  final deleted = ref.watch(sessionBudgetDeletedProvider);
+
+  final base = db == null
+      ? ref.watch(demoLedgerProvider).budgets
+      : [
+          for (final r in (await db.select(db.budgets).get()).where(
+            (r) => r.deletedAt == null,
+          ))
+            BudgetView.fromRow(r),
+        ];
+
+  final known = {for (final b in base) b.id};
+  return <BudgetView>[
+    for (final b in base)
+      if (!deleted.contains(b.id)) patches[b.id] ?? b,
+    for (final entry in patches.entries)
+      if (!known.contains(entry.key) && !deleted.contains(entry.key))
+        entry.value,
   ];
 });
 
 /// The overall monthly cap, or null when the user has not set one.
 final overallBudgetProvider = FutureProvider<int?>((ref) async {
-  final db = ref.watch(appDbProvider);
-  if (db == null) return ref.watch(demoLedgerProvider).overallBudgetPaise;
-
-  // Chained `where` calls: drift ANDs them, and no boolean-operator extension
-  // (or its import) is needed in this file.
-  final rows =
-      await (db.select(db.budgets)
-            ..where((b) => b.deletedAt.isNull())
-            ..where((b) => b.categoryId.isNull()))
-          .get();
-  if (rows.isEmpty) return null;
-  return rows.first.amountPaise;
+  final budgets = await ref.watch(budgetsProvider.future);
+  for (final b in budgets) {
+    if (b.isOverall) return b.amountPaise;
+  }
+  return null;
 });
 
 /// Per-category caps, categoryId → paise.
 final categoryBudgetsProvider = FutureProvider<Map<String, int>>((ref) async {
-  final db = ref.watch(appDbProvider);
-  if (db == null) return ref.watch(demoLedgerProvider).budgetCaps;
-
-  final rows = await (db.select(
-    db.budgets,
-  )..where((b) => b.deletedAt.isNull())).get();
+  final budgets = await ref.watch(budgetsProvider.future);
   return {
-    for (final r in rows)
-      if (r.categoryId != null) r.categoryId!: r.amountPaise,
+    for (final b in budgets)
+      if (b.categoryId != null) b.categoryId!: b.amountPaise,
   };
 });
+
+/// The overall budget row itself, for the list and the detail route.
+final overallBudgetRowProvider = FutureProvider<BudgetView?>((ref) async {
+  final budgets = await ref.watch(budgetsProvider.future);
+  for (final b in budgets) {
+    if (b.isOverall) return b;
+  }
+  return null;
+});
+
+/// Create / edit / delete for the budget screens (S-14, S-15).
+class BudgetActions {
+  const BudgetActions(this._ref);
+
+  final Ref _ref;
+
+  Future<void> save(BudgetView budget) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionBudgetPatchesProvider.notifier)
+          .update((map) => <String, BudgetView>{...map, budget.id: budget});
+      return;
+    }
+    await db
+        .into(db.budgets)
+        .insertOnConflictUpdate(
+          BudgetsCompanion.insert(
+            id: budget.id,
+            categoryId: Value(budget.categoryId),
+            period: Value(budget.period),
+            amountPaise: budget.amountPaise,
+            startDay: Value(budget.startDay),
+            alertAt80: Value(budget.alertAt80),
+            alertAt100: Value(budget.alertAt100),
+            startsOn: Value(budget.startsOn),
+            endsOn: Value(budget.endsOn),
+          ),
+        );
+    _ref.invalidate(budgetsProvider);
+  }
+
+  /// Removes the cap, not the spending: the rows that were counted against it
+  /// keep their category and stay in the ledger.
+  Future<void> delete(String id) async {
+    final db = _ref.read(appDbProvider);
+    if (db == null) {
+      _ref
+          .read(sessionBudgetDeletedProvider.notifier)
+          .update((ids) => <String>{...ids, id});
+      return;
+    }
+    await (db.update(db.budgets)..where((b) => b.id.equals(id))).write(
+      BudgetsCompanion(
+        deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
+      ),
+    );
+    _ref.invalidate(budgetsProvider);
+  }
+}
+
+final budgetActionsProvider = Provider<BudgetActions>(
+  (ref) => BudgetActions(ref),
+);
 
 // -----------------------------------------------------------------------------
 // derived

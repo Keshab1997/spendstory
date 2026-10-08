@@ -231,6 +231,7 @@ class AccountView {
     required this.type,
     required this.openingBalancePaise,
     this.last4,
+    this.colorHex,
   });
 
   final String id;
@@ -239,7 +240,83 @@ class AccountView {
   final int openingBalancePaise;
   final String? last4;
 
+  /// Optional per-account tint, set by the user in the account editor.
+  final String? colorHex;
+
   String get label => last4 == null ? name : '$name ••$last4';
+}
+
+/// A spending cap, as the UI needs it.
+///
+/// `categoryId == null` is the overall monthly budget — one per ledger, which
+/// is why the whole-app cap and the per-category caps can live in one list and
+/// one screen (`docs/05-DATA-MODEL.md`, `budgets` table).
+class BudgetView {
+  const BudgetView({
+    required this.id,
+    this.categoryId,
+    required this.amountPaise,
+    this.period = 'monthly',
+    this.startDay = 1,
+    this.alertAt80 = true,
+    this.alertAt100 = true,
+    this.startsOn,
+    this.endsOn,
+  });
+
+  final String id;
+
+  /// Null = the overall budget.
+  final String? categoryId;
+
+  final int amountPaise;
+
+  /// `monthly` | `weekly` | `custom`.
+  final String period;
+
+  /// 1–28: the day the cycle starts, for a salary-day budget.
+  final int startDay;
+
+  final bool alertAt80;
+  final bool alertAt100;
+
+  /// Only meaningful for `period: 'custom'`.
+  final int? startsOn;
+  final int? endsOn;
+
+  bool get isOverall => categoryId == null;
+
+  BudgetView copyWith({
+    String? categoryId,
+    bool clearCategory = false,
+    int? amountPaise,
+    String? period,
+    int? startDay,
+    bool? alertAt80,
+    bool? alertAt100,
+  }) => BudgetView(
+    id: id,
+    categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
+    amountPaise: amountPaise ?? this.amountPaise,
+    period: period ?? this.period,
+    startDay: startDay ?? this.startDay,
+    alertAt80: alertAt80 ?? this.alertAt80,
+    alertAt100: alertAt100 ?? this.alertAt100,
+    startsOn: startsOn,
+    endsOn: endsOn,
+  );
+
+  factory BudgetView.fromRow(BudgetRow row) => BudgetView(
+    id: row.id,
+    categoryId: row.categoryId,
+    amountPaise: row.amountPaise,
+    period: row.period,
+    startDay: row.startDay,
+    alertAt80: row.alertAt80,
+    alertAt100: row.alertAt100,
+    startsOn: row.startsOn,
+    endsOn: row.endsOn,
+  );
 }
 
 /// The category ids the rule engine can emit, in the order they should be

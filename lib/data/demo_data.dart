@@ -90,6 +90,22 @@ class DemoLedger {
       ),
   ];
 
+  /// The caps as rows, with the same ids every reload — a budget detail route
+  /// the user can reach from the preview has to stay reachable.
+  List<BudgetView> get budgets => <BudgetView>[
+    if (overallBudgetPaise != null)
+      BudgetView(
+        id: 'demo-budget-overall',
+        amountPaise: overallBudgetPaise!,
+      ),
+    for (final entry in budgetCaps.entries)
+      BudgetView(
+        id: 'demo-budget-${entry.key}',
+        categoryId: entry.key,
+        amountPaise: entry.value,
+      ),
+  ];
+
   /// Categories that have a cap, for the budget screen.
   List<({CategoryView category, int spentPaise, int capPaise})> get budgeted {
     final summary = LedgerSummary.from(
@@ -133,6 +149,8 @@ class DemoLedger {
           500000 // ₹5,000
       ..[Cat.transport] =
           300000 // ₹3,000
+      ..[Cat.bills] =
+          200000 // ₹2,000 — the cap that usually sits near the 80% line
       ..[Cat.entertainment] = 150000; // ₹1,500
   }
 
@@ -153,10 +171,12 @@ class DemoLedger {
       String categoryId, {
       TxnDirection direction = TxnDirection.expense,
       String? note,
+      String? accountId,
     }) {
       if (day < 1 || day > lastDay) {
         return;
       }
+      final mode = modeFor(merchant);
       transactions.add(
         TxnView(
           id: 'demo-${monthStart.year}-${monthStart.month}-${merchant.hashCode}-$day',
@@ -171,9 +191,10 @@ class DemoLedger {
           ).millisecondsSinceEpoch,
           merchant: merchant,
           categoryId: categoryId,
-          mode: modeFor(merchant),
+          mode: mode,
           source: direction == TxnDirection.income ? 'auto_sms' : 'auto_sms',
           note: note,
+          accountId: accountId ?? _accountFor(mode),
         ),
       );
     }
@@ -195,6 +216,7 @@ class DemoLedger {
         Cat.interest,
         direction: TxnDirection.income,
         note: 'এফডি সুদ',
+        accountId: accountSbi,
       );
     }
 
@@ -240,11 +262,18 @@ class DemoLedger {
         'Cashback',
         Cat.otherIncome,
         direction: TxnDirection.income,
+        accountId: accountSbi,
       );
     }
 
     transactions.sort((a, b) => b.occurredAtMs.compareTo(a.occurredAtMs));
   }
+
+  /// Where the money moved. Cash is cash, everything else runs through the
+  /// salary account — and the two income rows that are interest or cashback
+  /// land in the savings account, which is exactly where those arrive.
+  static String _accountFor(PaymentMode mode) =>
+      mode == PaymentMode.cash ? accountCash : accountHdfc;
 
   static PaymentMode modeFor(String merchant) {
     const upiMerchants = <String>{
