@@ -49,7 +49,15 @@ dependencies:
   # SMS and notification permissions. Every call is guarded in
   # lib/platform/permissions.dart, so the web build and the widget tests are
   # unaffected by the plugin's absence.
-  permission_handler: ^13.0.2
+  #
+  # Pinned below 13 on purpose: permission_handler 13 pulls
+  # permission_handler_android 14, whose AAR is built against compileSdk 37 —
+  # newer than both Flutter 3.47's default (36) and the maximum AGP 9.1.0
+  # recommends. The Android build then dies in checkReleaseAarMetadata before a
+  # line of our code is compiled. 12.0.3 resolves permission_handler_android
+  # 13.0.1 (compileSdk 35) and the Dart API the app uses is identical. Undo
+  # this pin when the toolchain moves to AGP 9.2 + compileSdk 37.
+  permission_handler: ^12.0.3
 
   # --- utils ---
   uuid: ^4.5.1

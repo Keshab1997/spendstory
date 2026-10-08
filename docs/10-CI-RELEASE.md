@@ -165,3 +165,33 @@ Recruiting testers: friends/family + r/androidapps + your own contacts. **Do not
 | AdMob eCPM / fill | AdMob console | adjust placement, never add intrusive units |
 | Reviews < 4.0 | Play Console | read every 1–3 ★ review; reply |
 | SMS parse failures | in-app `parse_log` → user-reported JSON | bump `ruleVersion`, ship parser fix |
+
+---
+
+## 11. What the first APK build taught us (2026-10-08)
+
+`ci.yml` runs format + analyze + tests and **deliberately does not build
+Android** (`build-apk: false`, `build-aab: false`), so nothing had ever compiled
+`android/` on CI. The first-ever dispatch of `manual-build.yml` (while landing
+T-706, whose app lock touches `MainActivity`, the manifest and the launch themes)
+failed before reaching a single Kotlin file. Two pre-existing faults, both fixed
+and both worth remembering:
+
+1. **`android/app/build.gradle.kts` did not compile.** Inside the Android DSL
+   block the name `java` resolves to the Java plugin's extension, so a
+   fully-qualified `java.util.Properties()` is an unresolved reference — and the
+   errors around it made Gradle also report the DSL accessor as deprecated. The
+   fix is one explicit `import java.util.Properties`. (The AdMob app-id lookup
+   that needed `Properties` is from T-601; it had never been compiled.)
+2. **`permission_handler` 13 pulls `permission_handler_android` 14**, whose AAR
+   is built against `compileSdk 37` — newer than Flutter 3.47's default (36) and
+   than the maximum AGP 9.1.0 recommends, so
+   `:app:checkReleaseAarMetadata` fails. `pubspec.yaml` now pins
+   `permission_handler: ^12.0.3` (resolves `permission_handler_android` 13.0.1,
+   `compileSdk 35`); the Dart API the app uses is unchanged. Lift the pin when
+   the toolchain moves to AGP 9.2 + compileSdk 37.
+
+**Suggestion for Keshab (workflow change, his call):** give `ci.yml`
+`build-apk: true`, or add a nightly dispatch of `manual-build.yml`. A Dart-green
+repo that cannot assemble an APK is the failure mode nobody sees until release
+day — today's run took 5 minutes and found two of them.
