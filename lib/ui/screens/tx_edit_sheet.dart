@@ -24,7 +24,6 @@ import '../../domain/view_models.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/money.dart';
-import '../format.dart';
 import '../strings.dart';
 import '../tokens.dart';
 
@@ -269,10 +268,7 @@ class _TxEditSheetState extends ConsumerState<TxEditSheet> {
                             icon: Icons.event_rounded,
                             label: _isToday(_date)
                                 ? s.today
-                                : shortDate(
-                                    _date.millisecondsSinceEpoch,
-                                    locale: locale,
-                                  ),
+                                : s.shortDate(_date.millisecondsSinceEpoch),
                             onTap: _pickDate,
                           ),
                         ),

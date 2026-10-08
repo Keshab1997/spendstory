@@ -330,12 +330,12 @@
   "alert100Title": "बजट पार हो गया",
   "alert100BodyTemplate": "{cat}: {amt} ज़्यादा",
   "recurringTitle": "नियमित भुगतान और रिमाइंडर",
-  "recurringStripTitle": "अगले ३० दिन",
+  "recurringStripTitle": "अगले 30 दिन",
   "recurringEmptyTitle": "अभी कुछ नहीं",
   "recurringEmptyBody": "किराया, EMI और सब्सक्रिप्शन — एक बार सेट करें, खर्च खुद लिखा जाएगा या याद दिलाया जाएगा।",
   "recurringAdd": "नियमित भुगतान जोड़ें",
   "recurringNextDueTemplate": "अगली बार {date}",
-  "recurringDueCountTemplate": "अगले ३० दिनों में {n}",
+  "recurringDueCountTemplate": "अगले 30 दिनों में {n}",
   "recurringAutoPost": "अपने आप लिख जाए",
   "recurringAutoPostNote": "तारीख आने पर खर्च खुद बही में जुड़ जाएगा।",
   "recurringRemindNote": "इसके लिए कोई रिमाइंडर नहीं है।",
@@ -473,5 +473,7 @@
   "lockBody": "फ़िंगरप्रिंट, चेहरा या फ़ोन के PIN से खोलें।",
   "lockUnlock": "खोलें",
   "lockUnavailableBody": "इस फ़ोन में फ़िंगरप्रिंट, चेहरा या PIN — कुछ भी सेट नहीं है, इसलिए जाँच नहीं हो सकती कि आप ही हैं।",
-  "lockTurnOff": "ऐप लॉक बंद करके खोलें"
+  "lockTurnOff": "ऐप लॉक बंद करके खोलें",
+  "settingsNumerals": "देवनागरी अंक दिखाएँ",
+  "settingsNumeralsBody": "रकम, तारीख़ और प्रतिशत इस भाषा के अंकों में"
 }

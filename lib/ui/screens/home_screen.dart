@@ -26,7 +26,6 @@ import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/money.dart';
 import '../components/surfaces.dart';
-import '../format.dart';
 import '../tokens.dart';
 import 'tx_edit_sheet.dart';
 
@@ -89,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
                       s.greeting,
                       style: SsText.caption.copyWith(color: c.textSecondary),
                     ),
-                    Text(monthLabel(month, locale: locale), style: SsText.h1),
+                    Text(s.monthLabel(month), style: SsText.h1),
                   ],
                 ),
               ),
@@ -135,11 +134,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     if (previous.expensePaise > 0) ...[
                       const SizedBox(width: SsSpace.x2),
-                      MoneyDelta(
-                        deltaPercent: delta,
-                        onDark: true,
-                        locale: locale,
-                      ),
+                      MoneyDelta(deltaPercent: delta, onDark: true, strings: s),
                       const SizedBox(width: SsSpace.x1),
                       Flexible(
                         child: Text(
@@ -294,7 +289,7 @@ class HomeScreen extends ConsumerWidget {
                     TxRow(
                       txn: recent[i],
                       category: categoryById[recent[i].categoryId],
-                      locale: locale,
+                      strings: s,
                       dense: true,
                       onTap: () =>
                           context.push('/transactions/${recent[i].id}'),

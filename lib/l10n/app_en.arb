@@ -633,5 +633,7 @@
   "lockBody": "Open with your fingerprint, face or phone PIN.",
   "lockUnlock": "Unlock",
   "lockUnavailableBody": "Nothing on this phone can check that it is you — no fingerprint, no face and no PIN is set up.",
-  "lockTurnOff": "Turn off the app lock and open"
+  "lockTurnOff": "Turn off the app lock and open",
+  "settingsNumerals": "Show local numerals",
+  "settingsNumeralsBody": "Amounts, dates and percentages in this language's own digits"
 }

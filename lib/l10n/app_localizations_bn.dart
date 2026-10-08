@@ -17,7 +17,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'SpendStory আপনার ব্যাঙ্কের লেনদেন SMS আর পেমেন্ট অ্যাপের নোটিফিকেশন পড়ে খরচ নিজেই লিখে রাখে। টাইপ করার দরকার নেই।';
 
   @override
-  String get ob1B1 => '৫০টি ব্যাঙ্ক সেন্ডার সাপোর্ট করে';
+  String get ob1B1 => '50টি ব্যাঙ্ক সেন্ডার সাপোর্ট করে';
 
   @override
   String get ob1B2 => 'লাখ-ফরম্যাটের অঙ্কও ঠিক পড়ে';
@@ -36,7 +36,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get ob2B1 => 'ক্যাটাগরি ভাগ আর টপ দোকান';
 
   @override
-  String get ob2B2 => 'মাসিক বাজেট, ৮০% এ সতর্কতা';
+  String get ob2B2 => 'মাসিক বাজেট, 80% এ সতর্কতা';
 
   @override
   String get ob2B3 => 'মাস শেষে কত হবে তার পূর্বাভাস';
@@ -266,7 +266,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get thisMonth => 'এই মাসে';
 
   @override
-  String get trend => 'গত ৬ মাস';
+  String get trend => 'গত 6 মাস';
 
   @override
   String get topCategories => 'টাকা কোথায় গেল';
@@ -311,7 +311,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'SpendStory শুধু ব্যাঙ্কের লেনদেনের SMS পড়ে — OTP কখনো নয়। কোনো ডেটা সার্ভারে পাঠানো হয় না, অ্যাকাউন্টও লাগে না। অ্যাপ আনইনস্টল করলে ফোন থেকে সব ডেটা মুছে যাবে।';
 
   @override
-  String get privacyOnDevice => '১০০% ডিভাইসেই';
+  String get privacyOnDevice => '100% ডিভাইসেই';
 
   @override
   String get version => 'ভার্সন';
@@ -336,7 +336,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get comingSoonBody =>
-      'এই স্ক্রিনটা ব্যাচ ৪–৬ এ বানবে। এখন শেল, থিম আর ডেমো ডেটা চালু।';
+      'এই স্ক্রিনটা ব্যাচ 4–6 এ বানবে। এখন শেল, থিম আর ডেমো ডেটা চালু।';
 
   @override
   String get adLabel => 'বিজ্ঞাপন';
@@ -416,21 +416,21 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get transactionDetailBody =>
-      'SMS-এর মূল লেখা, ক্যাটাগরি বদল, নোট যোগ আর মুছে ফেলা — সব এখানে থাকবে। ব্যাচ ৫ (T-403) এ আসছে।';
+      'SMS-এর মূল লেখা, ক্যাটাগরি বদল, নোট যোগ আর মুছে ফেলা — সব এখানে থাকবে। ব্যাচ 5 (T-403) এ আসছে।';
 
   @override
   String get categoryPageSubtitle => 'S-13 · ক্যাটাগরি ম্যানেজার';
 
   @override
   String get categoryPageBody =>
-      'নিজের ক্যাটাগরি তৈরি করুন, আইকন আর রং বেছে নিন। ব্যাচ ৫ (T-405) এ আসছে।';
+      'নিজের ক্যাটাগরি তৈরি করুন, আইকন আর রং বেছে নিন। ব্যাচ 5 (T-405) এ আসছে।';
 
   @override
   String get searchPageSubtitle => 'S-18 · সার্চ ও ফিল্টার';
 
   @override
   String get searchPageBody =>
-      'মার্চেন্ট, টাকার অঙ্ক বা তারিখ দিয়ে লেনদেন খুঁজুন। ব্যাচ ৫ (T-406) এ আসছে।';
+      'মার্চেন্ট, টাকার অঙ্ক বা তারিখ দিয়ে লেনদেন খুঁজুন। ব্যাচ 5 (T-406) এ আসছে।';
 
   @override
   String get notFoundTitle => 'পাতা খুঁজে পাওয়া গেল না';
@@ -652,7 +652,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get planMonthlyNote => 'প্রতি মাসে';
 
   @override
-  String get planYearlyNote => 'প্রতি বছরে · ৪১% সাশ্রয়';
+  String get planYearlyNote => 'প্রতি বছরে · 41% সাশ্রয়';
 
   @override
   String get planLifetimeNote => 'একবার, চিরদিনের জন্য';
@@ -684,7 +684,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'CSV এক্সপোর্ট সবার জন্য ফ্রি। PDF স্টেটমেন্ট Pro-তে পাওয়া যায়, নয়তো একটা rewarded ad দেখে।';
 
   @override
-  String get trialDisclaimer => '৭ দিন ফ্রি, যেকোনো সময় বাতিল করুন।';
+  String get trialDisclaimer => '7 দিন ফ্রি, যেকোনো সময় বাতিল করুন।';
 
   @override
   String get popular => 'সবচেয়ে জনপ্রিয়';
@@ -693,11 +693,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get proActive => 'Pro চালু আছে';
 
   @override
-  String get startTrial => '৭ দিনের ফ্রি ট্রায়াল শুরু করুন';
+  String get startTrial => '7 দিনের ফ্রি ট্রায়াল শুরু করুন';
 
   @override
   String get proActivatedDemo =>
-      'ডেমো: Pro চালু হয়েছে, বিজ্ঞাপন লুকানো। আসল বিলিং ব্যাচ ৭ (T-601) এ আসছে।';
+      'ডেমো: Pro চালু হয়েছে, বিজ্ঞাপন লুকানো। আসল বিলিং ব্যাচ 7 (T-601) এ আসছে।';
 
   @override
   String get billingNotAvailable =>
@@ -783,17 +783,17 @@ class AppLocalizationsBn extends AppLocalizations {
       'এখন ফর্ম খোলা গেল না। কিছুক্ষণ পরে চেষ্টা করুন।';
 
   @override
-  String get planTaste => '২৪ ঘণ্টার টেস্ট';
+  String get planTaste => '24 ঘণ্টার টেস্ট';
 
   @override
   String get proTasteBody =>
-      '২৪ ঘণ্টার জন্য Pro চালু। বিজ্ঞাপন বন্ধ, পূর্বাভাস খোলা — দেখার জন্য ধন্যবাদ।';
+      '24 ঘণ্টার জন্য Pro চালু। বিজ্ঞাপন বন্ধ, পূর্বাভাস খোলা — দেখার জন্য ধন্যবাদ।';
 
   @override
-  String get watchAdForTaste => 'বিজ্ঞাপন দেখে ২৪ ঘণ্টার Pro নিন';
+  String get watchAdForTaste => 'বিজ্ঞাপন দেখে 24 ঘণ্টার Pro নিন';
 
   @override
-  String get tasteEarned => '২৪ ঘণ্টার জন্য Pro চালু হলো। উপভোগ করুন।';
+  String get tasteEarned => '24 ঘণ্টার জন্য Pro চালু হলো। উপভোগ করুন।';
 
   @override
   String get tasteMissed =>
@@ -804,7 +804,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tasteTomorrow =>
-      'আজকের ২৪ ঘণ্টার Pro নেওয়া হয়ে গেছে। কাল আবার আসবে।';
+      'আজকের 24 ঘণ্টার Pro নেওয়া হয়ে গেছে। কাল আবার আসবে।';
 
   @override
   String get trialEndsTitle => 'ফ্রি ট্রায়াল শেষের পথে';
@@ -839,7 +839,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get budgetEmptyBody =>
-      'একটা সামগ্রিক সীমা, বা ক্যাটাগরি ধরে আলাদা। ৮০% হলে সতর্ক করবে, ছাড়িয়ে গেলে আবার।';
+      'একটা সামগ্রিক সীমা, বা ক্যাটাগরি ধরে আলাদা। 80% হলে সতর্ক করবে, ছাড়িয়ে গেলে আবার।';
 
   @override
   String get budgetOverallCap => 'সামগ্রিক মাসিক বাজেট';
@@ -863,7 +863,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get budgetAlertsLabel => 'সতর্কতা';
 
   @override
-  String get budgetAlert80 => '৮০% হলে জানাবে';
+  String get budgetAlert80 => '80% হলে জানাবে';
 
   @override
   String get budgetAlert100 => 'ছাড়িয়ে গেলে জানাবে';
@@ -956,7 +956,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get accountOpeningBalance => 'শুরুর ব্যালেন্স';
 
   @override
-  String get accountLast4 => 'শেষ ৪ সংখ্যা (ঐচ্ছিক)';
+  String get accountLast4 => 'শেষ 4 সংখ্যা (ঐচ্ছিক)';
 
   @override
   String get accountColor => 'রঙ';
@@ -994,7 +994,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get periodCustom => 'নিজের মতো';
 
   @override
-  String get trend30 => 'গত ৩০ দিনের দৈনিক খরচ';
+  String get trend30 => 'গত 30 দিনের দৈনিক খরচ';
 
   @override
   String get topMerchants => 'সবচেয়ে বেশি খরচ কোথায়';
@@ -1050,7 +1050,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get alert80Title => 'বাজেটের ৮০% শেষ';
+  String get alert80Title => 'বাজেটের 80% শেষ';
 
   @override
   String alert80BodyTemplate(String amt, String cat) {
@@ -1069,7 +1069,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get recurringTitle => 'নিয়মিত পেমেন্ট ও রিমাইন্ডার';
 
   @override
-  String get recurringStripTitle => 'আগামী ৩০ দিন';
+  String get recurringStripTitle => 'আগামী 30 দিন';
 
   @override
   String get recurringEmptyTitle => 'এখনও কিছু নেই';
@@ -1088,7 +1088,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String recurringDueCountTemplate(String n) {
-    return 'আগামী ৩০ দিনে $nটি';
+    return 'আগামী 30 দিনে $nটি';
   }
 
   @override
@@ -1325,7 +1325,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get aboutContactBody =>
-      'লিখে পাঠাও, ৩০ দিনের মধ্যে উত্তর পাবে। তোমার ডেটা তোমার ফোনে, তাই আমরা তোমার খাতা দেখতে পারি না — কিন্তু যা নষ্ট তা ঠিক করতে পারি।';
+      'লিখে পাঠাও, 30 দিনের মধ্যে উত্তর পাবে। তোমার ডেটা তোমার ফোনে, তাই আমরা তোমার খাতা দেখতে পারি না — কিন্তু যা নষ্ট তা ঠিক করতে পারি।';
 
   @override
   String get aboutGrievanceEmail => 'সাপোর্ট ইমেল';
@@ -1368,10 +1368,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get exportPassword => 'পাসওয়ার্ড';
 
   @override
-  String get exportPasswordHint => 'অন্তত ৮ অক্ষর। ফিরিয়ে আনতে এটাই লাগবে।';
+  String get exportPasswordHint => 'অন্তত 8 অক্ষর। ফিরিয়ে আনতে এটাই লাগবে।';
 
   @override
-  String get exportPasswordTooShort => 'অন্তত ৮ অক্ষর দাও।';
+  String get exportPasswordTooShort => 'অন্তত 8 অক্ষর দাও।';
 
   @override
   String get exportCreateBackup => 'ব্যাকআপ ফাইল বানাও';
@@ -1553,4 +1553,11 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get lockTurnOff => 'অ্যাপ লক বন্ধ করে খুলুন';
+
+  @override
+  String get settingsNumerals => 'বাংলা সংখ্যা দেখাও';
+
+  @override
+  String get settingsNumeralsBody =>
+      'টাকার অঙ্ক, তারিখ আর শতাংশ বাংলা হরফে দেখাবে';
 }

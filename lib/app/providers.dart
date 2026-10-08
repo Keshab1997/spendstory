@@ -18,7 +18,7 @@ import '../data/connection_io.dart'
     if (dart.library.js_interop) '../data/connection_web.dart';
 import '../data/db.dart';
 import '../data/demo_data.dart';
-import '../data/seed.dart' show kAppLockMetaKey;
+import '../data/seed.dart' show kAppLockMetaKey, kNumeralsMetaKey;
 import '../data/recurring_tasks.dart';
 import '../pro/entitlement.dart';
 import '../data/tx_repo.dart';
@@ -56,11 +56,17 @@ class BootState {
     required this.demoMode,
     required this.locale,
     this.appLock = false,
+    this.numerals = false,
   });
 
   final bool onboarded;
   final bool demoMode;
   final String locale;
+
+  /// The S-20 numerals switch, as stored. Defaulted rather than required for the
+  /// same reason as [appLock]: a test that only cares about onboarding does not
+  /// have to know about it — and "off" is the documented default anyway.
+  final bool numerals;
 
   /// The S-20 app-lock switch, as stored. Defaulted rather than required so a
   /// test that only cares about onboarding does not have to know about it.
@@ -94,12 +100,20 @@ final bootProvider = FutureProvider<BootState>((ref) async {
     // lock when this comes back true, so the first frame the user could see is
     // already the lock screen rather than a ledger that flashes before it.
     appLock: (await db.meta(kAppLockMetaKey)) == 'true',
+    numerals: (await db.meta(kNumeralsMetaKey)) == 'true',
   );
 });
 
 /// Active language: `bn` | `hi` | `en`. Switched instantly from Settings or the
 /// language screen — no restart, no reload.
 final localeProvider = StateProvider<String>((ref) => 'bn');
+
+/// Whether to write numbers in the language's own digits: `১২৪০` rather than
+/// `1,240` (T-707, docs/09 §2). Separate from [localeProvider] because they are
+/// separate choices — the words follow the language, the digits follow this
+/// switch — and because a Bengali reader who leaves it off is the default, not
+/// an edge case.
+final numeralsProvider = StateProvider<bool>((ref) => false);
 
 /// How the permission screens talk to the platform. Overridden in tests, where
 /// there is no Android host to answer (see [PermissionsApi]).
@@ -108,7 +122,10 @@ final permissionsProvider = Provider<PermissionsApi>(
 );
 
 final stringsProvider = Provider<SsStrings>(
-  (ref) => SsStrings(ref.watch(localeProvider)),
+  (ref) => SsStrings(
+    ref.watch(localeProvider),
+    nativeDigits: ref.watch(numeralsProvider),
+  ),
 );
 
 /// The clock, as a provider.
@@ -1022,7 +1039,6 @@ final recurringRunnerProvider = Provider<RecurringRunner>((ref) {
     final owed = owedRecurringReminders(
       rules: [for (final rule in rules) advanced[rule.id] ?? rule],
       strings: ref.read(stringsProvider),
-      locale: ref.read(localeProvider),
       nowMs: nowMs,
       sentOn: await records(_kRemindedPrefix),
     );
@@ -1086,14 +1102,14 @@ final sixMonthTrendProvider = Provider<List<int>>((ref) {
 
 /// Six short month labels matching [sixMonthTrendProvider].
 final sixMonthLabelsProvider = Provider<List<String>>((ref) {
-  final locale = ref.watch(localeProvider);
+  final strings = ref.watch(stringsProvider);
   final now = DateTime.now();
   return [
     for (var i = 5; i >= 0; i--)
-      monthLabel(
-        DateTime(now.year, now.month - i).millisecondsSinceEpoch,
-        locale: locale,
-      ).split(' ').first,
+      strings
+          .monthLabel(DateTime(now.year, now.month - i).millisecondsSinceEpoch)
+          .split(' ')
+          .first,
   ];
 });
 

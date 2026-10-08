@@ -1564,4 +1564,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lockTurnOff => 'Turn off the app lock and open';
+
+  @override
+  String get settingsNumerals => 'Show local numerals';
+
+  @override
+  String get settingsNumeralsBody =>
+      'Amounts, dates and percentages in this language\'s own digits';
 }

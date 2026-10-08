@@ -81,11 +81,12 @@ const _categories = <String, CategoryView>{
 List<BudgetAlert> _owed(
   List<BudgetStatus> statuses, {
   String locale = 'en',
+  bool nativeDigits = false,
   Map<String, String> sentOn = const <String, String>{},
   String today = '2026-10-07',
 }) => owedBudgetAlerts(
   statuses: statuses,
-  strings: SsStrings(locale),
+  strings: SsStrings(locale, nativeDigits: nativeDigits),
   locale: locale,
   today: today,
   sentOn: sentOn,
@@ -159,11 +160,22 @@ void main() {
       expect(owed.single.body, 'Overall monthly budget: ₹100 left');
     });
 
-    test('the copy is localised, digits and all', () {
+    test('the copy is localised, and the digits are Latin by default', () {
       final owed = _owed([_status(spentPaise: 80000)], locale: 'bn');
       expect(owed.single.title, SsStrings('bn')['alert80Title']);
-      expect(owed.single.body, contains('২০০'));
+      // Bengali words around a Latin number — what the bank's own SMS said
+      // (docs/09 §2). `২০২` is the opt-in (T-707).
+      expect(owed.single.body, contains('200'));
       expect(owed.single.body, isNot(contains('⟦')));
+    });
+
+    test('the numerals switch reaches a notification body', () {
+      final owed = _owed(
+        [_status(spentPaise: 80000)],
+        locale: 'bn',
+        nativeDigits: true,
+      );
+      expect(owed.single.body, contains('২০০'));
     });
   });
 

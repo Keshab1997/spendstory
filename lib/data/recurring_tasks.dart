@@ -14,7 +14,6 @@ library;
 import '../domain/recurring_math.dart';
 import '../domain/view_models.dart';
 import '../ui/components/money.dart' show formatInr;
-import '../ui/format.dart' show localizeDigits;
 import '../ui/strings.dart';
 import 'budget_alerts.dart' show alertDay;
 
@@ -108,14 +107,16 @@ class RecurringReminder {
 List<RecurringReminder> owedRecurringReminders({
   required List<RecurringRuleView> rules,
   required SsStrings strings,
-  required String locale,
   required int nowMs,
   required Map<String, String> sentOn,
 }) {
   final owed = <RecurringReminder>[];
   final todayStart = dayStartMs(nowMs);
-  String amountOf(RecurringRuleView rule) =>
-      formatInr(rule.amountPaise, showSymbol: true, localize: locale);
+  String amountOf(RecurringRuleView rule) => formatInr(
+    rule.amountPaise,
+    showSymbol: true,
+    localize: strings.numeralLocale,
+  );
 
   for (final rule in rules) {
     if (!rule.reminds) continue;
@@ -138,7 +139,7 @@ List<RecurringReminder> owedRecurringReminders({
         <String, String>{
           'title': rule.title,
           'amt': amountOf(rule),
-          'n': localizeDigits('${daysBetweenDays(todayStart, due)}', locale),
+          'n': strings.digits('${daysBetweenDays(todayStart, due)}'),
         },
       ),
     );

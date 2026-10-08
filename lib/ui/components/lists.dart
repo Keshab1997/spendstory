@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 
 import '../../domain/models.dart';
 import '../../domain/view_models.dart';
-import '../format.dart';
 import '../strings.dart';
 import '../tokens.dart';
 import 'money.dart';
@@ -123,7 +122,7 @@ class TxRow extends StatelessWidget {
   const TxRow({
     super.key,
     required this.txn,
-    required this.locale,
+    required this.strings,
     this.category,
     this.onTap,
     this.showDate = true,
@@ -131,7 +130,10 @@ class TxRow extends StatelessWidget {
   });
 
   final TxnView txn;
-  final String locale;
+
+  /// Words *and* digits: [SsStrings.locale] picks the copy, and its
+  /// `nativeDigits` picks the numeral system the date is written in (T-707).
+  final SsStrings strings;
   final CategoryView? category;
   final VoidCallback? onTap;
   final bool showDate;
@@ -144,11 +146,11 @@ class TxRow extends StatelessWidget {
 
     final title = txn.merchant?.trim().isNotEmpty == true
         ? txn.merchant!.trim()
-        : (category?.label(locale) ?? SsStrings(locale)['unknownCategory']);
+        : (category?.label(strings.locale) ?? strings['unknownCategory']);
 
     final meta = <String>[
-      if (category != null) category!.label(locale),
-      if (showDate) shortDate(txn.occurredAtMs, locale: locale),
+      if (category != null) category!.label(strings.locale),
+      if (showDate) strings.shortDate(txn.occurredAtMs),
     ].join(' · ');
 
     return InkWell(

@@ -19,7 +19,6 @@ import '../components/category_sheet.dart';
 import '../components/controls.dart';
 import '../components/money.dart';
 import '../components/surfaces.dart';
-import '../format.dart';
 import '../tokens.dart';
 import 'tx_edit_sheet.dart';
 
@@ -109,8 +108,8 @@ class TxDetailScreen extends ConsumerWidget {
                 _DetailRow(
                   label: s.detailDate,
                   value:
-                      '${dayLabel(txn.occurredAtMs, locale: locale)}'
-                      ' · ${timeOfDay(txn.occurredAtMs, locale: locale)}',
+                      '${s.dayLabel(txn.occurredAtMs)}'
+                      ' · ${s.timeOfDay(txn.occurredAtMs)}',
                 ),
                 _DetailRow(
                   label: s.detailCategory,

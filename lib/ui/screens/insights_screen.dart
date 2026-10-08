@@ -106,7 +106,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
           Text(s.insights, style: SsText.h1),
           const SizedBox(height: SsSpace.x1),
           Text(
-            _windowLabel(s, locale, now),
+            _windowLabel(s, now),
             style: SsText.caption.copyWith(color: c.textSecondary),
           ),
           const SizedBox(height: SsSpace.x5),
@@ -125,13 +125,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
           ),
           if (_period == InsightsPeriod.custom) ...[
             const SizedBox(height: SsSpace.x3),
-            _RangeRow(
-              strings: s,
-              from: _from,
-              to: _to,
-              locale: locale,
-              onTap: _pickRange,
-            ),
+            _RangeRow(strings: s, from: _from, to: _to, onTap: _pickRange),
           ],
           const SizedBox(height: SsSpace.x5),
 
@@ -178,7 +172,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                     _LegendRow(
                       label: categoryById[entry.key]?.label(locale) ?? '—',
                       icon: categoryById[entry.key]?.icon ?? '💳',
-                      locale: locale,
+                      strings: s,
                       colour: categoryById[entry.key]?.color ?? c.violet600,
                       amountPaise: entry.value,
                       share: summary.expensePaise == 0
@@ -206,23 +200,21 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                   Row(
                     children: [
                       Text(
-                        shortDate(
+                        s.shortDate(
                           DateTime(now.year, now.month, now.day)
                               .subtract(const Duration(days: 29))
                               .millisecondsSinceEpoch,
-                          locale: locale,
                         ),
                         style: SsText.micro.copyWith(color: c.textTertiary),
                       ),
                       const Spacer(),
                       Text(
-                        shortDate(
+                        s.shortDate(
                           DateTime(
                             now.year,
                             now.month,
                             now.day,
                           ).millisecondsSinceEpoch,
-                          locale: locale,
                         ),
                         style: SsText.micro.copyWith(color: c.textTertiary),
                       ),
@@ -267,7 +259,6 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                     label: s.expense,
                     currentPaise: summary.expensePaise,
                     previousPaise: previous.expensePaise,
-                    locale: locale,
                     strings: s,
                   ),
                   const SizedBox(height: SsSpace.x3),
@@ -275,7 +266,6 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                     label: s.income,
                     currentPaise: summary.incomePaise,
                     previousPaise: previous.incomePaise,
-                    locale: locale,
                     strings: s,
                     goodWhenDown: false,
                   ),
@@ -551,20 +541,19 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
     }
   }
 
-  String _windowLabel(SsStrings s, String locale, DateTime now) {
+  String _windowLabel(SsStrings s, DateTime now) {
     switch (_period) {
       case InsightsPeriod.week:
         return s['periodWeek'];
       case InsightsPeriod.year:
-        return localizeDigits('${now.year}', locale);
+        return s.digits('${now.year}');
       case InsightsPeriod.custom:
         if (_from == null || _to == null) return s['periodCustom'];
-        return '${shortDate(_from!.millisecondsSinceEpoch, locale: locale)}'
-            ' – ${shortDate(_to!.millisecondsSinceEpoch, locale: locale)}';
+        return '${s.shortDate(_from!.millisecondsSinceEpoch)}'
+            ' – ${s.shortDate(_to!.millisecondsSinceEpoch)}';
       case InsightsPeriod.month:
-        return monthLabel(
+        return s.monthLabel(
           DateTime(now.year, now.month).millisecondsSinceEpoch,
-          locale: locale,
         );
     }
   }
@@ -718,7 +707,7 @@ class _LegendRow extends StatelessWidget {
     required this.colour,
     required this.amountPaise,
     required this.share,
-    required this.locale,
+    required this.strings,
     required this.onTap,
   });
 
@@ -727,7 +716,7 @@ class _LegendRow extends StatelessWidget {
   final Color colour;
   final int amountPaise;
   final double share;
-  final String locale;
+  final SsStrings strings;
   final VoidCallback onTap;
 
   @override
@@ -780,10 +769,7 @@ class _LegendRow extends StatelessWidget {
               children: [
                 MoneyText(amountPaise, style: SsText.bodyStrong),
                 Text(
-                  localizeDigits(
-                    '${(share * 100).toStringAsFixed(0)}%',
-                    locale,
-                  ),
+                  strings.digits('${(share * 100).toStringAsFixed(0)}%'),
                   style: SsText.micro.copyWith(color: c.textTertiary),
                 ),
               ],
@@ -847,7 +833,6 @@ class _CompareRow extends StatelessWidget {
     required this.label,
     required this.currentPaise,
     required this.previousPaise,
-    required this.locale,
     required this.strings,
     this.goodWhenDown = true,
   });
@@ -855,7 +840,6 @@ class _CompareRow extends StatelessWidget {
   final String label;
   final int currentPaise;
   final int previousPaise;
-  final String locale;
   final SsStrings strings;
   final bool goodWhenDown;
 
@@ -896,7 +880,7 @@ class _CompareRow extends StatelessWidget {
                 else
                   MoneyDelta(
                     deltaPercent: delta,
-                    locale: locale,
+                    strings: strings,
                     goodWhenDown: goodWhenDown,
                   ),
               ],
@@ -958,7 +942,7 @@ class _Findings extends StatelessWidget {
           const SizedBox(height: SsSpace.x1),
           Text(
             '${categories[jump.$1]?.label(locale) ?? '—'} · '
-            '${strings.fill('deltaMoreTemplate', {'pct': localizeDigits('${jump.$2.round()}', locale)})}',
+            '${strings.fill('deltaMoreTemplate', {'pct': strings.digits('${jump.$2.round()}')})}',
             style: SsText.bodyStrong,
           ),
           const SizedBox(height: SsSpace.x4),
@@ -992,14 +976,12 @@ class _RangeRow extends StatelessWidget {
     required this.strings,
     required this.from,
     required this.to,
-    required this.locale,
     required this.onTap,
   });
 
   final SsStrings strings;
   final DateTime? from;
   final DateTime? to;
-  final String locale;
   final VoidCallback onTap;
 
   @override
@@ -1008,9 +990,8 @@ class _RangeRow extends StatelessWidget {
 
     String show(DateTime? d) => d == null
         ? '—'
-        : shortDate(
+        : strings.shortDate(
             DateTime(d.year, d.month, d.day).millisecondsSinceEpoch,
-            locale: locale,
           );
 
     return SsCard(
@@ -1056,6 +1037,9 @@ class _CategorySheet extends StatelessWidget {
   final int amountPaise;
   final LedgerSummary summary;
   final SsStrings strings;
+
+  /// The category name is copy, so it stays on the language while the sheet's
+  /// numbers follow the numerals switch.
   final String locale;
 
   @override
@@ -1098,7 +1082,7 @@ class _CategorySheet extends StatelessWidget {
             const SizedBox(height: SsSpace.x1),
             Text(
               strings.fill('shareOfSpendingTemplate', {
-                'pct': localizeDigits('$share', locale),
+                'pct': strings.digits('$share'),
               }),
               style: SsText.body.copyWith(color: c.textSecondary),
             ),

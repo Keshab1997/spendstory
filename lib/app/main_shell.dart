@@ -21,7 +21,7 @@ import '../pro/paywall_gate.dart';
 import '../pro/pro_controller.dart';
 import '../pro/rewards.dart';
 import '../pro/trial_reminder.dart';
-import '../ui/format.dart';
+import '../ui/strings.dart';
 import '../ui/tokens.dart';
 import 'providers.dart';
 
@@ -101,7 +101,6 @@ class _MainShellState extends ConsumerState<MainShell> {
     });
 
     final s = ref.watch(stringsProvider);
-    final locale = ref.watch(localeProvider);
     final uncategorised = ref.watch(uncategorisedCountProvider);
     final pro = ref.watch(proStatusProvider);
 
@@ -134,7 +133,7 @@ class _MainShellState extends ConsumerState<MainShell> {
       extendBody: true,
       body: widget.shell,
       bottomNavigationBar: _FloatingNav(
-        locale: locale,
+        strings: s,
         items: items,
         currentIndex: widget.shell.currentIndex,
         onTap: (index) => widget.shell.goBranch(
@@ -169,10 +168,12 @@ class _FloatingNav extends StatelessWidget {
     required this.items,
     required this.currentIndex,
     required this.onTap,
-    this.locale = 'bn',
+    required this.strings,
   });
 
-  final String locale;
+  /// Carries the badge's numerals too: the count on the Transactions tab is a
+  /// number like any other (T-707).
+  final SsStrings strings;
   final List<_NavItem> items;
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -207,7 +208,7 @@ class _FloatingNav extends StatelessWidget {
                 for (var i = 0; i < items.length; i++)
                   Expanded(
                     child: _NavButton(
-                      locale: locale,
+                      strings: strings,
                       item: items[i],
                       selected: i == currentIndex,
                       onTap: () => onTap(i),
@@ -227,10 +228,10 @@ class _NavButton extends StatelessWidget {
     required this.item,
     required this.selected,
     required this.onTap,
-    this.locale = 'bn',
+    required this.strings,
   });
 
-  final String locale;
+  final SsStrings strings;
   final _NavItem item;
   final bool selected;
   final VoidCallback onTap;
@@ -277,7 +278,7 @@ class _NavButton extends StatelessWidget {
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
-                        localizeDigits('${item.badge}', locale),
+                        strings.digits('${item.badge}'),
                         textAlign: TextAlign.center,
                         style: SsText.micro.copyWith(
                           color: Colors.white,

@@ -19,7 +19,6 @@ import '../../domain/recurring_math.dart';
 import '../../domain/view_models.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
-import '../format.dart';
 import '../tokens.dart';
 
 Future<bool> showRecurringEditor(
@@ -329,7 +328,7 @@ class _RecurringEditorSheetState extends ConsumerState<RecurringEditorSheet> {
 
           _Stepper(
             label: s['recurringIntervalLabel'],
-            value: localizeDigits('$_interval', locale),
+            value: s.digits('$_interval'),
             onMinus: _interval > 1
                 ? () => setState(() => _interval -= 1)
                 : null,
@@ -341,7 +340,7 @@ class _RecurringEditorSheetState extends ConsumerState<RecurringEditorSheet> {
           const SizedBox(height: SsSpace.x4),
           _DateRow(
             label: s['recurringFirstDue'],
-            value: shortDate(_firstDue.millisecondsSinceEpoch, locale: locale),
+            value: s.shortDate(_firstDue.millisecondsSinceEpoch),
             onTap: _pickFirstDue,
           ),
           if (_needsDay) ...[

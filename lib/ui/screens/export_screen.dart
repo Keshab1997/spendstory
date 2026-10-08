@@ -42,6 +42,7 @@ import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/surfaces.dart';
 import '../format.dart';
+import '../strings.dart';
 import '../tokens.dart';
 
 class ExportScreen extends ConsumerStatefulWidget {
@@ -89,7 +90,6 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
     final s = ref.watch(stringsProvider);
-    final locale = ref.watch(localeProvider);
     final db = ref.watch(appDbProvider);
     final hasPassword = _password.text.trim().length >= _minPasswordLength;
     // Watching the ledger here is what makes the CSV count and the statement
@@ -149,7 +149,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                     onPressed: hasPassword && !_busyBackup ? _backUpNow : null,
                   ),
                   const SizedBox(height: SsSpace.x3),
-                  _LastBackupLine(locale: locale),
+                  _LastBackupLine(strings: s),
                 ],
               ),
             ),
@@ -369,13 +369,12 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       final report = await BackupRepo(db)
           .restore(file.bytes, password: _restorePassword.text);
       _refreshLedger();
-      final locale = ref.read(localeProvider);
       _say(
         s.fill('exportRestoreDone', <String, String>{
-          'tx': localizeDigits('${report.transactions}', locale),
-          'cats': localizeDigits('${report.categories}', locale),
-          'budgets': localizeDigits('${report.budgets}', locale),
-          'accounts': localizeDigits('${report.accounts}', locale),
+          'tx': s.digits('${report.transactions}'),
+          'cats': s.digits('${report.categories}'),
+          'budgets': s.digits('${report.budgets}'),
+          'accounts': s.digits('${report.accounts}'),
         }),
       );
     } on BackupFormatException {
@@ -492,6 +491,8 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
 
     return buildStatementPdf(
       StatementData(
+        // English and Latin digits on purpose: the PDF has no Indic shaping,
+        // and a filename is not a sentence the user reads (T-705).
         period: monthLabel(_month.millisecondsSinceEpoch, locale: 'en'),
         rows: rows,
         incomePaise: income,
@@ -569,9 +570,9 @@ class _AutoBackupCard extends ConsumerWidget {
 
 /// The last-backup line, which is also where the weekly reminder shows.
 class _LastBackupLine extends ConsumerWidget {
-  const _LastBackupLine({required this.locale});
+  const _LastBackupLine({required this.strings});
 
-  final String locale;
+  final SsStrings strings;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -586,7 +587,7 @@ class _LastBackupLine extends ConsumerWidget {
     final text = last == null
         ? s['exportNeverBackedUp']
         : s.fill('exportLastBackup', <String, String>{
-            'when': shortDate(last.millisecondsSinceEpoch, locale: locale),
+            'when': strings.shortDate(last.millisecondsSinceEpoch),
           });
 
     return Row(
@@ -679,7 +680,6 @@ class _PdfCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
     final s = ref.watch(stringsProvider);
-    final locale = ref.watch(localeProvider);
     final isPro = ref.watch(proStatusProvider);
     final credits = ref.watch(pdfExportCreditsProvider);
     // An offer is only drawn when the ledger says it can be honoured right now:
@@ -724,10 +724,7 @@ class _PdfCard extends ConsumerWidget {
                   Expanded(
                     child: Center(
                       child: Text(
-                        monthLabel(
-                          month.millisecondsSinceEpoch,
-                          locale: locale,
-                        ),
+                        s.monthLabel(month.millisecondsSinceEpoch),
                         style: SsText.h3,
                       ),
                     ),
@@ -751,7 +748,7 @@ class _PdfCard extends ConsumerWidget {
                 const SizedBox(height: SsSpace.x2),
                 Text(
                   s.fill('exportPdfCredits', <String, String>{
-                    'n': localizeDigits('$credits', locale),
+                    'n': s.digits('$credits'),
                   }),
                   style: SsText.micro.copyWith(color: c.textTertiary),
                 ),

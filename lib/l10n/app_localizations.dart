@@ -2948,6 +2948,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Turn off the app lock and open'**
   String get lockTurnOff;
+
+  /// No description provided for @settingsNumerals.
+  ///
+  /// In en, this message translates to:
+  /// **'Show local numerals'**
+  String get settingsNumerals;
+
+  /// No description provided for @settingsNumeralsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Amounts, dates and percentages in this language\'s own digits'**
+  String get settingsNumeralsBody;
 }
 
 class _AppLocalizationsDelegate

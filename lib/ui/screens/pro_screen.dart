@@ -36,7 +36,6 @@ import '../components/controls.dart';
 import '../components/privacy_sheet.dart';
 import '../components/money.dart' show formatInr;
 import '../components/surfaces.dart';
-import '../format.dart';
 import '../strings.dart';
 import '../tokens.dart';
 
@@ -215,11 +214,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
 
                 // A Pro user is not sold to; they get their receipt.
                 if (isPro && entitlement != null)
-                  _ProStatusCard(
-                    entitlement: entitlement,
-                    locale: locale,
-                    strings: s,
-                  )
+                  _ProStatusCard(entitlement: entitlement, strings: s)
                 else ...[
                   // The three things that are for sale — never the taste, which
                   // cannot be bought and is not offered here (`docs/08 §5`).
@@ -231,7 +226,7 @@ class _ProScreenState extends ConsumerState<ProScreen> {
                       selected: _plan == plan,
                       badge: plan == ProPlan.yearly
                           ? s.fill('savePercentTemplate', {
-                              'pct': localizeDigits('$yearlySaving', locale),
+                              'pct': s.digits('$yearlySaving'),
                             })
                           : null,
                       onTap: () => setState(() => _plan = plan),
@@ -373,14 +368,9 @@ String planLabel(SsStrings strings, ProPlan plan) => switch (plan) {
 /// What a paying user sees instead of the tiers: which plan they own, and when
 /// it renews. No price, no timer, nothing to buy.
 class _ProStatusCard extends StatelessWidget {
-  const _ProStatusCard({
-    required this.entitlement,
-    required this.locale,
-    required this.strings,
-  });
+  const _ProStatusCard({required this.entitlement, required this.strings});
 
   final ProEntitlement entitlement;
-  final String locale;
   final SsStrings strings;
 
   @override
@@ -417,7 +407,7 @@ class _ProStatusCard extends StatelessWidget {
             const SizedBox(height: SsSpace.x1),
             Text(
               strings.fill('renewsOnTemplate', {
-                'date': shortDate(renewsOn, locale: locale),
+                'date': strings.shortDate(renewsOn),
               }),
               style: SsText.micro.copyWith(color: c.textTertiary),
             ),

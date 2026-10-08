@@ -24,7 +24,6 @@ import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/money.dart';
 import '../components/surfaces.dart';
-import '../format.dart';
 import '../tokens.dart';
 import 'budget_edit_sheet.dart';
 
@@ -120,7 +119,7 @@ class BudgetDetailScreen extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    localizeDigits('${(status.ratio * 100).round()}%', locale),
+                    s.digits('${(status.ratio * 100).round()}%'),
                     style: SsText.h1.copyWith(
                       fontWeight: FontWeight.w800,
                       fontSize: 30,
@@ -209,7 +208,7 @@ class BudgetDetailScreen extends ConsumerWidget {
                           'amt': formatInr(
                             _wholeRupees(status.dailyAllowancePaise!),
                             showSymbol: true,
-                            localize: locale,
+                            localize: s.numeralLocale,
                           ),
                         }),
                   style: SsText.h3.copyWith(color: Colors.white, height: 1.35),
@@ -229,7 +228,7 @@ class BudgetDetailScreen extends ConsumerWidget {
             for (final t in recent)
               TxRow(
                 txn: t,
-                locale: locale,
+                strings: s,
                 category: category,
                 showDate: true,
                 onTap: () => context.push('/transactions/${t.id}'),

@@ -96,7 +96,11 @@ openingBalancePaise
 → Settings → "কিছু ভুল হয়েছে? রিপোর্ট করুন" e JSON export (user-initiated, no auto upload)
 
 ### `app_meta` (kv)
-`onboarded` · `locale` · `theme` · `smsPermAsked` · `notifPermAsked` · `lastBackupAt` · `autoBackup` · `proStatus` · `ruleVersion` · `sessionCount` · `appLock`
+`onboarded` · `locale` · `theme` · `smsPermAsked` · `notifPermAsked` · `lastBackupAt` · `autoBackup` · `proStatus` · `ruleVersion` · `sessionCount` · `appLock` · `numerals`
+
+`numerals` (T-707) is the S-20 Bengali-digits switch: absent or `false` means
+Latin digits, which is the documented default — `kDefaultMeta` seeds it, so the
+absence of the row is the same answer as the row saying `false`.
 
 `BackupRepo` (T-705) reads and writes `lastBackupAt` and the weekly-reminder flag
 `autoBackup`. The payload carries `locale`, `theme` and `lastBackupAt` and

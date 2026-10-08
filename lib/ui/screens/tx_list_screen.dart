@@ -91,7 +91,6 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
     final s = ref.watch(stringsProvider);
-    final locale = ref.watch(localeProvider);
     final categoryById = ref.watch(categoryByIdProvider);
     final month = ref.watch(selectedMonthProvider);
 
@@ -118,7 +117,7 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
     // The chips describe the month, not the filter: hiding income should not
     // make the month's income disappear from the summary.
     final summary = LedgerSummary.from(inMonth);
-    final groups = _groupByDay(visible, locale);
+    final groups = _groupByDay(visible, s);
     final atCurrentMonth =
         month >= startOfMonth(DateTime.now().millisecondsSinceEpoch);
 
@@ -141,7 +140,7 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
           ),
           const SizedBox(height: SsSpace.x3),
           _MonthStrip(
-            label: monthLabel(month, locale: locale),
+            label: s.monthLabel(month),
             onPrevious: () => _shiftMonth(-1),
             // No future months: the ledger cannot contain them, and an empty
             // screen the user cannot explain is worse than a disabled arrow.
@@ -221,7 +220,7 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
                   )
                 : _TxGroupList(
                     groups: groups,
-                    locale: locale,
+                    strings: s,
                     categoryById: categoryById,
                     stagger: _stagger,
                     onDelete: _deleteWithUndo,
@@ -285,7 +284,7 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
   }
 
   /// Newest day first; each group carries its own expense total.
-  List<_DayGroup> _groupByDay(List<TxnView> txns, String locale) {
+  List<_DayGroup> _groupByDay(List<TxnView> txns, SsStrings s) {
     final buckets = <int, List<TxnView>>{};
     for (final t in txns) {
       final d = DateTime.fromMillisecondsSinceEpoch(t.occurredAtMs);
@@ -297,7 +296,7 @@ class _TxListScreenState extends ConsumerState<TxListScreen>
     return [
       for (final key in keys)
         _DayGroup(
-          label: dayLabel(key, locale: locale),
+          label: s.dayLabel(key),
           totalPaise: buckets[key]!
               .where((t) => t.direction != TxnDirection.income)
               .fold<int>(0, (sum, t) => sum + t.amountPaise),
@@ -432,7 +431,7 @@ class _SummaryChip extends StatelessWidget {
 class _TxGroupList extends StatelessWidget {
   const _TxGroupList({
     required this.groups,
-    required this.locale,
+    required this.strings,
     required this.categoryById,
     required this.stagger,
     required this.onDelete,
@@ -440,7 +439,7 @@ class _TxGroupList extends StatelessWidget {
   });
 
   final List<_DayGroup> groups;
-  final String locale;
+  final SsStrings strings;
   final Map<String, CategoryView> categoryById;
   final AnimationController stagger;
   final Future<void> Function(TxnView) onDelete;
@@ -449,7 +448,7 @@ class _TxGroupList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
-    final s = SsStrings(locale);
+    final s = strings;
 
     return ListView.builder(
       // `ListView.builder` + a per-day card: only the visible days are built,
@@ -488,7 +487,7 @@ class _TxGroupList extends StatelessWidget {
                       if (i > 0) Divider(color: c.divider, height: 1),
                       _SwipeableTxRow(
                         txn: group.txns[i],
-                        locale: locale,
+                        strings: strings,
                         category: categoryById[group.txns[i].categoryId],
                         onDelete: onDelete,
                         onRecategorise: onRecategorise,
@@ -509,14 +508,14 @@ class _TxGroupList extends StatelessWidget {
 class _SwipeableTxRow extends StatelessWidget {
   const _SwipeableTxRow({
     required this.txn,
-    required this.locale,
+    required this.strings,
     required this.category,
     required this.onDelete,
     required this.onRecategorise,
   });
 
   final TxnView txn;
-  final String locale;
+  final SsStrings strings;
   final CategoryView? category;
   final Future<void> Function(TxnView) onDelete;
   final Future<void> Function(TxnView) onRecategorise;
@@ -524,7 +523,7 @@ class _SwipeableTxRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
-    final s = SsStrings(locale);
+    final s = strings;
 
     return Dismissible(
       key: ValueKey<String>('tx-${txn.id}'),
@@ -551,7 +550,7 @@ class _SwipeableTxRow extends StatelessWidget {
       onDismissed: (_) => onDelete(txn),
       child: TxRow(
         txn: txn,
-        locale: locale,
+        strings: strings,
         category: category,
         showDate: false,
         onTap: () => context.push('/transactions/${txn.id}'),

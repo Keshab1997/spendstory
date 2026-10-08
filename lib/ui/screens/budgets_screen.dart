@@ -28,7 +28,6 @@ import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/money.dart';
 import '../components/surfaces.dart';
-import '../format.dart';
 import '../strings.dart';
 import '../tokens.dart';
 import 'budget_edit_sheet.dart';
@@ -40,7 +39,6 @@ class BudgetsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
     final s = ref.watch(stringsProvider);
-    final locale = ref.watch(localeProvider);
     final showAds = ref.watch(adsVisibleProvider);
     final budgets =
         ref.watch(budgetsProvider).valueOrNull ?? const <BudgetView>[];
@@ -114,7 +112,7 @@ class BudgetsScreen extends ConsumerWidget {
                       const SizedBox(width: SsSpace.x2),
                       Flexible(
                         child: Text(
-                          '— ${_pctLabel(overallStatus.ratio, locale)} '
+                          '— ${_pctLabel(overallStatus.ratio, s)} '
                           '${s['budgetUsed']}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -156,7 +154,7 @@ class BudgetsScreen extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           '${s['budgetSpentLabel']} '
-                          '${formatInr(overallStatus.spentPaise, showSymbol: true, localize: locale)}',
+                          '${formatInr(overallStatus.spentPaise, showSymbol: true, localize: s.numeralLocale)}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: SsText.caption.copyWith(
@@ -165,7 +163,7 @@ class BudgetsScreen extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        _budgetBarTail(overallStatus, s, locale),
+                        _budgetBarTail(overallStatus, s),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: SsText.caption.copyWith(
@@ -206,7 +204,6 @@ class BudgetsScreen extends ConsumerWidget {
               _BudgetRow(
                 status: shown[i],
                 category: categoryById[shown[i].budget.categoryId],
-                locale: locale,
                 strings: s,
                 onTap: () => context.push('/budgets/${shown[i].budget.id}'),
               ),
@@ -217,8 +214,7 @@ class BudgetsScreen extends ConsumerWidget {
 
           // ---- a cap that keeps being missed ----------------------------------
           for (final status in shown)
-            if (status.at120)
-              _SuggestionCard(status: status, locale: locale, s: s),
+            if (status.at120) _SuggestionCard(status: status, s: s),
 
           if (shown.isNotEmpty) ...[
             const SizedBox(height: SsSpace.x4),
@@ -236,17 +232,18 @@ class BudgetsScreen extends ConsumerWidget {
 }
 
 /// `৫০%` — the percentage as the user reads it, uncapped, because a budget at
-/// 107% has to say 107%.
-String _pctLabel(double ratio, String locale) =>
-    localizeDigits('${(ratio * 100).round()}%', locale);
+/// 107% has to say 107%. The numerals come from [s], so `৫০%` here and `50%`
+/// on a screen where the switch is off.
+String _pctLabel(double ratio, SsStrings s) =>
+    s.digits('${(ratio * 100).round()}%');
 
-String _budgetBarTail(BudgetStatus status, SsStrings s, String locale) {
+String _budgetBarTail(BudgetStatus status, SsStrings s) {
   final remaining = status.remainingPaise;
   if (remaining >= 0) {
     return '${s['budgetRemainingLabel']} '
-        '${formatInr(remaining, showSymbol: true, localize: locale)}';
+        '${formatInr(remaining, showSymbol: true, localize: s.numeralLocale)}';
   }
-  return '${formatInr(-remaining, showSymbol: true, localize: locale)} '
+  return '${formatInr(-remaining, showSymbol: true, localize: s.numeralLocale)} '
       '${s['over']}';
 }
 
@@ -287,21 +284,19 @@ class _BudgetRow extends StatelessWidget {
   const _BudgetRow({
     required this.status,
     required this.category,
-    required this.locale,
     required this.strings,
     required this.onTap,
   });
 
   final BudgetStatus status;
   final CategoryView? category;
-  final String locale;
   final SsStrings strings;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = SsColors.of(context);
-    final label = category?.label(locale) ?? '';
+    final label = category?.label(strings.locale) ?? '';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: SsSpace.x3),
@@ -330,7 +325,7 @@ class _BudgetRow extends StatelessWidget {
                   ),
                 ),
                 SsBadge(
-                  label: _pctLabel(status.ratio, locale),
+                  label: _pctLabel(status.ratio, strings),
                   color: status.at100
                       ? c.danger
                       : (status.at80 ? c.gold500 : c.teal500),
@@ -352,8 +347,8 @@ class _BudgetRow extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    '${formatInr(status.spentPaise, showSymbol: true, localize: locale)}'
-                    ' / ${formatInr(status.limitPaise, showSymbol: true, localize: locale)}',
+                    '${formatInr(status.spentPaise, showSymbol: true, localize: strings.numeralLocale)}'
+                    ' / ${formatInr(status.limitPaise, showSymbol: true, localize: strings.numeralLocale)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: SsText.caption.copyWith(color: c.textSecondary),
@@ -375,14 +370,9 @@ class _BudgetRow extends StatelessWidget {
 }
 
 class _SuggestionCard extends StatelessWidget {
-  const _SuggestionCard({
-    required this.status,
-    required this.locale,
-    required this.s,
-  });
+  const _SuggestionCard({required this.status, required this.s});
 
   final BudgetStatus status;
-  final String locale;
   final SsStrings s;
 
   @override
@@ -401,10 +391,7 @@ class _SuggestionCard extends StatelessWidget {
             Expanded(
               child: Text(
                 s.fill('budgetSuggestTemplate', {
-                  'pct': localizeDigits(
-                    '${((status.ratio - 1) * 100).round()}',
-                    locale,
-                  ),
+                  'pct': s.digits('${((status.ratio - 1) * 100).round()}'),
                 }),
                 style: SsText.caption.copyWith(color: c.textPrimary),
               ),

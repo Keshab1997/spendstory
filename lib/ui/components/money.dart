@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers.dart';
 import '../format.dart';
+import '../strings.dart';
 import '../tokens.dart';
 
 /// Formats an integer number of paise as Indian rupees.
@@ -111,7 +112,7 @@ class MoneyText extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
-    final locale = ref.watch(localeProvider);
+    final strings = ref.watch(stringsProvider);
     final base = style ?? SsText.amountRow;
     final sign = switch (tone) {
       AmountTone.income => showSign ? '+' : '',
@@ -122,12 +123,12 @@ class MoneyText extends ConsumerWidget {
     // Bengali and Hindi render their own numerals: ₹১,২৪০ reads as money to a
     // Bengali speaker in a way ₹1,240 never quite does.
     final body = compact
-        ? formatInrCompact(paise, localize: locale)
+        ? formatInrCompact(paise, localize: strings.numeralLocale)
         : formatInr(
             paise,
             showPaise: showPaise,
             showSymbol: showSymbol,
-            localize: locale,
+            localize: strings.numeralLocale,
           );
 
     return Text(
@@ -179,12 +180,12 @@ class MoneyDelta extends StatelessWidget {
     required this.deltaPercent,
     this.onDark = false,
     this.goodWhenDown = true,
-    required this.locale,
+    required this.strings,
   });
 
   final double deltaPercent;
   final bool onDark;
-  final String locale;
+  final SsStrings strings;
 
   /// For an expense, spending *less* is the good outcome.
   final bool goodWhenDown;
@@ -207,7 +208,7 @@ class MoneyDelta extends StatelessWidget {
         ),
         const SizedBox(width: SsSpace.x1),
         Text(
-          localizeDigits('${deltaPercent.abs().toStringAsFixed(0)}%', locale),
+          strings.digits('${deltaPercent.abs().toStringAsFixed(0)}%'),
           style: SsText.caption.copyWith(
             color: colour,
             fontWeight: FontWeight.w700,
@@ -250,7 +251,6 @@ class BudgetBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
-    final locale = ref.watch(localeProvider);
     final strings = ref.watch(stringsProvider);
     final colour = _barColour(c);
     final remaining = limitPaise - spentPaise;
@@ -301,7 +301,11 @@ class BudgetBar extends ConsumerWidget {
             children: [
               Flexible(
                 child: Text(
-                  formatInr(spentPaise, showSymbol: true, localize: locale),
+                  formatInr(
+                    spentPaise,
+                    showSymbol: true,
+                    localize: strings.numeralLocale,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: SsText.caption.copyWith(
@@ -312,7 +316,7 @@ class BudgetBar extends ConsumerWidget {
               ),
               Flexible(
                 child: Text(
-                  ' / ${formatInr(limitPaise, showSymbol: true, localize: locale)}',
+                  ' / ${formatInr(limitPaise, showSymbol: true, localize: strings.numeralLocale)}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: SsText.caption.copyWith(color: c.textSecondary),
@@ -322,8 +326,8 @@ class BudgetBar extends ConsumerWidget {
               Flexible(
                 child: Text(
                   remaining >= 0
-                      ? '${strings['budgetLeft']} ${formatInr(remaining, showSymbol: true, localize: locale)}'
-                      : '${formatInr(-remaining, showSymbol: true, localize: locale)} ${strings['over']}',
+                      ? '${strings['budgetLeft']} ${formatInr(remaining, showSymbol: true, localize: strings.numeralLocale)}'
+                      : '${formatInr(-remaining, showSymbol: true, localize: strings.numeralLocale)} ${strings['over']}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.right,

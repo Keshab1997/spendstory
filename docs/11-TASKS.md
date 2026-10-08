@@ -513,7 +513,57 @@ PDF export credit gets spent.
 - [x] **T-706** Settings data-erase (double confirm) + biometric lock
       *(the erase half already existed and matches `05 §5`; the lock is new —
       `local_auth` → `androidx.biometric`, one seam, no prompt in `flutter test`)*
-- [ ] **T-707** Bengali digits toggle
+- [x] **T-707** Bengali digits toggle
+      *(the recon held: one preference, one seam — but the default made it a
+      migration too, because 29 approved translations had Bengali and Devanagari
+      digits baked into them. See the landing block below.)*
+
+**What landed (T-707)** — *Bangla/hindi digits toggle*
+
+- **The default is Latin digits, everywhere.** `₹1,240`, `12 সেপ্টেম্বর`, `80%`,
+  `১` on the About steps became `1`. That is what the bank SMS, the ATM slip and
+  every UPI screen write, and it is what `docs/09 §2` asked for. Bengali *words*
+  with Latin *digits* is the ordinary sentence in Kolkata.
+- **One switch in S-20 → সাধারণ**, right under the language picker:
+  **বাংলা সংখ্যা দেখাও** / **देवनागरी अंक दिखाएँ**, and **not drawn for
+  English** — there is no second numeral system to switch to, and a control that
+  cannot change anything is a control that lies. Stored as
+  `app_meta.numerals` (`kNumeralsMetaKey`), read at boot into
+  `numeralsProvider` (`StateProvider<bool>`, default `false`), applied on the
+  spot by `_setNumerals` — same shape as the language picker one row above it.
+- **One seam, and the compiler cannot walk around it.** `localizeDigits` stays
+  the pure table in `lib/ui/format.dart`; `digitCode(locale, nativeDigits)`
+  resolves the choice; `SsStrings.digits(input)` and
+  `SsStrings.numeralLocale` are what the app calls, and `SsStrings` grew
+  `shortDate` / `dayLabel` / `monthLabel` / `timeOfDay` wrappers so the 21 date
+  call sites did not each have to remember a second argument —
+  `shortDate(ms, locale: 'bn')` still compiles and still renders, and now
+  silently ignores the switch, which is exactly why
+  `test/ui/numerals_test.dart` reads the repo as text and fails on it.
+- **54 call sites in 15 files** moved from `localizeDigits(x, locale)` /
+  `localize: locale` to `s.digits(x)` / `s.numeralLocale`. Where a widget had
+  been handed a locale only to format a number, the locale went away and the
+  `SsStrings` took its place (`TxRow`, `MoneyDelta`, `_BudgetRow`, `_DayTile`,
+  `_LegendRow`, `_SuggestionCard`, `_RangeRow`, `_CompareRow`, `_RuleCard`,
+  `_ProStatusCard`, `_LastBackupLine`, `_TxGroupList`, `_SwipeableTxRow`,
+  `_FloatingNav`) — so the copy *and* the digits now travel as one value, and a
+  forgotten switch is a compile error rather than a screenshot nobody took.
+- **29 translations were rewritten** (`app_bn.arb` 27, `app_hi.arb` 2): a baked
+  `৩০` in an approved sentence cannot be switched *off*, so `আগাছা`-style copy now
+  reads `30` in the ARB and `operator []` writes `৩০` only when the user asked.
+  New ARB key `settingsNumerals` + `settingsNumeralsBody` (476 keys ×3), and
+  `test/ui/numerals_test.dart` now fails if any future translation bakes a
+  numeral in.
+- **Tests: 12 new** (`test/ui/numerals_test.dart`) — the seam in both scripts
+  and English, the guard rails in the copy, the two source-scan rules
+  (`localizeDigits`, and the bare date helpers), the switch drawn for `bn` and
+  absent for `en`, a tap that turns the harness ledger from `₹1,240` into
+  `₹১,২৪০` *and* writes `app_meta.numerals`, and a stored `true` that is applied
+  before the first frame. Suite: **707 pass**, `flutter analyze` clean,
+  `tool/preflight.py` 158/0.
+- **Not in scope, deliberately:** the amount *input* stays Latin (the keyboard's
+  own number row), and so do the CSV and the PDF statement — documents that
+  leave the phone, and `pdf` has no Indic shaping engine (T-705).
 
 **What landed (T-706):**
 - **Security section (S-20).** Settings now has a নিরাপত্তা group with the two

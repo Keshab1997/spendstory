@@ -90,8 +90,18 @@ void main() {
         dayLabel(DateTime(2026, 10, 6, 23).millisecondsSinceEpoch, nowMs: now),
         'গতকাল',
       );
+      // Latin digits unless the S-20 switch asks otherwise (T-707): the words
+      // are Bengali either way.
       expect(
         dayLabel(DateTime(2026, 9, 12).millisecondsSinceEpoch, nowMs: now),
+        '12 সেপ্টেম্বর',
+      );
+      expect(
+        dayLabel(
+          DateTime(2026, 9, 12).millisecondsSinceEpoch,
+          nowMs: now,
+          nativeDigits: true,
+        ),
         '১২ সেপ্টেম্বর',
       );
     });

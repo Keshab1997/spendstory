@@ -135,7 +135,9 @@ void main() {
     testWidgets('reads in Bengali, and fits on a 360dp phone', (tester) async {
       await _pump(tester, client: FakeAdClient(), locale: 'bn');
 
-      final offer = find.text('বিজ্ঞাপন দেখে ২৪ ঘণ্টার Pro নিন');
+      // `24`, not `২৪`: the offer is copy, and the digits in it follow the
+      // numerals switch like every other number (T-707).
+      final offer = find.text('বিজ্ঞাপন দেখে 24 ঘণ্টার Pro নিন');
       await tester.ensureVisible(offer);
       await tester.pumpAndSettle();
       expect(offer, findsOneWidget);

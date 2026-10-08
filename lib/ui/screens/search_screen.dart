@@ -246,7 +246,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         Divider(color: c.divider, height: 1),
                     itemBuilder: (context, index) => TxRow(
                       txn: results[index],
-                      locale: locale,
+                      strings: s,
                       category: byId[results[index].categoryId],
                       onTap: () =>
                           context.push('/transactions/${results[index].id}'),

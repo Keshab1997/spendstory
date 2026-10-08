@@ -48,6 +48,11 @@ const String kCashAccountId = 'acc-cash';
 /// setting that silently forgets.
 const String kAppLockMetaKey = 'appLock';
 
+/// The S-20 numerals switch (T-707). Off — Latin digits — is the default
+/// (docs/09 §2), so the stored value is only ever `'true'` for a user who asked
+/// for `১২৪০` instead of `1,240`.
+const String kNumeralsMetaKey = 'numerals';
+
 /// Keys written into `app_meta` on first run.
 const Map<String, String> kDefaultMeta = <String, String>{
   'onboarded': 'false',
@@ -59,6 +64,7 @@ const Map<String, String> kDefaultMeta = <String, String>{
   'sessionCount': '0',
   'seedVersion': '1',
   kAppLockMetaKey: 'false',
+  kNumeralsMetaKey: 'false',
 };
 
 /// The 12 expense categories. Ids match the keys in [Cat], which is what lets a

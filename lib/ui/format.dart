@@ -114,7 +114,21 @@ const List<String> _weekdaysEn = <String>[
 const String _bnDigits = '০১২৩৪৫৬৭৮৯';
 const String _hiDigits = '०१२३४५६७८९';
 
-/// Rewrites ASCII digits in [input] using the locale's numeral system.
+/// The numeral system to print [input] in: `bn`, `hi`, or `en` for "leave the
+/// digits alone".
+///
+/// `bn` and `hi` each have two ways to write a number — `১২৪০` and `1240` — and
+/// **Latin is the default**, because that is what the bank SMS, the ATM slip and
+/// every UPI screen show (docs/09-LOCALIZATION.md §2). The S-20 switch
+/// "বাংলা সংখ্যা দেখাও" is the other one. `en` is also the answer for a locale
+/// with a single numeral system, which makes the rewrite a no-op.
+String digitCode(String locale, bool nativeDigits) =>
+    nativeDigits ? locale : 'en';
+
+/// Rewrites ASCII digits in [input] using [locale]'s numeral system.
+///
+/// Pure and preference-free on purpose: prefer [SsStrings.digits] or
+/// [digitCode], which carry the user's choice — this is the table itself.
 String localizeDigits(String input, String locale) {
   final table = switch (locale) {
     'bn' => _bnDigits,
@@ -158,20 +172,28 @@ int startOfPreviousMonth(int ms) {
 int endOfPreviousMonth(int ms) => startOfMonth(ms) - 1;
 
 /// "১২ সেপ্ট" — the short form used in a transaction row.
-String shortDate(int ms, {String locale = 'bn'}) {
+String shortDate(int ms, {String locale = 'bn', bool nativeDigits = false}) {
   final d = DateTime.fromMillisecondsSinceEpoch(ms);
   final months = switch (locale) {
     'en' => _monthsEn,
     'hi' => _monthsHi,
     _ => _monthsBn,
   };
-  return localizeDigits('${d.day} ${months[d.month - 1]}', locale);
+  return localizeDigits(
+    '${d.day} ${months[d.month - 1]}',
+    digitCode(locale, nativeDigits),
+  );
 }
 
 /// "আজ" / "গতকাল" / "১২ সেপ্টেম্বর" — the grouped-ledger day header.
 ///
 /// [nowMs] is injectable so the grouping is testable without freezing the clock.
-String dayLabel(int ms, {String locale = 'bn', int? nowMs}) {
+String dayLabel(
+  int ms, {
+  String locale = 'bn',
+  bool nativeDigits = false,
+  int? nowMs,
+}) {
   final now = nowMs ?? DateTime.now().millisecondsSinceEpoch;
   final today = _startOfDay(now);
   final yesterday = today - 24 * 60 * 60 * 1000;
@@ -198,18 +220,21 @@ String dayLabel(int ms, {String locale = 'bn', int? nowMs}) {
     _ => _monthsFullBn,
   };
   final d = DateTime.fromMillisecondsSinceEpoch(ms);
-  return localizeDigits('${d.day} ${months[d.month - 1]}', locale);
+  return localizeDigits(
+    '${d.day} ${months[d.month - 1]}',
+    digitCode(locale, nativeDigits),
+  );
 }
 
 /// "অক্টোবর ২০২৬" — the home month selector.
-String monthLabel(int ms, {String locale = 'bn'}) {
+String monthLabel(int ms, {String locale = 'bn', bool nativeDigits = false}) {
   final d = DateTime.fromMillisecondsSinceEpoch(ms);
   final name = switch (locale) {
     'en' => '${_monthsFullEn(d.month)} ${d.year}',
     'hi' => '${_monthsFullHi[d.month - 1]} ${d.year}',
     _ => '${_monthsFullBn[d.month - 1]} ${d.year}',
   };
-  return localizeDigits(name, locale);
+  return localizeDigits(name, digitCode(locale, nativeDigits));
 }
 
 String _monthsFullEn(int month) => const <String>[
@@ -239,7 +264,7 @@ String weekdayShort(int ms, {String locale = 'bn'}) {
 }
 
 /// "১২ ঘ : ৪৫ মি" — a time of day, used on the transaction detail screen.
-String timeOfDay(int ms, {String locale = 'bn'}) {
+String timeOfDay(int ms, {String locale = 'bn', bool nativeDigits = false}) {
   final d = DateTime.fromMillisecondsSinceEpoch(ms);
   final hour = d.hour % 12 == 0 ? 12 : d.hour % 12;
   final minute = d.minute.toString().padLeft(2, '0');
@@ -248,7 +273,10 @@ String timeOfDay(int ms, {String locale = 'bn'}) {
     'hi' => d.hour < 12 ? 'पूर्वाह्न' : 'अपराह्न',
     _ => d.hour < 12 ? 'সকাল' : 'বিকেল',
   };
-  return localizeDigits('$hour:$minute $suffix', locale);
+  return localizeDigits(
+    '$hour:$minute $suffix',
+    digitCode(locale, nativeDigits),
+  );
 }
 
 /// Days elapsed in the current month, and how many it has — the forecast input.

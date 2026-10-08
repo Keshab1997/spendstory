@@ -34,7 +34,6 @@ class RecurringScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
     final s = ref.watch(stringsProvider);
-    final locale = ref.watch(localeProvider);
     final showAds = ref.watch(adsVisibleProvider);
     final rules =
         ref.watch(recurringProvider).valueOrNull ?? const <RecurringRuleView>[];
@@ -70,9 +69,8 @@ class RecurringScreen extends ConsumerWidget {
             const SizedBox(height: SsSpace.x1),
             Text(
               s.fill('recurringDueCountTemplate', {
-                'n': localizeDigits(
+                'n': s.digits(
                   '${strip.fold<int>(0, (sum, day) => sum + day.rules.length)}',
-                  locale,
                 ),
               }),
               style: SsText.micro.copyWith(color: c.textTertiary),
@@ -84,11 +82,8 @@ class RecurringScreen extends ConsumerWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: strip.length,
                 separatorBuilder: (_, _) => const SizedBox(width: SsSpace.x2),
-                itemBuilder: (_, index) => _DayTile(
-                  day: strip[index],
-                  isToday: index == 0,
-                  locale: locale,
-                ),
+                itemBuilder: (_, index) =>
+                    _DayTile(day: strip[index], isToday: index == 0, s: s),
               ),
             ),
             const SizedBox(height: SsSpace.x5),
@@ -100,7 +95,6 @@ class RecurringScreen extends ConsumerWidget {
                 category: rule.categoryId == null
                     ? null
                     : categoryById[rule.categoryId],
-                locale: locale,
                 strings: s,
                 todayMs: today,
                 onTap: () async {
@@ -173,15 +167,11 @@ class RecurringScreen extends ConsumerWidget {
 }
 
 class _DayTile extends StatelessWidget {
-  const _DayTile({
-    required this.day,
-    required this.isToday,
-    required this.locale,
-  });
+  const _DayTile({required this.day, required this.isToday, required this.s});
 
   final ({int dayMs, List<RecurringRuleView> rules}) day;
   final bool isToday;
-  final String locale;
+  final SsStrings s;
 
   @override
   Widget build(BuildContext context) {
@@ -204,21 +194,18 @@ class _DayTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            weekdayShort(day.dayMs, locale: locale).characters.first,
+            weekdayShort(day.dayMs, locale: s.locale).characters.first,
             style: SsText.micro.copyWith(color: c.textTertiary),
           ),
           const SizedBox(height: 2),
           Text(
-            localizeDigits(
-              '${DateTime.fromMillisecondsSinceEpoch(day.dayMs).day}',
-              locale,
-            ),
+            s.digits('${DateTime.fromMillisecondsSinceEpoch(day.dayMs).day}'),
             style: SsText.bodyStrong,
           ),
           const SizedBox(height: 2),
           if (hasDue)
             Text(
-              formatInrCompact(total, localize: locale),
+              formatInrCompact(total, localize: s.numeralLocale),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: SsText.micro.copyWith(
@@ -249,7 +236,6 @@ class _RuleCard extends StatelessWidget {
   const _RuleCard({
     required this.rule,
     required this.category,
-    required this.locale,
     required this.strings,
     required this.todayMs,
     required this.onTap,
@@ -257,7 +243,6 @@ class _RuleCard extends StatelessWidget {
 
   final RecurringRuleView rule;
   final CategoryView? category;
-  final String locale;
   final SsStrings strings;
   final int todayMs;
   final VoidCallback onTap;
@@ -279,7 +264,7 @@ class _RuleCard extends StatelessWidget {
             RecurringFrequency.yearly => 'freqYearly',
           }]
         : strings.fill('recurringEveryTemplate', {
-            'n': localizeDigits('${rule.interval}', locale),
+            'n': strings.digits('${rule.interval}'),
             'unit':
                 strings[switch (rule.frequencyEnum) {
                   RecurringFrequency.daily => 'unitDays',
@@ -289,7 +274,7 @@ class _RuleCard extends StatelessWidget {
                 }],
           });
 
-    final date = shortDate(rule.nextDueAt, locale: locale);
+    final date = strings.shortDate(rule.nextDueAt);
     final when = overdue
         ? '${strings['recurringOverdue']} $date'
         : dueToday

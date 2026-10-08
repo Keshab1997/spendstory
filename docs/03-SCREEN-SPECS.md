@@ -348,6 +348,7 @@ Legend: **P0** = v1.0 must ship · **P1** = v1.0 target · **P2** = v1.1
 সাধারণ
   ভাষা / Language        → /language
   থিম  (ডার্ক ডিফল্ট / লাইট / সিস্টেম)
+  সংখ্যা / Numerals      (বাংলা সংখ্যা দেখাও — ডিফল্ট বন্ধ, মানে ₹1,240)
 নিরাপত্তা
   অ্যাপ লক (biometric)
   ডেটা মুছুন (destructive, double-confirm)
@@ -368,6 +369,15 @@ Legend: **P0** = v1.0 must ship · **P1** = v1.0 target · **P2** = v1.1
   "রিপোর্ট / ফিডব্যাক"
 ```
 **Ads:** ❌ (settings e ad = policy irritant).
+
+**Implemented (T-707):** the সংখ্যা switch sits in the সাধারণ card under the
+language picker (and is not drawn for English, where there is nothing to
+switch). It is one boolean — `numeralsProvider`, stored as `app_meta.numerals` —
+and every numeral on every screen reads through `SsStrings.digits()` /
+`SsStrings.numeralLocale()`. Criteria testable in `test/ui/numerals_test.dart`
+(the seam in both scripts, the switch on screen, Latin-by-default on the ledger
+and the Settings footer, a stored value applied at boot, the two source-scan
+guards, and the line in `docs/09 §2`).
 
 **Implemented (T-706):** `lib/ui/screens/settings_screen.dart` + the lock screen
 `lib/ui/screens/lock_screen.dart` (route `/lock`, which is not in `04`'s table

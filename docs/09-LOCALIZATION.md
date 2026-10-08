@@ -103,7 +103,26 @@ MaterialApp(
 
 **Category names** table er modhye 3 column e already ache (`categories.nameEn/Hi/Bn`).
 
-**Number formatting** — use `intl` with `NumberFormat.currency(locale: ..., symbol: '₹')`. Bengali locale e Bengali digits option: `NumberFormat.decimalPattern('bn')` → ১২,৪৮০. **Default = Latin digits** (users expect ₹1,240), but add a Settings toggle "বাংলা সংখ্যা দেখাও".
+**Number formatting (T-707, implemented).** The app does **not** use `intl` for
+money: `formatInr` in `lib/ui/components/money.dart` hand-rolls the lakh/crore
+grouping, which is the one thing `intl` gets wrong for this market without a
+custom pattern. Digits are the other half, and there the rule is:
+
+| | |
+|---|---|
+| **Default** | **Latin digits.** `₹1,240`, `12 সেপ্টেম্বর`, `80%` — the bank's SMS, the ATM slip and every UPI screen write numbers this way. Bengali words, Latin digits is the normal sentence in Kolkata. |
+| **Switch** | S-20 → সাধারণ → **বাংলা সংখ্যা দেখাও** / **देवनागरी अंक दिखाएँ** (hidden when the language is English — there is no second numeral system to switch to). Stored as `app_meta.numerals`, applied instantly. |
+| **Scope** | Every numeral the user *reads*: amounts, dates, percentages, badge counts, notification bodies, section numbers. Not the numeral the user *types* — the amount field stays Latin, because that is the keyboard's own number row. |
+| **Exceptions** | The CSV and the PDF statement are Latin-always with English labels (T-705 landing block, `docs/11-TASKS.md`): both are documents that leave the phone, and `pdf` has no Indic shaping engine. |
+
+One seam does it: `localizeDigits(input, locale)` (`lib/ui/format.dart`) is the
+table, and `SsStrings.digits()` / `SsStrings.numeralLocale()` are the only
+preference-aware ways to reach it — a screen calls `s.digits('$amount')` or
+`s.shortDate(ms)`, never the table. `test/ui/numerals_test.dart` fails the build
+if a file goes around it, and it also asserts that **no ARB sentence bakes a
+numeral in**: `app_bn.arb` holds `আগামী 30 দিন`, not `আগামী ৩০ দিন`, because a
+baked `৩০` cannot be switched back off. That is why T-707 rewrote 29 approved
+translations — the copy did not change, only the digits in it.
 
 ## 3. Translation rules
 

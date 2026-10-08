@@ -57,6 +57,9 @@ class _SpendStoryAppState extends ConsumerState<SpendStoryApp> {
       if (ref.read(localeProvider) != boot.locale) {
         ref.read(localeProvider.notifier).state = boot.locale;
       }
+      if (ref.read(numeralsProvider) != boot.numerals) {
+        ref.read(numeralsProvider.notifier).state = boot.numerals;
+      }
       // A stored "on" means the first thing this launch shows is the lock.
       if (boot.appLock) ref.read(lockActionsProvider).arm();
     });

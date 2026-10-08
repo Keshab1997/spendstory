@@ -198,7 +198,6 @@ void main() {
         owedRecurringReminders(
           rules: <RecurringRuleView>[rule],
           strings: strings,
-          locale: 'en',
           nowMs: at(2026, 10, 7, 9),
           sentOn: const <String, String>{},
         ),
@@ -210,7 +209,6 @@ void main() {
         owedRecurringReminders(
           rules: <RecurringRuleView>[rule],
           strings: strings,
-          locale: 'en',
           nowMs: at(2026, 10, 6, 9),
           sentOn: const <String, String>{},
         ),
@@ -222,7 +220,6 @@ void main() {
         owedRecurringReminders(
           rules: <RecurringRuleView>[rule],
           strings: strings,
-          locale: 'en',
           nowMs: at(2026, 10, 11, 9),
           sentOn: const <String, String>{},
         ),
@@ -236,7 +233,6 @@ void main() {
           _rule(nextDueAt: at(2026, 10, 10), remindDaysBefore: 3),
         ],
         strings: strings,
-        locale: 'en',
         nowMs: nowMs,
         sentOn: const <String, String>{},
       ).single.body;
@@ -250,7 +246,6 @@ void main() {
         owedRecurringReminders(
           rules: <RecurringRuleView>[_rule(nextDueAt: at(2026, 10, 10))],
           strings: strings,
-          locale: 'en',
           nowMs: at(2026, 10, 10, 9),
           sentOn: const <String, String>{},
         ),
@@ -264,7 +259,6 @@ void main() {
       final first = owedRecurringReminders(
         rules: <RecurringRuleView>[rule],
         strings: strings,
-        locale: 'en',
         nowMs: at(2026, 10, 8, 9),
         sentOn: const <String, String>{},
       ).single;
@@ -274,7 +268,6 @@ void main() {
         owedRecurringReminders(
           rules: <RecurringRuleView>[rule],
           strings: strings,
-          locale: 'en',
           nowMs: at(2026, 10, 9, 9),
           sentOn: <String, String>{first.key: '2026-10-08'},
         ),
@@ -286,7 +279,6 @@ void main() {
         owedRecurringReminders(
           rules: <RecurringRuleView>[rule],
           strings: strings,
-          locale: 'en',
           nowMs: at(2026, 10, 9, 9),
           sentOn: const <String, String>{
             'recurring-reminder:r1:2026-09-10': '2026-09-08',

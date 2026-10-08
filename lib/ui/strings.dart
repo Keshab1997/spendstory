@@ -24,13 +24,56 @@
 library;
 
 import '../l10n/strings_table.g.dart';
-import 'format.dart';
+// Prefixed: the date wrappers below share their names with these functions on
+// purpose, and an unqualified call would find the method, not the table.
+import 'format.dart' as fmt;
 
 class SsStrings {
-  const SsStrings(this.locale);
+  const SsStrings(this.locale, {this.nativeDigits = false});
 
   /// `en` | `hi` | `bn`
   final String locale;
+
+  /// Whether numbers are written in [locale]'s own digits — the S-20 switch
+  /// "বাংলা সংখ্যা দেখাও" (docs/09-LOCALIZATION.md §2).
+  ///
+  /// False is the shipped default and the default in the tests: a Bengali
+  /// reader expects `₹1,240`, because that is how their bank writes it. The
+  /// switch moves the *digits* only — the words around them were already
+  /// Bengali, and they stay Bengali either way.
+  final bool nativeDigits;
+
+  /// What the numeral tables in `format.dart` understand: the language, when the
+  /// user asked for its digits, and `en` ("leave them alone") when they did not.
+  String get numeralLocale => nativeDigits ? locale : 'en';
+
+  /// [input] with its ASCII digits written the way this user reads numbers:
+  /// `1240` → `১২৪০` / `१२४०`, or unchanged.
+  ///
+  /// Every numeral a screen shows goes through here or through
+  /// [numeralLocale], which is what makes the one switch enough
+  /// (`test/ui/numerals_test.dart` fails if a call site goes around it).
+  String digits(String input) => fmt.localizeDigits(input, numeralLocale);
+
+  /// The date helpers in `format.dart`, resolved against the same choice: a
+  /// Bengali ledger that left the numerals switch off writes `12 সেপ্টেম্বর`,
+  /// and one that turned it on writes `১২ সেপ্টেম্বর`. Same words either way —
+  /// only the digits move.
+  String shortDate(int ms) =>
+      fmt.shortDate(ms, locale: locale, nativeDigits: nativeDigits);
+
+  String dayLabel(int ms, {int? nowMs}) => fmt.dayLabel(
+    ms,
+    locale: locale,
+    nativeDigits: nativeDigits,
+    nowMs: nowMs,
+  );
+
+  String monthLabel(int ms) =>
+      fmt.monthLabel(ms, locale: locale, nativeDigits: nativeDigits);
+
+  String timeOfDay(int ms) =>
+      fmt.timeOfDay(ms, locale: locale, nativeDigits: nativeDigits);
 
   static const List<String> supportedLocales = <String>['bn', 'en', 'hi'];
 
@@ -38,12 +81,12 @@ class SsStrings {
     final value = ssStringsTable[locale]?[key];
     // Never silently borrow English copy into a Bengali or Hindi screen.
     if (value == null) return '⟦$key⟧';
-    return localizeDigits(value, locale);
+    return digits(value);
   }
 
   /// `{n} days left` — the one phrase S-14 and S-15 both read out.
   String daysLeft(int days) =>
-      fill('budgetDaysLeftTemplate', {'n': localizeDigits('$days', locale)});
+      fill('budgetDaysLeftTemplate', {'n': digits('$days')});
 
   /// A string with `{placeholders}` filled in.
   ///

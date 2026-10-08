@@ -85,8 +85,10 @@ void main() {
       expect(find.text(_bn['aboutScreenTitle']), findsOneWidget);
       expect(find.text(_bn['aboutCollectBody']), findsOneWidget);
       expect(find.text(_en['aboutCollectBody']), findsNothing);
-      // Bengali digits on the steps, like every other number in the app.
-      expect(find.text('১'), findsOneWidget);
+      // Latin digits on the steps by default — `১২৪০` rather than `১২৪০`, the
+      // way the bank writes it. The Bngali-digits case is
+      // `test/ui/numerals_test.dart` (T-707).
+      expect(find.text('1'), findsOneWidget);
     });
 
     testWidgets('the DPDP contact is stated, and no address is invented', (

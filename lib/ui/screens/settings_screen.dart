@@ -13,12 +13,12 @@ import '../../ads/ad_consent.dart';
 import '../../app/app_info.dart';
 import '../../app/lock.dart';
 import '../../app/providers.dart';
+import '../../data/seed.dart' show kNumeralsMetaKey;
 import '../../export/backup_repo.dart';
 import '../../platform/app_lock.dart';
 import '../../pro/pro_controller.dart';
 import '../components/controls.dart';
 import '../components/surfaces.dart';
-import '../format.dart';
 import '../tokens.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -29,6 +29,7 @@ class SettingsScreen extends ConsumerWidget {
     final c = SsColors.of(context);
     final s = ref.watch(stringsProvider);
     final locale = ref.watch(localeProvider);
+    final numerals = ref.watch(numeralsProvider);
     final themeMode = ref.watch(themeModeProvider);
     final isPro = ref.watch(proStatusProvider);
     final personalized = !ref.watch(nonPersonalizedAdsProvider);
@@ -157,6 +158,41 @@ class SettingsScreen extends ConsumerWidget {
                     ref.read(appDbProvider)?.setMeta('locale', code);
                   },
                 ),
+                // English has one way to write a number, so the switch is not
+                // drawn for it: a control that cannot change anything is a
+                // control that lies (docs/09-LOCALIZATION.md §2).
+                if (locale != 'en') ...[
+                  const SizedBox(height: SsSpace.x4),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              s['settingsNumerals'],
+                              style: SsText.caption.copyWith(
+                                color: c.textSecondary,
+                              ),
+                            ),
+                            const SizedBox(height: SsSpace.x1),
+                            Text(
+                              s['settingsNumeralsBody'],
+                              style: SsText.micro.copyWith(
+                                color: c.textTertiary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: SsSpace.x3),
+                      Switch(
+                        value: numerals,
+                        onChanged: (on) => _setNumerals(ref, on),
+                      ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
@@ -359,9 +395,8 @@ class SettingsScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     Text(
-                      localizeDigits(
+                      s.digits(
                         '${s.appName} · ${s['version']} ${AppInfo.version}',
-                        locale,
                       ),
                       style: SsText.micro.copyWith(color: c.textTertiary),
                     ),
@@ -389,6 +424,14 @@ class SettingsScreen extends ConsumerWidget {
   /// The app-lock switch. The toggle only moves when the phone has actually
   /// confirmed the user: a lock that turns on for a prompt that was cancelled is
   /// a lock the user does not know the state of.
+  /// The numerals switch (T-707). Instant, like the language picker above it,
+  /// and stored in `app_meta` so the choice survives the next launch — the one
+  /// place a preference is written from Settings.
+  void _setNumerals(WidgetRef ref, bool on) {
+    ref.read(numeralsProvider.notifier).state = on;
+    ref.read(appDbProvider)?.setMeta(kNumeralsMetaKey, '$on');
+  }
+
   Future<void> _setLock(BuildContext context, WidgetRef ref, bool on) async {
     final s = ref.read(stringsProvider);
     final messenger = ScaffoldMessenger.of(context);

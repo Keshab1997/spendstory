@@ -32,7 +32,6 @@ import '../../app/providers.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
 import '../components/surfaces.dart';
-import '../format.dart';
 import '../tokens.dart';
 
 class AboutScreen extends ConsumerWidget {
@@ -42,7 +41,6 @@ class AboutScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = SsColors.of(context);
     final s = ref.watch(stringsProvider);
-    final locale = ref.watch(localeProvider);
 
     return SsScaffold(
       title: s['aboutScreenTitle'],
@@ -77,7 +75,7 @@ class AboutScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SsSpace.x1),
                 Text(
-                  localizeDigits('${s['version']} ${AppInfo.version}', locale),
+                  s.digits('${s['version']} ${AppInfo.version}'),
                   style: SsText.micro.copyWith(color: c.textTertiary),
                 ),
               ],
@@ -180,19 +178,19 @@ class AboutScreen extends ConsumerWidget {
             child: Column(
               children: <Widget>[
                 _Step(
-                  n: localizeDigits('1', locale),
+                  n: s.digits('1'),
                   text: s['aboutEraseStep1'],
                   color: c.violet600,
                 ),
                 const SizedBox(height: SsSpace.x3),
                 _Step(
-                  n: localizeDigits('2', locale),
+                  n: s.digits('2'),
                   text: s['aboutEraseStep2'],
                   color: c.violet600,
                 ),
                 const SizedBox(height: SsSpace.x3),
                 _Step(
-                  n: localizeDigits('3', locale),
+                  n: s.digits('3'),
                   text: s['aboutEraseStep3'],
                   color: c.violet600,
                 ),

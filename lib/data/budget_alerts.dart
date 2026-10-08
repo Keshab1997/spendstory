@@ -110,7 +110,8 @@ BudgetAlert _build({
   final amount = formatInr(
     crossed ? -status.remainingPaise : status.remainingPaise,
     showSymbol: true,
-    localize: locale,
+    // The language picks the words above; this picks the numerals.
+    localize: strings.numeralLocale,
   );
 
   return BudgetAlert(

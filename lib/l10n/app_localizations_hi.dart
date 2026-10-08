@@ -1072,7 +1072,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get recurringTitle => 'नियमित भुगतान और रिमाइंडर';
 
   @override
-  String get recurringStripTitle => 'अगले ३० दिन';
+  String get recurringStripTitle => 'अगले 30 दिन';
 
   @override
   String get recurringEmptyTitle => 'अभी कुछ नहीं';
@@ -1091,7 +1091,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String recurringDueCountTemplate(String n) {
-    return 'अगले ३० दिनों में $n';
+    return 'अगले 30 दिनों में $n';
   }
 
   @override
@@ -1558,4 +1558,11 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get lockTurnOff => 'ऐप लॉक बंद करके खोलें';
+
+  @override
+  String get settingsNumerals => 'देवनागरी अंक दिखाएँ';
+
+  @override
+  String get settingsNumeralsBody =>
+      'रकम, तारीख़ और प्रतिशत इस भाषा के अंकों में';
 }

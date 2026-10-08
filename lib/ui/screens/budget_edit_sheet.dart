@@ -17,7 +17,6 @@ import '../../domain/models.dart';
 import '../../domain/view_models.dart';
 import '../components/controls.dart';
 import '../components/lists.dart';
-import '../format.dart';
 import '../tokens.dart';
 
 /// Opens the editor. Returns true when something was saved or deleted.
@@ -268,10 +267,7 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
                               : null,
                         ),
                         const SizedBox(width: SsSpace.x3),
-                        Text(
-                          localizeDigits('$_startDay', locale),
-                          style: SsText.h3,
-                        ),
+                        Text(s.digits('$_startDay'), style: SsText.h3),
                         const SizedBox(width: SsSpace.x3),
                         SsIconButton(
                           icon: Icons.add_rounded,
