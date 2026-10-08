@@ -95,6 +95,13 @@ final stringsProvider = Provider<SsStrings>(
   (ref) => SsStrings(ref.watch(localeProvider)),
 );
 
+/// The clock, as a provider.
+///
+/// Screens that divide by "days left" are only as testable as their idea of
+/// today, so the one thing they are allowed to read is this. Overridden in
+/// tests; never overridden in the app.
+final nowProvider = Provider<DateTime>((ref) => DateTime.now());
+
 /// Light / dark / system. The design ships both themes; the user picks.
 final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
 

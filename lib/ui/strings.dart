@@ -31,6 +31,11 @@ class SsStrings {
     return localizeDigits(value, locale);
   }
 
+  /// `{n} days left` — the one phrase S-14 and S-15 both read out.
+  String daysLeft(int days) => fill('budgetDaysLeftTemplate', {
+    'n': localizeDigits('$days', locale),
+  });
+
   /// A string with `{placeholders}` filled in.
   ///
   /// Word order differs between the three languages, so a sentence like

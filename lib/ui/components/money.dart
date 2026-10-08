@@ -546,3 +546,117 @@ class MiniBars extends StatelessWidget {
     );
   }
 }
+
+/// A ring showing how much of a cap is gone, with the number in the middle.
+///
+/// The ring and the number must never disagree, so both are driven from one
+/// `ratio`: the arc is clamped to a full circle (an arc cannot be 107% of a
+/// circle) while the number is not, which is exactly the pair a user needs —
+/// the ring says "full", the centre says "and then some".
+class CircularGauge extends StatelessWidget {
+  const CircularGauge({
+    super.key,
+    required this.ratio,
+    required this.child,
+    this.size = 176,
+    this.thickness = 14,
+    this.color,
+  });
+
+  /// Uncapped on purpose: 1.07 draws a full ring and reads 107%.
+  final double ratio;
+
+  final Widget child;
+  final double size;
+  final double thickness;
+
+  /// Overrides the threshold colour. Used where the surrounding card already
+  /// carries the state and a second colour would fight it.
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = SsColors.of(context);
+
+    // The same thresholds as [BudgetBar]: violet under 80%, gold to 100%,
+    // danger once the cap is gone.
+    final arcColour =
+        color ??
+        (ratio >= 1.0
+            ? c.danger
+            : (ratio >= 0.8 ? c.gold500 : c.violet600));
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: ratio.clamp(0.0, 1.0)),
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, _) => CustomPaint(
+              size: Size.square(size),
+              painter: _GaugePainter(
+                progress: value,
+                thickness: thickness,
+                track: c.surfaceTint,
+                color: arcColour,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(thickness + SsSpace.x3),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GaugePainter extends CustomPainter {
+  _GaugePainter({
+    required this.progress,
+    required this.thickness,
+    required this.track,
+    required this.color,
+  });
+
+  final double progress;
+  final double thickness;
+  final Color track;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final arcRect = rect.deflate(thickness / 2);
+
+    final trackPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = thickness
+      ..color = track;
+    canvas.drawArc(arcRect, 0, math.pi * 2, false, trackPaint);
+
+    if (progress <= 0) return;
+
+    final barPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = thickness
+      ..strokeCap = StrokeCap.round
+      ..color = color;
+    canvas.drawArc(
+      arcRect,
+      -math.pi / 2,
+      math.pi * 2 * progress,
+      false,
+      barPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _GaugePainter old) =>
+      old.progress != progress || old.color != color;
+}

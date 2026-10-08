@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ui/screens/budget_detail_screen.dart';
 import '../ui/screens/budgets_screen.dart';
 import '../ui/screens/categories_screen.dart';
 import '../ui/screens/coming_soon_screen.dart';
@@ -168,6 +169,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/budgets',
         builder: (context, state) => const BudgetsScreen(),
+        routes: <RouteBase>[
+          // Nested, so the detail screen's back arrow returns to the list it
+          // was opened from rather than to Home.
+          GoRoute(
+            path: ':id',
+            builder: (context, state) =>
+                BudgetDetailScreen(id: state.pathParameters['id']!),
+          ),
+        ],
       ),
       GoRoute(
         path: '/accounts',

@@ -46,7 +46,7 @@ class BudgetsScreen extends ConsumerWidget {
     final txns =
         ref.watch(transactionsProvider).valueOrNull ?? const <TxnView>[];
     final categoryById = ref.watch(categoryByIdProvider);
-    final nowMs = DateTime.now().millisecondsSinceEpoch;
+    final nowMs = ref.watch(nowProvider).millisecondsSinceEpoch;
 
     final overall = <BudgetView>[
       for (final b in budgets)
@@ -208,6 +208,7 @@ class BudgetsScreen extends ConsumerWidget {
                 status: shown[i],
                 category: categoryById[shown[i].budget.categoryId],
                 locale: locale,
+                strings: s,
                 onTap: () => context.push('/budgets/${shown[i].budget.id}'),
               ),
               // After the third row, and only when rows follow it.
@@ -290,12 +291,14 @@ class _BudgetRow extends StatelessWidget {
     required this.status,
     required this.category,
     required this.locale,
+    required this.strings,
     required this.onTap,
   });
 
   final BudgetStatus status;
   final CategoryView? category;
   final String locale;
+  final SsStrings strings;
   final VoidCallback onTap;
 
   @override
@@ -362,7 +365,7 @@ class _BudgetRow extends StatelessWidget {
                 if (status.cycle.daysLeft > 0 &&
                     status.dailyAllowancePaise != null)
                   Text(
-                    daysLeftLabel(SsStrings(locale), status.cycle.daysLeft),
+                    strings.daysLeft(status.cycle.daysLeft),
                     style: SsText.micro.copyWith(color: c.textTertiary),
                   ),
               ],
@@ -373,12 +376,6 @@ class _BudgetRow extends StatelessWidget {
     );
   }
 }
-
-/// `{n} days left`, in the active language and its numerals.
-String daysLeftLabel(SsStrings s, int days) => s.fill(
-  'budgetDaysLeftTemplate',
-  {'n': localizeDigits('$days', s.locale)},
-);
 
 class _SuggestionCard extends StatelessWidget {
   const _SuggestionCard({

@@ -168,7 +168,42 @@ class _BudgetEditorSheetState extends ConsumerState<BudgetEditorSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ---- which cap -------------------------------------------
-                    if (widget.fixedCategoryId == null) ...[
+                    // A new budget chooses its category; an existing one shows
+                    // it. Moving a cap to another category is a different
+                    // budget, and silently re-pointing this one would leave its
+                    // id (budget-<category>) describing something it no longer
+                    // is.
+                    if (widget.existing != null) ...[
+                      Text(
+                        s['budgetCategoryCap'],
+                        style: SsText.caption.copyWith(color: c.textSecondary),
+                      ),
+                      const SizedBox(height: SsSpace.x2),
+                      CategoryChip(
+                        label: widget.existing!.categoryId == null
+                            ? s['budgetOverallName']
+                            : (all
+                                      .where(
+                                        (cat) =>
+                                            cat.id ==
+                                            widget.existing!.categoryId,
+                                      )
+                                      .firstOrNull
+                                      ?.label(locale) ??
+                                  s['budgetOverallName']),
+                        icon: widget.existing!.categoryId == null
+                            ? 'Σ'
+                            : all
+                                  .where(
+                                    (cat) =>
+                                        cat.id == widget.existing!.categoryId,
+                                  )
+                                  .firstOrNull
+                                  ?.icon,
+                        selected: true,
+                      ),
+                      const SizedBox(height: SsSpace.x4),
+                    ] else if (widget.fixedCategoryId == null) ...[
                       Text(
                         s['budgetCategoryCap'],
                         style: SsText.caption.copyWith(color: c.textSecondary),
