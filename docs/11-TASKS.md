@@ -299,47 +299,6 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
 - [x] **T-609** Audit: grep every `AdRequest` site → **zero** financial data passed
 - [ ] **T-610** Settings toggle: "personalized ads" (off by default in India)
 
-**What landed (T-604, T-605):**
-- `lib/pro/` — the billing half of Pro, and the only place that imports
-  `in_app_purchase`. `product_ids.dart` holds the three ids, the documented
-  prices and the entitlement window; `entitlement.dart` is the record Play last
-  confirmed, encoded as one readable line (`yearly|1759939200000|restore`);
-  `billing_client.dart` is the seam (`available`, `events`, `buy`, `restore`);
-  `billing_client_mobile.dart` is the plugin; `billing_client_web.dart` is a
-  const stub whose `available` is false.
-- **The entitlement is a window, not a boolean.** Monthly is honoured for 31 days
-  and yearly for 372, both longer than the period they pay for — a renewal still
-  in flight must never lock a paying user out — and `proStatusProvider` is now a
-  *derived* `Provider<bool>` that re-reads the clock, so a window that runs out
-  reads Free immediately. Lifetime's window is null: nothing to count down.
-- **The store's price is what the paywall shows.** `proProductsProvider` asks
-  Play; when it cannot, the screen falls back to `fallbackPricePaise` and says
-  the numbers are estimates. Nothing in this app formats a price and calls it
-  the store's.
-- **A purchase is granted on `purchased`/`restored`, and never on the tap.** Play
-  answers after the sheet closes, so the paywall says "opening the store…" and
-  the snackbar comes from the event, not from the tap. `pending` gets its own
-  note ("the store is reviewing it") and grants nothing.
-- **Restore is on the paywall *and* in Settings** (`docs/08 §6`), and the
-  controller also restores once per launch: it is what gives a reinstall its Pro
-  back and what ends a subscription that lapsed in the store.
-- **The paywall gate is arithmetic** (`lib/pro/paywall_gate.dart`, §S-22): a tap
-  on something that names Pro is always honoured, a Pro-locked insight earns the
-  paywall on the third tap, the app offers itself from the tenth session, and
-  never more than one paywall a session — counters in `app_meta`, so the tenth
-  session is the tenth session of the install.
-- **There are no counted-down offers, no fake discounts and no struck-through
-  prices**, and the tests say so by pattern, not by eye:
-  `test/ui/paywall_test.dart` searches every string on the screen for
-  `\bleft\b`, `\bending\b`, `was ₹`, `hurry`, `limited time`.
-- **The trial reminder** (`lib/pro/trial_reminder.dart`) is S-22's last rule:
-  Play charges on the eighth day of a yearly trial, so on the *last* day of one
-  — and only on that day, only for a trial bought in this app, only once — the
-  next launch posts a notification that says where to cancel. It says **no
-  price**: the store's price is the store's to state, and a notification is not
-  a place to guess at money. A notification the host refuses stays owed, the
-  same bargain T-505 makes.
-
 **What landed (T-601 … T-603, T-608, T-609):**
 - `lib/ads/` — the whole ads layer, and the only place that knows the SDK
   exists. `ad_placement.dart` names the six placements as *screens* (`ss_home_banner`,
@@ -390,6 +349,61 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
    lost the slot it had grown.
 4. The `240s` floor was off by a boundary (`<` where `docs/08 §4` writes `>`),
    so an interstitial could fire exactly four minutes later.
+
+**What landed (T-604, T-605):**
+- `lib/pro/` — the billing half of Pro, and the only place that imports
+  `in_app_purchase`. `product_ids.dart` holds the three ids, the documented
+  prices and the entitlement window; `entitlement.dart` is the record Play last
+  confirmed, encoded as one readable line (`yearly|1759939200000|restore`);
+  `billing_client.dart` is the seam (`available`, `events`, `buy`, `restore`);
+  `billing_client_mobile.dart` is the plugin; `billing_client_web.dart` is a
+  const stub whose `available` is false.
+- **The entitlement is a window, not a boolean.** Monthly is honoured for 31 days
+  and yearly for 372, both longer than the period they pay for — a renewal still
+  in flight must never lock a paying user out — and `proStatusProvider` is now a
+  *derived* `Provider<bool>` that re-reads the clock, so a window that runs out
+  reads Free immediately. Lifetime's window is null: nothing to count down.
+- **The store's price is what the paywall shows.** `proProductsProvider` asks
+  Play; when it cannot, the screen falls back to `fallbackPricePaise` and says
+  the numbers are estimates. Nothing in this app formats a price and calls it
+  the store's.
+- **A purchase is granted on `purchased`/`restored`, and never on the tap.** Play
+  answers after the sheet closes, so the paywall says "opening the store…" and
+  the snackbar comes from the event, not from the tap. `pending` gets its own
+  note ("the store is reviewing it") and grants nothing.
+- **Restore is on the paywall *and* in Settings** (`docs/08 §6`), and the
+  controller also restores once per launch: it is what gives a reinstall its Pro
+  back and what ends a subscription that lapsed in the store.
+- **The paywall gate is arithmetic** (`lib/pro/paywall_gate.dart`, §S-22): a tap
+  on something that names Pro is always honoured, a Pro-locked insight earns the
+  paywall on the third tap, the app offers itself from the tenth session, and
+  never more than one paywall a session — counters in `app_meta`, so the tenth
+  session is the tenth session of the install.
+- **There are no counted-down offers, no fake discounts and no struck-through
+  prices**, and the tests say so by pattern, not by eye:
+  `test/ui/paywall_test.dart` searches every string on the screen for
+  `\bleft\b`, `\bending\b`, `was ₹`, `hurry`, `limited time`.
+- **The trial reminder** (`lib/pro/trial_reminder.dart`) is S-22's last rule:
+  Play charges on the eighth day of a yearly trial, so on the *last* day of one
+  — and only on that day, only for a trial bought in this app, only once — the
+  next launch posts a notification that says where to cancel. It says **no
+  price**: the store's price is the store's to state, and a notification is not
+  a place to guess at money. A notification the host refuses stays owed, the
+  same bargain T-505 makes.
+
+**Bugs the tests surfaced (T-604/T-605, all fixed):**
+5. `billingClientProvider` was read before the store had answered in tests, so a
+   *cancelled* purchase still wrote `proEntitlement` — the controller now
+   ignores anything that is not `purchased`/`restored`, and the fake store's five
+   outcomes each have their own test.
+6. The paywall's fallback prices were rendered side by side with the store's
+   without saying which was which. The estimate note is now printed above the
+   tiers whenever `proProductsProvider` is empty.
+7. The privacy and terms sheets were a fixed `Column`, so the policy text
+   overflowed on a 360 dp phone. Both sheets scroll now.
+8. Tapping the Settings card opened a paywall for a user who *already pays* —
+   the gate reads `proStatusProvider` first and Pro users get their own card
+   (plan + renewal), with nothing to buy and restore still offered.
 
 **What landed (T-606, T-607):**
 - **`lib/pro/rewards.dart`** — the two offers of `docs/08 §5` as arithmetic and a
@@ -455,20 +469,6 @@ purchases (Batch 7), ARB localization (Batch 8), release prep (Batch 9).
     had loaded, which read an empty counter as "nothing granted yet". The shell
     loads the ledger with the rest of the launch work, and the button reads what
     the ledger published rather than guessing.
-
-**Bugs the tests surfaced (T-604/T-605, all fixed):**
-5. `billingClientProvider` was read before the store had answered in tests, so a
-   *cancelled* purchase still wrote `proEntitlement` — the controller now
-   ignores anything that is not `purchased`/`restored`, and the fake store's five
-   outcomes each have their own test.
-6. The paywall's fallback prices were rendered side by side with the store's
-   without saying which was which. The estimate note is now printed above the
-   tiers whenever `proProductsProvider` is empty.
-7. The privacy and terms sheets were a fixed `Column`, so the policy text
-   overflowed on a 360 dp phone. Both sheets scroll now.
-8. Tapping the Settings card opened a paywall for a user who *already pays* —
-   the gate reads `proStatusProvider` first and Pro users get their own card
-   (plan + renewal), with nothing to buy and restore still offered.
 
 **Next:** T-610 — the Settings half: the "personalized ads" switch (off by
 default in India, which is the default `lib/ads/ad_consent.dart` already
