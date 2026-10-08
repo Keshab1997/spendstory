@@ -240,7 +240,12 @@ void main() {
       router.go('/transactions');
       await tester.pumpAndSettle();
       expect(find.text('Transactions'), findsWidgets);
-      expect(find.textContaining('Groceries'), findsWidgets);
+      // Assert on the first row's own category rather than on a merchant that
+      // may or may not be above the fold: the list builds lazily, so which
+      // rows exist in the tree depends on the day the suite runs.
+      final firstRow = tester.widget<TxRow>(find.byType(TxRow).first);
+      expect(firstRow.category, isNotNull);
+      expect(find.textContaining(firstRow.category!.label('en')), findsWidgets);
       expect(find.text('মুদি ও বাজার'), findsNothing);
 
       router.go('/insights');
@@ -260,8 +265,10 @@ void main() {
 
       router.go('/budgets');
       await tester.pumpAndSettle();
-      expect(find.textContaining('Budget list and details'), findsOneWidget);
-      expect(find.textContaining('Category limits'), findsOneWidget);
+      // The real screen now, not the Batch 6 placeholder: the overall cap and
+      // a category cap, both in English.
+      expect(find.text('This month\'s budget'), findsOneWidget);
+      expect(find.text('Category budget'), findsWidgets);
     });
   });
 }
