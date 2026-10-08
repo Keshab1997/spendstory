@@ -75,8 +75,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  integration_test:
-    sdk: flutter
+  # No integration_test here on purpose (2026-10-08): with it in the list the
+  # Flutter tool writes an Android `GeneratedPluginRegistrant` that registers
+  # `IntegrationTestPlugin`, while the Gradle side does not put the module on the
+  # classpath — so `flutter build apk` dies in compileReleaseJavaWithJavac
+  # ("package dev.flutter.plugins.integration_test does not exist"). The repo has
+  # no integration_test/ suite; add both back together when one exists, on a
+  # toolchain where the module is included.
   flutter_lints: ^5.0.0
   drift_dev: ^2.21.0
   build_runner: ^2.4.13

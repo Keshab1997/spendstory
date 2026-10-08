@@ -191,6 +191,14 @@ and both worth remembering:
    `compileSdk 35`); the Dart API the app uses is unchanged. Lift the pin when
    the toolchain moves to AGP 9.2 + compileSdk 37.
 
+3. **`integration_test` in `dev_dependencies` broke the release build.** With
+   it listed, the Flutter tool writes an Android `GeneratedPluginRegistrant` that
+   registers `IntegrationTestPlugin`, while the Gradle side does not put the
+   module on the classpath — `:app:compileReleaseJavaWithJavac` then fails with
+   "package dev.flutter.plugins.integration_test does not exist". The repo has no
+   `integration_test/` suite, so the dependency was removed; put the directory
+   and the dependency back together when a suite exists.
+
 **Suggestion for Keshab (workflow change, his call):** give `ci.yml`
 `build-apk: true`, or add a nightly dispatch of `manual-build.yml`. A Dart-green
 repo that cannot assemble an APK is the failure mode nobody sees until release
