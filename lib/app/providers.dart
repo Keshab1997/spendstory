@@ -18,6 +18,7 @@ import '../data/connection_io.dart'
     if (dart.library.js_interop) '../data/connection_web.dart';
 import '../data/db.dart';
 import '../data/demo_data.dart';
+import '../data/seed.dart' show kAppLockMetaKey;
 import '../data/recurring_tasks.dart';
 import '../pro/entitlement.dart';
 import '../data/tx_repo.dart';
@@ -54,11 +55,16 @@ class BootState {
     required this.onboarded,
     required this.demoMode,
     required this.locale,
+    this.appLock = false,
   });
 
   final bool onboarded;
   final bool demoMode;
   final String locale;
+
+  /// The S-20 app-lock switch, as stored. Defaulted rather than required so a
+  /// test that only cares about onboarding does not have to know about it.
+  final bool appLock;
 }
 
 /// Runs once, behind the splash screen: open the database, seed it if this is
@@ -84,6 +90,10 @@ final bootProvider = FutureProvider<BootState>((ref) async {
     locale:
         stored ??
         (SsStrings.supportedLocales.contains(deviceCode) ? deviceCode : 'en'),
+    // Read here, acted on once, behind the splash: `lib/app/app.dart` arms the
+    // lock when this comes back true, so the first frame the user could see is
+    // already the lock screen rather than a ledger that flashes before it.
+    appLock: (await db.meta(kAppLockMetaKey)) == 'true',
   );
 });
 

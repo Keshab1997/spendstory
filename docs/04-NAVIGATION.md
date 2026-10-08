@@ -47,6 +47,9 @@ final router = GoRouter(
     GoRoute(path: '/about',       builder: About.new),
     GoRoute(path: '/export',      builder: Export.new),
 
+    // guard destination, not a place the user navigates to (T-706)
+    GoRoute(path: '/lock',        builder: LockScreen.new),
+
     GoRoute(                                     // paywall = fullscreen sheet
       path: '/pro',
       pageBuilder: (c, s) => MaterialPage(
@@ -124,6 +127,7 @@ Android: `android/app/src/main/AndroidManifest.xml` e intent-filter (scheme `spe
 - `app_meta` (onboarded, locale, theme) → `SharedPreferences` + Riverpod `AppMetaProvider`
 - Guard: `redirect:` e check koro — `onboarded == false` hole `/home` ba `/transactions` e jete debe na
 - Permission state **kono guard na** — permission optional, app kono screen block kore na
+- **App lock** (T-706) — `app_meta.appLock` + `lockEnabledProvider` / `lockedProvider`; lock on hole `/lock` chara sob location → `/lock?from=…`, ar unlock korle oi location-ei fire. `/lock` protected root **na**: lock-e pathano ta lock bypass korar chesta na
 - Ad gate: interstitial ek session e max 1, `AdGateProvider` e counter
 
 ## 7. Testing requirements

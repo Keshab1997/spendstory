@@ -14,9 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spendstory/app/app.dart';
+import 'package:spendstory/app/lock.dart';
 import 'package:spendstory/app/providers.dart';
 import 'package:spendstory/app/router.dart';
+import 'package:spendstory/platform/app_lock.dart';
 import 'package:spendstory/ui/components/money.dart';
+import 'package:spendstory/ui/strings.dart';
+
+import '../ui/ledger_harness.dart';
+
 import 'package:spendstory/ui/theme.dart';
 
 const List<String> _allRoutes = <String>[
@@ -91,6 +97,55 @@ void main() {
         expect(errors, isEmpty, reason: errors.join('\n---\n'));
       });
     }
+  }
+
+  // S-20's lock screen (T-706) only appears with the lock armed, so it gets its
+  // own pass instead of a line in `_allRoutes` — and it is exactly the kind of
+  // screen this file exists for: three sentences of Bengali centred on a 360 dp
+  // phone, with a button under them.
+  for (final locale in <String>['bn', 'hi', 'en']) {
+    testWidgets('the lock screen renders cleanly · $locale · textScale 1.3', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final errors = <String>[];
+      final previous = FlutterError.onError;
+      FlutterError.onError = (details) =>
+          errors.add(details.exceptionAsString());
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: <Override>[
+            appDbProvider.overrideWithValue(null),
+            bootProvider.overrideWith(
+              (ref) async => BootState(
+                onboarded: true,
+                demoMode: true,
+                locale: locale,
+                appLock: true,
+              ),
+            ),
+            // Cancelled: the screen stays up, which is what we want to look at.
+            appLockProvider.overrideWithValue(
+              FakeAppLock(LockOutcome.cancelled),
+            ),
+          ],
+          child: MediaQuery(
+            data: const MediaQueryData(textScaler: TextScaler.linear(1.3)),
+            child: const SpendStoryApp(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      FlutterError.onError = previous;
+
+      expect(find.text(SsStrings(locale)['lockTitle']), findsOneWidget);
+      expect(errors, isEmpty, reason: errors.join('\n---\n'));
+    });
   }
 
   testWidgets('the bar chart never overflows, at any data shape', (

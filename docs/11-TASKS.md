@@ -510,8 +510,50 @@ PDF export credit gets spent.
       *(the recon held: `pointycastle` + `pdf` are pure Dart, `share_plus` and
       `file_picker` are the only two new plugins, and the rewarded unlock runs
       through `spendPdfCredit()` unchanged. See the landing block below.)*
-- [ ] **T-706** Settings data-erase (double confirm) + biometric lock
+- [x] **T-706** Settings data-erase (double confirm) + biometric lock
+      *(the erase half already existed and matches `05 §5`; the lock is new —
+      `local_auth` → `androidx.biometric`, one seam, no prompt in `flutter test`)*
 - [ ] **T-707** Bengali digits toggle
+
+**What landed (T-706):**
+- **Security section (S-20).** Settings now has a নিরাপত্তা group with the two
+  rows `03` asks for: অ্যাপ লক and সব ডেটা মুছুন. The erase row moved out of its
+  own card at the bottom of the screen into that group; the double-confirm flow
+  behind it is unchanged (two dialogs, `purgeEverything()` → re-seed →
+  `onboarded=false` → `/language`, and demo mode says so instead of pretending).
+- **The lock is real, and it is the phone's check, not ours.** `local_auth` →
+  `androidx.biometric` on a `FlutterFragmentActivity`; the app receives one bit
+  and stores nothing — no biometric data, no hash, no copy of a PIN.
+  `AppLock` (`lib/platform/app_lock.dart`) is the seam: one `prompt()` returning
+  `unlocked` / `cancelled` / `unavailable`, and it **never throws**, so the web
+  preview and `flutter test` answer "unavailable" instead of blowing up. Device
+  credentials (PIN/pattern) are allowed on purpose — a lock that only accepts a
+  fingerprint becomes a lock-out the day the fingerprints are deleted.
+- **State machine** (`lib/app/lock.dart`): `lockEnabled` (the user's choice,
+  mirrored in `app_meta.appLock`) is deliberately separate from `locked` (the
+  app's current obligation to ask). Turning the switch on does **not** lock the
+  screen the user is looking at; boot with a stored "on" does. Leaving the app
+  for more than `lockGrace` (60 s) locks it again on return, so a glance at a
+  notification — or the share sheet from S-23 — does not re-prompt.
+- **Guard** (`docs/04 §6`): while locked, every location redirects to
+  `/lock?from=…`, and unlocking returns to the location that was withheld rather
+  than dumping the user on Home. `/lock` is not a protected root (being sent to
+  the lock is not trying to get past it), and with the lock off `/lock` is not a
+  place to sit.
+- **No dead end.** If the phone cannot ask (nothing enrolled, lock-screen
+  removed, web), the lock screen says exactly that and offers one honest way
+  out: turn the lock off, recorded in `app_meta` like any other change.
+  Permanent lock-out is not a feature this app ships.
+- Android: `USE_BIOMETRIC` declared in the app manifest (the plugin also
+  declares it — this is the manifest a reviewer reads), `MainActivity` now
+  extends `FlutterFragmentActivity`, and both launch themes hang off
+  `Theme.AppCompat` (the requirement `local_auth_android` documents). None of
+  that changes the engine, the channel or the notification listener.
+- Tests: `test/ui/settings_lock_test.dart` (12 — switch outcomes, boot-locked
+  routing, return-to-intercepted-location, the way out, the grace window, and
+  the erase double-confirm against a real in-memory database), plus the lock
+  screen in `test/app/render_smoke_test.dart` at 360 dp / 1.3× in all three
+  languages. 13 new ARB keys ×3 languages (474 total).
 
 **What landed (T-701):**
 - `lib/l10n/app_en.arb` (template) + `app_hi.arb` + `app_bn.arb` — **377 keys

@@ -2870,6 +2870,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Encrypted backup, restore, CSV and PDF'**
   String get exportSettingBody;
+
+  /// No description provided for @security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// No description provided for @appLock.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock'**
+  String get appLock;
+
+  /// No description provided for @appLockBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Asks for your fingerprint, face or phone PIN before the app opens. The reading stays inside Android.'**
+  String get appLockBody;
+
+  /// No description provided for @appLockPromptReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock SpendStory'**
+  String get appLockPromptReason;
+
+  /// No description provided for @appLockOnDone.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock is on. SpendStory asks when you open it, and again after you have been away a while.'**
+  String get appLockOnDone;
+
+  /// No description provided for @appLockOffDone.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock is off.'**
+  String get appLockOffDone;
+
+  /// No description provided for @appLockCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing changed.'**
+  String get appLockCancelled;
+
+  /// No description provided for @appLockUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone cannot check it right now. Set up a fingerprint, face or PIN in Android settings first.'**
+  String get appLockUnavailable;
+
+  /// No description provided for @lockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'SpendStory is locked'**
+  String get lockTitle;
+
+  /// No description provided for @lockBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open with your fingerprint, face or phone PIN.'**
+  String get lockBody;
+
+  /// No description provided for @lockUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get lockUnlock;
+
+  /// No description provided for @lockUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing on this phone can check that it is you — no fingerprint, no face and no PIN is set up.'**
+  String get lockUnavailableBody;
+
+  /// No description provided for @lockTurnOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off the app lock and open'**
+  String get lockTurnOff;
 }
 
 class _AppLocalizationsDelegate

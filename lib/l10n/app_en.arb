@@ -620,5 +620,18 @@
   "exportMonthNext": "Next month",
   "exportDemoUnavailable": "Backups need the installed app — the web preview keeps no ledger.",
   "exportShareDrive": "In the share sheet, pick Drive to keep a copy there. SpendStory never uploads the file itself.",
-  "exportSettingBody": "Encrypted backup, restore, CSV and PDF"
+  "exportSettingBody": "Encrypted backup, restore, CSV and PDF",
+  "security": "Security",
+  "appLock": "App lock",
+  "appLockBody": "Asks for your fingerprint, face or phone PIN before the app opens. The reading stays inside Android.",
+  "appLockPromptReason": "Unlock SpendStory",
+  "appLockOnDone": "App lock is on. SpendStory asks when you open it, and again after you have been away a while.",
+  "appLockOffDone": "App lock is off.",
+  "appLockCancelled": "Nothing changed.",
+  "appLockUnavailable": "This phone cannot check it right now. Set up a fingerprint, face or PIN in Android settings first.",
+  "lockTitle": "SpendStory is locked",
+  "lockBody": "Open with your fingerprint, face or phone PIN.",
+  "lockUnlock": "Unlock",
+  "lockUnavailableBody": "Nothing on this phone can check that it is you — no fingerprint, no face and no PIN is set up.",
+  "lockTurnOff": "Turn off the app lock and open"
 }

@@ -1521,4 +1521,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportSettingBody => 'Encrypted backup, restore, CSV and PDF';
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get appLock => 'App lock';
+
+  @override
+  String get appLockBody =>
+      'Asks for your fingerprint, face or phone PIN before the app opens. The reading stays inside Android.';
+
+  @override
+  String get appLockPromptReason => 'Unlock SpendStory';
+
+  @override
+  String get appLockOnDone =>
+      'App lock is on. SpendStory asks when you open it, and again after you have been away a while.';
+
+  @override
+  String get appLockOffDone => 'App lock is off.';
+
+  @override
+  String get appLockCancelled => 'Nothing changed.';
+
+  @override
+  String get appLockUnavailable =>
+      'This phone cannot check it right now. Set up a fingerprint, face or PIN in Android settings first.';
+
+  @override
+  String get lockTitle => 'SpendStory is locked';
+
+  @override
+  String get lockBody => 'Open with your fingerprint, face or phone PIN.';
+
+  @override
+  String get lockUnlock => 'Unlock';
+
+  @override
+  String get lockUnavailableBody =>
+      'Nothing on this phone can check that it is you — no fingerprint, no face and no PIN is set up.';
+
+  @override
+  String get lockTurnOff => 'Turn off the app lock and open';
 }

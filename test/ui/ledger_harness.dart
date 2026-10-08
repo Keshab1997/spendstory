@@ -15,6 +15,8 @@ import 'package:spendstory/app/providers.dart';
 import 'package:spendstory/app/router.dart';
 import 'package:spendstory/domain/models.dart';
 import 'package:spendstory/domain/view_models.dart';
+import 'package:spendstory/platform/app_lock.dart';
+import 'package:spendstory/ui/components/controls.dart';
 
 final harnessNow = DateTime(2026, 10, 7, 20, 42);
 
@@ -153,6 +155,33 @@ Future<ProviderContainer> pumpAt(
   await tester.pumpAndSettle();
   return container;
 }
+
+/// The phone, faked — one answer at a time.
+///
+/// [outcome] is mutable so a test can walk a user through the real sequence:
+/// cancel once, then unlock on the retry.
+class FakeAppLock implements AppLock {
+  FakeAppLock(this.outcome);
+
+  LockOutcome outcome;
+  final List<String> reasons = <String>[];
+
+  @override
+  Future<LockOutcome> prompt({required String reason}) async {
+    reasons.add(reason);
+    return outcome;
+  }
+}
+
+/// The switch inside the settings row titled [title].
+///
+/// Settings has had more than one switch since T-706 (personalized ads, and the
+/// app lock), so `find.byType(Switch)` is ambiguous by design: a test has to say
+/// which one it means.
+Finder switchInTile(String title) => find.descendant(
+  of: find.ancestor(of: find.text(title), matching: find.byType(SettingTile)),
+  matching: find.byType(Switch),
+);
 
 String pathOf(ProviderContainer container) =>
     container.read(routerProvider).routerDelegate.currentConfiguration.uri.path;

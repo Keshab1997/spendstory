@@ -369,6 +369,17 @@ Legend: **P0** = v1.0 must ship · **P1** = v1.0 target · **P2** = v1.1
 ```
 **Ads:** ❌ (settings e ad = policy irritant).
 
+**Implemented (T-706):** `lib/ui/screens/settings_screen.dart` + the lock screen
+`lib/ui/screens/lock_screen.dart` (route `/lock`, which is not in `04`'s table
+because it is a guard destination rather than a place the user navigates to).
+The নিরাপত্তা group holds both rows. The lock is one `AppLock` seam
+(`lib/platform/app_lock.dart`: `unlocked` / `cancelled` / `unavailable`, never
+throwing) driven by `lib/app/lock.dart` — the switch is `app_meta.appLock`, the
+redirect is in `lib/app/router.dart`, and a phone that cannot authenticate gets
+the way out described in `07 §5`'s implementation note. The erase row keeps the
+two dialogs `05 §5` specifies. Criteria testable in
+`test/ui/settings_lock_test.dart`.
+
 ---
 
 ## S-21 · Privacy & About — `/about` — P0

@@ -127,6 +127,20 @@ Rules notified **13 Nov 2025** (G.S.R. 846(E)); substantive obligations enforcea
 | **Children's data** | App targets 18+; no child-directed content |
 | **Consent Manager** | Not applicable (not a Consent Manager; storing locally without a fiduciary transfer) |
 
+**Implemented (T-706).** The security row's other half — the optional app lock —
+is real now too, and it is worth being precise about what it does and does not
+claim. The switch in Settings asks the phone to prove the user with a
+fingerprint, a face, the device PIN, or whatever the phone accepts; the check
+happens inside `androidx.biometric` and SpendStory receives a yes or a no. No
+biometric data is read, stored, hashed or transmitted, because none of it reaches
+the app. `USE_BIOMETRIC` is asked for at the moment the switch is turned on,
+never at launch, and the app works with it denied. If the phone cannot answer —
+nothing enrolled, lock screen turned off, or the web preview — the lock screen
+says so and the user can turn the lock off from there, because an app that cannot
+be opened is a data-loss bug rather than a safeguard. Declared honestly: the lock
+guards the screen, not the file — the database is app-private storage either way,
+so this is shoulder-surfing protection, not encryption at rest.
+
 **Implemented (T-705).** The security row is real: S-23 (`/export`) writes the
 whole ledger as a single file encrypted with AES-256-GCM under a password the
 user chooses (PBKDF2-HMAC-SHA256, 120,000 iterations, a fresh salt and nonce per

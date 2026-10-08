@@ -1510,4 +1510,47 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get exportSettingBody => 'এনক্রিপ্ট করা ব্যাকআপ, ফেরানো, CSV আর PDF';
+
+  @override
+  String get security => 'নিরাপত্তা';
+
+  @override
+  String get appLock => 'অ্যাপ লক';
+
+  @override
+  String get appLockBody =>
+      'অ্যাপ খোলার আগে আপনার ফিঙ্গারপ্রিন্ট, মুখ বা ফোনের PIN চাইবে। পড়াটা Android-এর ভিতরেই থাকে।';
+
+  @override
+  String get appLockPromptReason => 'SpendStory খুলুন';
+
+  @override
+  String get appLockOnDone =>
+      'অ্যাপ লক চালু। খোলার সময় জিজ্ঞেস করবে, আর অনেকক্ষণ দূরে থাকলে আবার।';
+
+  @override
+  String get appLockOffDone => 'অ্যাপ লক বন্ধ।';
+
+  @override
+  String get appLockCancelled => 'কিছুই বদলায়নি।';
+
+  @override
+  String get appLockUnavailable =>
+      'এই ফোনে এখন যাচাই করা যাচ্ছে না। আগে Android সেটিংসে ফিঙ্গারপ্রিন্ট, মুখ বা PIN সেট করুন।';
+
+  @override
+  String get lockTitle => 'SpendStory লক করা আছে';
+
+  @override
+  String get lockBody => 'ফিঙ্গারপ্রিন্ট, মুখ বা ফোনের PIN দিয়ে খুলুন।';
+
+  @override
+  String get lockUnlock => 'খুলুন';
+
+  @override
+  String get lockUnavailableBody =>
+      'এই ফোনে ফিঙ্গারপ্রিন্ট, মুখ বা PIN — কোনোটাই সেট করা নেই, তাই যাচাই করা যাচ্ছে না যে আপনি নিজেই।';
+
+  @override
+  String get lockTurnOff => 'অ্যাপ লক বন্ধ করে খুলুন';
 }

@@ -460,5 +460,18 @@
   "exportMonthNext": "अगला महीना",
   "exportDemoUnavailable": "बैकअप के लिए ऐप चाहिए — वेब प्रीव्यू कोई हिसाब नहीं रखता।",
   "exportShareDrive": "शेयर शीट में Drive चुनें, कॉपी वहाँ रख लें। SpendStory ख़ुद कभी फ़ाइल अपलोड नहीं करता।",
-  "exportSettingBody": "एन्क्रिप्टेड बैकअप, वापसी, CSV और PDF"
+  "exportSettingBody": "एन्क्रिप्टेड बैकअप, वापसी, CSV और PDF",
+  "security": "सुरक्षा",
+  "appLock": "ऐप लॉक",
+  "appLockBody": "ऐप खुलने से पहले आपका फ़िंगरप्रिंट, चेहरा या फ़ोन का PIN माँगा जाएगा। जाँच Android के अंदर ही रहती है।",
+  "appLockPromptReason": "SpendStory खोलें",
+  "appLockOnDone": "ऐप लॉक चालू। खोलने पर पूछा जाएगा, और देर तक दूर रहने पर फिर।",
+  "appLockOffDone": "ऐप लॉक बंद।",
+  "appLockCancelled": "कुछ नहीं बदला।",
+  "appLockUnavailable": "यह फ़ोन अभी पुष्टि नहीं कर सकता। पहले Android सेटिंग्स में फ़िंगरप्रिंट, चेहरा या PIN सेट करें।",
+  "lockTitle": "SpendStory लॉक है",
+  "lockBody": "फ़िंगरप्रिंट, चेहरा या फ़ोन के PIN से खोलें।",
+  "lockUnlock": "खोलें",
+  "lockUnavailableBody": "इस फ़ोन में फ़िंगरप्रिंट, चेहरा या PIN — कुछ भी सेट नहीं है, इसलिए जाँच नहीं हो सकती कि आप ही हैं।",
+  "lockTurnOff": "ऐप लॉक बंद करके खोलें"
 }

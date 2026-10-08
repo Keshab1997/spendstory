@@ -59,7 +59,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Personalized ads'), findsOneWidget);
-      final toggle = tester.widget<Switch>(find.byType(Switch));
+      final toggle = tester.widget<Switch>(switchInTile('Personalized ads'));
       expect(
         toggle.value,
         isFalse,
@@ -74,7 +74,7 @@ void main() {
 
       await tester.ensureVisible(find.text('Personalized ads'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(Switch));
+      await tester.tap(switchInTile('Personalized ads'));
       await tester.pumpAndSettle();
 
       // The choice is the user's, it is stored, and every request carries it —
@@ -84,7 +84,7 @@ void main() {
       expect(await db.meta(ConsentController.metaKey), 'on');
 
       // And it can be turned back off, which is the point of having it.
-      await tester.tap(find.byType(Switch));
+      await tester.tap(switchInTile('Personalized ads'));
       await tester.pumpAndSettle();
       expect(await db.meta(ConsentController.metaKey), 'off');
       expect(container.read(nonPersonalizedAdsProvider), isTrue);

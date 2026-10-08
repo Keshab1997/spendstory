@@ -476,6 +476,19 @@ const List<String> ssStringKeys = <String>[
   "exportDemoUnavailable",
   "exportShareDrive",
   "exportSettingBody",
+  "security",
+  "appLock",
+  "appLockBody",
+  "appLockPromptReason",
+  "appLockOnDone",
+  "appLockOffDone",
+  "appLockCancelled",
+  "appLockUnavailable",
+  "lockTitle",
+  "lockBody",
+  "lockUnlock",
+  "lockUnavailableBody",
+  "lockTurnOff",
 ];
 
 /// The copy itself, as the screens read it.
@@ -963,6 +976,19 @@ const Map<String, String> _en = <String, String>{
       "Backups need the installed app — the web preview keeps no ledger.",
   "exportShareDrive": "In the share sheet, pick Drive to keep a copy there. SpendStory never uploads the file itself.",
   "exportSettingBody": "Encrypted backup, restore, CSV and PDF",
+  "security": "Security",
+  "appLock": "App lock",
+  "appLockBody": "Asks for your fingerprint, face or phone PIN before the app opens. The reading stays inside Android.",
+  "appLockPromptReason": "Unlock SpendStory",
+  "appLockOnDone": "App lock is on. SpendStory asks when you open it, and again after you have been away a while.",
+  "appLockOffDone": "App lock is off.",
+  "appLockCancelled": "Nothing changed.",
+  "appLockUnavailable": "This phone cannot check it right now. Set up a fingerprint, face or PIN in Android settings first.",
+  "lockTitle": "SpendStory is locked",
+  "lockBody": "Open with your fingerprint, face or phone PIN.",
+  "lockUnlock": "Unlock",
+  "lockUnavailableBody": "Nothing on this phone can check that it is you — no fingerprint, no face and no PIN is set up.",
+  "lockTurnOff": "Turn off the app lock and open",
 };
 
 const Map<String, String> _hi = <String, String>{
@@ -1449,6 +1475,20 @@ const Map<String, String> _hi = <String, String>{
       "बैकअप के लिए ऐप चाहिए — वेब प्रीव्यू कोई हिसाब नहीं रखता।",
   "exportShareDrive": "शेयर शीट में Drive चुनें, कॉपी वहाँ रख लें। SpendStory ख़ुद कभी फ़ाइल अपलोड नहीं करता।",
   "exportSettingBody": "एन्क्रिप्टेड बैकअप, वापसी, CSV और PDF",
+  "security": "सुरक्षा",
+  "appLock": "ऐप लॉक",
+  "appLockBody": "ऐप खुलने से पहले आपका फ़िंगरप्रिंट, चेहरा या फ़ोन का PIN माँगा जाएगा। जाँच Android के अंदर ही रहती है।",
+  "appLockPromptReason": "SpendStory खोलें",
+  "appLockOnDone":
+      "ऐप लॉक चालू। खोलने पर पूछा जाएगा, और देर तक दूर रहने पर फिर।",
+  "appLockOffDone": "ऐप लॉक बंद।",
+  "appLockCancelled": "कुछ नहीं बदला।",
+  "appLockUnavailable": "यह फ़ोन अभी पुष्टि नहीं कर सकता। पहले Android सेटिंग्स में फ़िंगरप्रिंट, चेहरा या PIN सेट करें।",
+  "lockTitle": "SpendStory लॉक है",
+  "lockBody": "फ़िंगरप्रिंट, चेहरा या फ़ोन के PIN से खोलें।",
+  "lockUnlock": "खोलें",
+  "lockUnavailableBody": "इस फ़ोन में फ़िंगरप्रिंट, चेहरा या PIN — कुछ भी सेट नहीं है, इसलिए जाँच नहीं हो सकती कि आप ही हैं।",
+  "lockTurnOff": "ऐप लॉक बंद करके खोलें",
 };
 
 const Map<String, String> _bn = <String, String>{
@@ -1932,4 +1972,18 @@ const Map<String, String> _bn = <String, String>{
       "ব্যাকআপের জন্য অ্যাপটা লাগবে — ওয়েব প্রিভিউ কোনো খাতা রাখে না।",
   "exportShareDrive": "শেয়ার শিটে Drive বেছে নিয়ে সেখানে কপি রেখে দাও। SpendStory নিজে কখনো ফাইল আপলোড করে না।",
   "exportSettingBody": "এনক্রিপ্ট করা ব্যাকআপ, ফেরানো, CSV আর PDF",
+  "security": "নিরাপত্তা",
+  "appLock": "অ্যাপ লক",
+  "appLockBody": "অ্যাপ খোলার আগে আপনার ফিঙ্গারপ্রিন্ট, মুখ বা ফোনের PIN চাইবে। পড়াটা Android-এর ভিতরেই থাকে।",
+  "appLockPromptReason": "SpendStory খুলুন",
+  "appLockOnDone":
+      "অ্যাপ লক চালু। খোলার সময় জিজ্ঞেস করবে, আর অনেকক্ষণ দূরে থাকলে আবার।",
+  "appLockOffDone": "অ্যাপ লক বন্ধ।",
+  "appLockCancelled": "কিছুই বদলায়নি।",
+  "appLockUnavailable": "এই ফোনে এখন যাচাই করা যাচ্ছে না। আগে Android সেটিংসে ফিঙ্গারপ্রিন্ট, মুখ বা PIN সেট করুন।",
+  "lockTitle": "SpendStory লক করা আছে",
+  "lockBody": "ফিঙ্গারপ্রিন্ট, মুখ বা ফোনের PIN দিয়ে খুলুন।",
+  "lockUnlock": "খুলুন",
+  "lockUnavailableBody": "এই ফোনে ফিঙ্গারপ্রিন্ট, মুখ বা PIN — কোনোটাই সেট করা নেই, তাই যাচাই করা যাচ্ছে না যে আপনি নিজেই।",
+  "lockTurnOff": "অ্যাপ লক বন্ধ করে খুলুন",
 };

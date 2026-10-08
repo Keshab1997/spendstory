@@ -460,5 +460,18 @@
   "exportMonthNext": "পরের মাস",
   "exportDemoUnavailable": "ব্যাকআপের জন্য অ্যাপটা লাগবে — ওয়েব প্রিভিউ কোনো খাতা রাখে না।",
   "exportShareDrive": "শেয়ার শিটে Drive বেছে নিয়ে সেখানে কপি রেখে দাও। SpendStory নিজে কখনো ফাইল আপলোড করে না।",
-  "exportSettingBody": "এনক্রিপ্ট করা ব্যাকআপ, ফেরানো, CSV আর PDF"
+  "exportSettingBody": "এনক্রিপ্ট করা ব্যাকআপ, ফেরানো, CSV আর PDF",
+  "security": "নিরাপত্তা",
+  "appLock": "অ্যাপ লক",
+  "appLockBody": "অ্যাপ খোলার আগে আপনার ফিঙ্গারপ্রিন্ট, মুখ বা ফোনের PIN চাইবে। পড়াটা Android-এর ভিতরেই থাকে।",
+  "appLockPromptReason": "SpendStory খুলুন",
+  "appLockOnDone": "অ্যাপ লক চালু। খোলার সময় জিজ্ঞেস করবে, আর অনেকক্ষণ দূরে থাকলে আবার।",
+  "appLockOffDone": "অ্যাপ লক বন্ধ।",
+  "appLockCancelled": "কিছুই বদলায়নি।",
+  "appLockUnavailable": "এই ফোনে এখন যাচাই করা যাচ্ছে না। আগে Android সেটিংসে ফিঙ্গারপ্রিন্ট, মুখ বা PIN সেট করুন।",
+  "lockTitle": "SpendStory লক করা আছে",
+  "lockBody": "ফিঙ্গারপ্রিন্ট, মুখ বা ফোনের PIN দিয়ে খুলুন।",
+  "lockUnlock": "খুলুন",
+  "lockUnavailableBody": "এই ফোনে ফিঙ্গারপ্রিন্ট, মুখ বা PIN — কোনোটাই সেট করা নেই, তাই যাচাই করা যাচ্ছে না যে আপনি নিজেই।",
+  "lockTurnOff": "অ্যাপ লক বন্ধ করে খুলুন"
 }

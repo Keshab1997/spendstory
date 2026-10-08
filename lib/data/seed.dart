@@ -43,6 +43,11 @@ class SeedCategory {
 
 const String kCashAccountId = 'acc-cash';
 
+/// The app-lock switch (S-20, T-706). Named because three places read it — the
+/// seed, boot, and the lock itself — and a typo in a string literal is a
+/// setting that silently forgets.
+const String kAppLockMetaKey = 'appLock';
+
 /// Keys written into `app_meta` on first run.
 const Map<String, String> kDefaultMeta = <String, String>{
   'onboarded': 'false',
@@ -53,6 +58,7 @@ const Map<String, String> kDefaultMeta = <String, String>{
   'proStatus': 'free',
   'sessionCount': '0',
   'seedVersion': '1',
+  kAppLockMetaKey: 'false',
 };
 
 /// The 12 expense categories. Ids match the keys in [Cat], which is what lets a

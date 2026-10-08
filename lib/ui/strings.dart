@@ -196,6 +196,21 @@ class SsStrings {
   String get ob3Title => this['ob3Title'];
   String get ob3Body => this['ob3Body'];
 
+  // ---- app lock (T-706) -----------------------------------------------------
+  String get security => this['security'];
+  String get appLock => this['appLock'];
+  String get appLockBody => this['appLockBody'];
+  String get appLockPromptReason => this['appLockPromptReason'];
+  String get appLockOnDone => this['appLockOnDone'];
+  String get appLockOffDone => this['appLockOffDone'];
+  String get appLockCancelled => this['appLockCancelled'];
+  String get appLockUnavailable => this['appLockUnavailable'];
+  String get lockTitle => this['lockTitle'];
+  String get lockBody => this['lockBody'];
+  String get lockUnlock => this['lockUnlock'];
+  String get lockUnavailableBody => this['lockUnavailableBody'];
+  String get lockTurnOff => this['lockTurnOff'];
+
   /// Keys present in one language but missing in another — empty is correct.
 
   /// `locale:key` pairs for a key any locale is missing.

@@ -1515,4 +1515,47 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get exportSettingBody => 'एन्क्रिप्टेड बैकअप, वापसी, CSV और PDF';
+
+  @override
+  String get security => 'सुरक्षा';
+
+  @override
+  String get appLock => 'ऐप लॉक';
+
+  @override
+  String get appLockBody =>
+      'ऐप खुलने से पहले आपका फ़िंगरप्रिंट, चेहरा या फ़ोन का PIN माँगा जाएगा। जाँच Android के अंदर ही रहती है।';
+
+  @override
+  String get appLockPromptReason => 'SpendStory खोलें';
+
+  @override
+  String get appLockOnDone =>
+      'ऐप लॉक चालू। खोलने पर पूछा जाएगा, और देर तक दूर रहने पर फिर।';
+
+  @override
+  String get appLockOffDone => 'ऐप लॉक बंद।';
+
+  @override
+  String get appLockCancelled => 'कुछ नहीं बदला।';
+
+  @override
+  String get appLockUnavailable =>
+      'यह फ़ोन अभी पुष्टि नहीं कर सकता। पहले Android सेटिंग्स में फ़िंगरप्रिंट, चेहरा या PIN सेट करें।';
+
+  @override
+  String get lockTitle => 'SpendStory लॉक है';
+
+  @override
+  String get lockBody => 'फ़िंगरप्रिंट, चेहरा या फ़ोन के PIN से खोलें।';
+
+  @override
+  String get lockUnlock => 'खोलें';
+
+  @override
+  String get lockUnavailableBody =>
+      'इस फ़ोन में फ़िंगरप्रिंट, चेहरा या PIN — कुछ भी सेट नहीं है, इसलिए जाँच नहीं हो सकती कि आप ही हैं।';
+
+  @override
+  String get lockTurnOff => 'ऐप लॉक बंद करके खोलें';
 }

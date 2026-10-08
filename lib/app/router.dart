@@ -5,9 +5,15 @@
 /// permission routes are deliberately *outside* the shell: they are a linear
 /// flow, not a place you can wander back into.
 ///
-/// The guard is small and does exactly one thing: a user who has not finished
-/// onboarding cannot reach a tab root. It never blocks on permissions — those
-/// are optional by design, and nothing in the app is gated behind them.
+/// The guard does exactly two things, and both are about the *user*, never
+/// about the app's convenience:
+///
+/// 1. a user who has not finished onboarding cannot reach a tab root;
+/// 2. with the app lock on (S-20, T-706), nothing renders until the phone has
+///    confirmed it is them.
+///
+/// It never blocks on permissions — those are optional by design, and nothing
+/// in the app is gated behind them.
 library;
 
 import 'package:flutter/material.dart';
@@ -24,6 +30,7 @@ import '../ui/screens/coming_soon_screen.dart';
 import '../ui/screens/home_screen.dart';
 import '../ui/screens/insights_screen.dart';
 import '../ui/screens/language_screen.dart';
+import '../ui/screens/lock_screen.dart';
 import '../ui/screens/manual_path_screen.dart';
 import '../ui/screens/onboarding_screen.dart';
 import '../ui/screens/permission_notification_screen.dart';
@@ -36,6 +43,7 @@ import '../ui/screens/search_screen.dart';
 import '../ui/screens/tx_detail_screen.dart';
 import '../ui/screens/tx_edit_screen.dart';
 import '../ui/screens/tx_list_screen.dart';
+import 'lock.dart';
 import 'main_shell.dart';
 import 'providers.dart';
 
@@ -47,12 +55,34 @@ const List<String> _protectedRoots = <String>[
   '/settings',
 ];
 
+/// The app lock screen's path. Not in [_protectedRoots]: being sent *to* the
+/// lock must not count as trying to get past it.
+const String _lockPath = '/lock';
+
+/// The location the lock screen came back to, checked before it is used as a
+/// navigation target — a query parameter is user input, and going back into
+/// `/lock` (or anywhere non-local) would be a loop.
+String _returnTo(String? raw) {
+  if (raw == null || raw.isEmpty) return '/home';
+  final location = Uri.decodeComponent(raw);
+  if (!location.startsWith('/') || location.startsWith(_lockPath)) {
+    return '/home';
+  }
+  return location;
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
   // Boot resolves asynchronously (open the database, seed, read prefs). The
   // router rebuilds its redirects when it lands, rather than being recreated —
   // recreating a GoRouter would throw away the navigation stack.
   final refresh = ValueNotifier<int>(0);
   ref.listen<AsyncValue<BootState>>(bootProvider, (_, _) => refresh.value++);
+  // The lock changes the answer to "may this location resolve?" while the app
+  // is running: it is armed at boot, and it can fire again after the app has
+  // been away. Both are redirects, and a redirect that never re-runs is a
+  // locked screen the user is left sitting on.
+  ref.listen<bool>(lockEnabledProvider, (_, _) => refresh.value++);
+  ref.listen<bool>(lockedProvider, (_, _) => refresh.value++);
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
@@ -74,6 +104,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         if (location == '/splash') return '/language';
         if (isProtected) return '/language';
         return null;
+      }
+
+      // The lock, before anything else resolves. `from` carries the location
+      // being withheld so unlocking returns to it rather than to Home.
+      final locked = ref.read(lockEnabledProvider) && ref.read(lockedProvider);
+      if (locked && location != _lockPath) {
+        return '$_lockPath?from=${Uri.encodeComponent(location)}';
+      }
+      if (!locked && location == _lockPath) {
+        // Not locked, or unlocked a moment ago: `/lock` is not a place to sit.
+        return '/home';
       }
 
       // A returning user sitting on the splash or the language picker is sent
@@ -213,6 +254,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/pro',
         pageBuilder: (context, state) =>
             MaterialPage(fullscreenDialog: true, child: const ProScreen()),
+      ),
+      // S-20's app lock. Outside the shell, so the bottom navigation — and the
+      // ledger behind it — is not built at all while the app is locked.
+      GoRoute(
+        path: _lockPath,
+        builder: (context, state) =>
+            LockScreen(returnTo: _returnTo(state.uri.queryParameters['from'])),
       ),
 
       GoRoute(

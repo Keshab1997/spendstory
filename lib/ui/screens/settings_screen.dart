@@ -11,8 +11,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../ads/ad_consent.dart';
 import '../../app/app_info.dart';
+import '../../app/lock.dart';
 import '../../app/providers.dart';
 import '../../export/backup_repo.dart';
+import '../../platform/app_lock.dart';
 import '../../pro/pro_controller.dart';
 import '../components/controls.dart';
 import '../components/surfaces.dart';
@@ -31,6 +33,7 @@ class SettingsScreen extends ConsumerWidget {
     final isPro = ref.watch(proStatusProvider);
     final personalized = !ref.watch(nonPersonalizedAdsProvider);
     final privacyOptionsRequired = ref.watch(privacyOptionsRequiredProvider);
+    final lockOn = ref.watch(lockEnabledProvider);
 
     return SsScaffold(
       floatingNav: true,
@@ -153,6 +156,39 @@ class SettingsScreen extends ConsumerWidget {
                     ref.read(localeProvider.notifier).state = code;
                     ref.read(appDbProvider)?.setMeta('locale', code);
                   },
+                ),
+              ],
+            ),
+          ),
+
+          // ---- security (T-706) ----------------------------------------------
+          const SizedBox(height: SsSpace.x6),
+          SectionHeader(title: s['security'], padding: EdgeInsets.zero),
+          SsCard(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SsSpace.x2,
+              vertical: SsSpace.x1,
+            ),
+            child: Column(
+              children: [
+                SettingTile(
+                  icon: Icons.fingerprint_rounded,
+                  tint: c.teal500,
+                  title: s['appLock'],
+                  subtitle: s['appLockBody'],
+                  trailing: Switch(
+                    value: lockOn,
+                    onChanged: (on) => _setLock(context, ref, on),
+                  ),
+                  onTap: () => _setLock(context, ref, !lockOn),
+                ),
+                Divider(color: c.divider, height: 1),
+                SettingTile(
+                  icon: Icons.delete_outline_rounded,
+                  title: s['deleteAllData'],
+                  subtitle: s['deleteAllDataSubtitle'],
+                  danger: true,
+                  onTap: () => _confirmErase(context, ref),
                 ),
               ],
             ),
@@ -312,19 +348,6 @@ class SettingsScreen extends ConsumerWidget {
           ],
 
           const SizedBox(height: SsSpace.x5),
-          SsCard(
-            padding: const EdgeInsets.symmetric(
-              horizontal: SsSpace.x2,
-              vertical: SsSpace.x1,
-            ),
-            child: SettingTile(
-              icon: Icons.delete_outline_rounded,
-              title: s['deleteAllData'],
-              subtitle: s['deleteAllDataSubtitle'],
-              danger: true,
-              onTap: () => _confirmErase(context, ref),
-            ),
-          ),
 
           const SizedBox(height: SsSpace.x6),
           Center(
@@ -359,6 +382,28 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: SsSpace.x4),
         ],
+      ),
+    );
+  }
+
+  /// The app-lock switch. The toggle only moves when the phone has actually
+  /// confirmed the user: a lock that turns on for a prompt that was cancelled is
+  /// a lock the user does not know the state of.
+  Future<void> _setLock(BuildContext context, WidgetRef ref, bool on) async {
+    final s = ref.read(stringsProvider);
+    final messenger = ScaffoldMessenger.of(context);
+
+    final outcome = await ref
+        .read(lockActionsProvider)
+        .setEnabled(on, reason: s['appLockPromptReason']);
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(switch (outcome) {
+          LockOutcome.unlocked => on ? s['appLockOnDone'] : s['appLockOffDone'],
+          LockOutcome.cancelled => s['appLockCancelled'],
+          LockOutcome.unavailable => s['appLockUnavailable'],
+        }),
       ),
     );
   }

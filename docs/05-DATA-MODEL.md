@@ -96,7 +96,7 @@ openingBalancePaise
 → Settings → "কিছু ভুল হয়েছে? রিপোর্ট করুন" e JSON export (user-initiated, no auto upload)
 
 ### `app_meta` (kv)
-`onboarded` · `locale` · `theme` · `smsPermAsked` · `notifPermAsked` · `lastBackupAt` · `autoBackup` · `proStatus` · `ruleVersion` · `sessionCount`
+`onboarded` · `locale` · `theme` · `smsPermAsked` · `notifPermAsked` · `lastBackupAt` · `autoBackup` · `proStatus` · `ruleVersion` · `sessionCount` · `appLock`
 
 `BackupRepo` (T-705) reads and writes `lastBackupAt` and the weekly-reminder flag
 `autoBackup`. The payload carries `locale`, `theme` and `lastBackupAt` and
@@ -148,7 +148,8 @@ class AppDb extends _$AppDb {
 | Action | Effect |
 |---|---|
 | Delete single tx | soft delete → undo snackbar 5s → purge on next open |
-| "সব ডেটা মুছুন" (Settings) | double-confirm → full purge + prefs reset → back to onboarding |
+| "সব ডেটা মুছুন" (Settings) | double-confirm → full purge + prefs reset → back to onboarding (T-706: the two dialogs and the purge are in `settings_screen.dart`, tested against a real database) |
+| App lock (Settings) | not a data feature: `app_meta.appLock` is one row, and a locked app renders `/lock` instead of anything else. Nothing is encrypted by it — the database stays app-private, locked or not — so a user who forgets the lock still owns their data |
 | Uninstall | OS removes everything (nothing was outside) |
 | Inactive > 12 months | on open, prompt: "পুরনো ডেটা মুছে ফেলব?" (user choice, never silent) |
 
