@@ -776,10 +776,10 @@ PDF export credit gets spent.
 
 ## 🔜 Batch 9 — Release prep
 
-- [ ] **T-801** App icon from `app-icon.png` → `flutter_launcher_icons` (adaptive)
-- [ ] **T-802** Splash native config (`flutter_native_splash`) using brand gradient
-- [ ] **T-803** Compress `assets/3d/*` → webp 2×, target < 120 KB each
-- [ ] **T-804** `distribution/whatsnew/` — rename `bn-BD`→`bn-IN`, add `hi-IN`
+- [x] **T-801** App icon from `app-icon.png` → `flutter_launcher_icons` (adaptive; Android + web, iOS off because there is no `ios/` folder)
+- [x] **T-802** Splash native config (`flutter_native_splash`) — solid colours only (light `#F7F6FC`, dark `#0E0A2A`); the plugin cannot draw the gradient
+- [ ] **T-803** Compress `assets/3d/*` → webp 2×, target < 120 KB each _(already under target: the largest JPG is 112 KB; the webp conversion itself is not done)_
+- [x] **T-804** `distribution/whatsnew/` — `bn-IN` and `hi-IN` are in place, and no `bn-BD` remains
 - [ ] **T-805** Keystore + GitHub secrets (Keshab, locally — never in repo)
 - [ ] **T-806** Privacy policy live URL (GitHub Pages)
 - [ ] **T-807** **Demo video** recorded (7 shots per `07` §3)
