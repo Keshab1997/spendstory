@@ -3,11 +3,12 @@
     "short_name": "SpendStory",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#F7F6FC",
+    "background_color": "#0E0A2A",
     "theme_color": "#6C4CF1",
     "description": "UPI ও ব্যাঙ্ক SMS থেকে খরচের হিসাব — সম্পূর্ণ ফোনেই।",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "lang": "bn",
     "icons": [
         {
             "src": "icons/Icon-192.png",
@@ -31,6 +32,5 @@
             "type": "image/png",
             "purpose": "maskable"
         }
-    ],
-    "lang": "bn"
+    ]
 }

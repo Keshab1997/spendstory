@@ -85,6 +85,11 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   drift_dev: ^2.21.0
   build_runner: ^2.4.13
+  # T-801 / T-802: launcher icon and native splash are generated from assets/icon/.
+  # Re-run after changing the artwork: dart run flutter_launcher_icons
+  #                                    dart run flutter_native_splash:create
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.6
 
   # Pinned deliberately. build_runner 2.16.1 *declares* support for analyzer
   # 13.3–15 but its source does not compile against 14.x (`contextFeatures`
@@ -134,3 +139,27 @@ flutter:
           weight: 600
         - asset: assets/fonts/NotoSansDevanagari-VariableFont_wght.ttf
           weight: 700
+
+# T-801: launcher icon. The artwork carries its own rounded tile. The plugin
+# insets the adaptive foreground by 16% itself, so the full artwork is the
+# foreground, and the tile corner colour (#0C0C28) is the adaptive background.
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/app-icon.png"
+  adaptive_icon_background: "#0C0C28"
+  adaptive_icon_foreground: "assets/icon/app-icon.png"
+  web:
+    generate: true
+    image_path: "assets/icon/app-icon.png"
+    background_color: "#0E0A2A"
+    theme_color: "#6C4CF1"
+
+# T-802: native splash. Solid colours only: the plugin cannot draw a gradient.
+# Light matches the bg token (#F7F6FC), dark matches the dark bg (#0E0A2A).
+flutter_native_splash:
+  color: "#F7F6FC"
+  color_dark: "#0E0A2A"
+  android_12:
+    color: "#F7F6FC"
+    color_dark: "#0E0A2A"
