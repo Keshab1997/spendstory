@@ -12,6 +12,10 @@
 .swiftpm/
 migrate_working_dir/
 
+# Throwaway screenshots from tool/see_screen.py and adb; never commit these
+# (AGENTS.md promises they are ignored, and agent_loop.py stages with `git add -A`).
+.agent-screens/
+
 # IntelliJ related
 *.iml
 *.ipr

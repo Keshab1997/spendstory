@@ -42,6 +42,17 @@ android {
 
     buildTypes {
         release {
+            // Shrinking is what keeps the release APK small, and it is also what
+            // broke it: R8 renames WorkManager's Room-generated database (pulled
+            // in transitively by google_mobile_ads), so the app died in
+            // androidx.startup before Flutter started. proguard-rules.pro keeps
+            // that one package. See the file for the full story.
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
