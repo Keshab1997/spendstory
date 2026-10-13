@@ -10,6 +10,19 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Upload-key signing, read from android/key.properties. That file is
+// gitignored because it holds the keystore password; the publish-release and
+// manual-build workflows write it — and android/app/upload-keystore.jks — from
+// repository secrets just before they build, so CI always has them. On a laptop
+// that has not been set up the file is absent and release builds fall back to
+// the debug key: installable, but not publishable, which is exactly what the
+// release workflow's debug-signing warning is about.
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+}
+
 android {
     namespace = "com.keshabstudios.spendstory"
     compileSdk = flutter.compileSdkVersion
@@ -18,6 +31,20 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    signingConfigs {
+        // Declared only when key.properties exists: otherwise getByName("release")
+        // would be an error, and the release block below depends on this config
+        // being absent to pick its fallback.
+        if (keystorePropertiesFile.exists()) {
+            create("release") {
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+                storePassword = keystoreProperties.getProperty("storePassword")
+                storeFile = keystoreProperties.getProperty("storeFile")?.let { file(it) }
+            }
+        }
     }
 
     defaultConfig {
@@ -53,9 +80,14 @@ android {
                 "proguard-rules.pro",
             )
 
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // The upload key when android/key.properties is present — the
+            // workflows always provide it — and the debug key otherwise, so a
+            // fresh checkout can still `flutter run --release`.
+            signingConfig = if (keystorePropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
 
             // The live app id, read from android/local.properties (machine-
             // local and gitignored, like sdk.dir) or from `-Padmob.appId=...`,
