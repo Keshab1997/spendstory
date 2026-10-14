@@ -26,6 +26,8 @@ import '../domain/budget_math.dart';
 import '../domain/models.dart';
 import '../domain/view_models.dart';
 import '../platform/native_bridge.dart';
+import '../capture/capture_service.dart';
+import 'dart:convert';
 import '../platform/permissions.dart';
 import '../pro/billing_client.dart';
 import '../ui/format.dart';
@@ -1133,3 +1135,83 @@ final adsVisibleProvider = Provider<bool>((ref) {
   final boot = ref.watch(bootProvider).valueOrNull;
   return !isPro && (boot?.onboarded ?? false);
 });
+
+// ---------------------------------------------------------------------------
+// Capture pipeline wiring — drains native buffers into CaptureService.
+// ---------------------------------------------------------------------------
+
+class CaptureRunner {
+  CaptureRunner(this._ref);
+
+  final Ref _ref;
+
+  bool _running = false;
+
+  Future<void> run() async {
+    if (_running) return;
+    _running = true;
+    try {
+      final db = _ref.read(appDbProvider);
+      if (db == null) return;
+      final capture = CaptureService(db: db);
+
+      // 1. Payment-app notifications buffered by the listener service.
+      final notifs = await NativeBridge.drainPendingNotifications();
+      for (final raw in notifs ?? const <String>[]) {
+        try {
+          final m = jsonDecode(raw) as Map<String, dynamic>;
+          await capture.handleNotification(
+            packageName: (m['pkg'] ?? '') as String,
+            title: (m['title'] ?? '') as String,
+            body: (m['text'] ?? '') as String,
+            timestampMs: (m['postedAt'] as num?)?.toInt() ??
+                DateTime.now().millisecondsSinceEpoch,
+          );
+        } catch (_) {
+          // Skip malformed entries; never let one bad row kill the drain.
+        }
+      }
+
+      // 2. Bank SMS buffered by the receiver.
+      final smsBuf = await NativeBridge.drainPendingSms();
+      for (final raw in smsBuf ?? const <String>[]) {
+        try {
+          final m = jsonDecode(raw) as Map<String, dynamic>;
+          await capture.handleSms(
+            sender: (m['sender'] ?? '') as String,
+            body: (m['body'] ?? '') as String,
+            timestampMs: (m['timestampMs'] as num?)?.toInt() ??
+                DateTime.now().millisecondsSinceEpoch,
+          );
+        } catch (_) {}
+      }
+
+      // 3. Catch up on recent inbox SMS (covers messages that arrived before
+      //    the receiver was registered or while the app was closed). Dedupe in
+      //    CaptureService / TxRepo keeps this idempotent.
+      final since = DateTime.now()
+          .subtract(const Duration(days: 30))
+          .millisecondsSinceEpoch;
+      final inbox = await NativeBridge.readSmsInbox(sinceMs: since);
+      for (final raw in inbox ?? const <String>[]) {
+        try {
+          final m = jsonDecode(raw) as Map<String, dynamic>;
+          await capture.handleSms(
+            sender: (m['sender'] ?? '') as String,
+            body: (m['body'] ?? '') as String,
+            timestampMs: (m['timestampMs'] as num?)?.toInt() ??
+                DateTime.now().millisecondsSinceEpoch,
+          );
+        } catch (_) {}
+      }
+
+      _ref.invalidate(transactionsProvider);
+    } finally {
+      _running = false;
+    }
+  }
+}
+
+final captureRunnerProvider = Provider<CaptureRunner>(
+  (ref) => CaptureRunner(ref),
+);

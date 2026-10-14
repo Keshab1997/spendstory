@@ -57,6 +57,15 @@ class MainActivity : FlutterFragmentActivity() {
                 "drainPendingNotifications" ->
                     result.success(SpendStoryNotificationListener.drainPending(this))
 
+                "drainPendingSms" ->
+                    result.success(SpendStorySmsReceiver.drainPending(this))
+
+                "readSmsInbox" -> {
+                    val since = call.argument<Number>("sinceMs")?.toLong()
+                        ?: (System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000)
+                    result.success(SpendStorySmsReceiver.readSmsInbox(this, since))
+                }
+
                 "postNotification" ->
                     result.success(
                         postNotification(

@@ -95,6 +95,9 @@ void main() {
         'notificationAccessGranted',
         'enabledListenerPackages',
         'openNotificationAccessSettings',
+        'drainPendingNotifications',
+        'drainPendingSms',
+        'readSmsInbox',
       ]) {
         expect(
           activity,

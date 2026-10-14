@@ -13,6 +13,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'dart:async' show unawaited;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/app_localizations.dart';
@@ -39,7 +40,11 @@ class _SpendStoryAppState extends ConsumerState<SpendStoryApp> {
     // cannot be unit-tested and that decision can.
     _lifecycle = AppLifecycleListener(
       onPause: () => ref.read(lockActionsProvider).noteAway(DateTime.now()),
-      onResume: () => ref.read(lockActionsProvider).noteBack(DateTime.now()),
+      onResume: () {
+        ref.read(lockActionsProvider).noteBack(DateTime.now());
+        // Drain any SMS / notifications that arrived while we were away.
+        unawaited(ref.read(captureRunnerProvider).run());
+      },
     );
   }
 
@@ -62,6 +67,8 @@ class _SpendStoryAppState extends ConsumerState<SpendStoryApp> {
       }
       // A stored "on" means the first thing this launch shows is the lock.
       if (boot.appLock) ref.read(lockActionsProvider).arm();
+      // First capture pass once the database is open.
+      unawaited(ref.read(captureRunnerProvider).run());
     });
 
     final router = ref.watch(routerProvider);

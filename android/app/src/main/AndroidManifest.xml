@@ -70,6 +70,18 @@
         </service>
 
 
+        <!-- Incoming bank SMS are buffered here and drained by the Dart capture
+             pipeline. The receiver is exported so the system can deliver the
+             broadcast; only the OS (BROADCAST_SMS) may send to it. -->
+        <receiver
+            android:name=".SpendStorySmsReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
         <!-- AdMob (T-601, Batch 7). The value comes from Gradle rather than
              being written here, so a debug build can only ever carry Google's
              test app id and a release build only the live one — and so the live

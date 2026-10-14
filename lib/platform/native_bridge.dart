@@ -36,6 +36,53 @@ class NativeBridge {
     }
   }
 
+  /// Drains payment-app notifications buffered by the listener service.
+  ///
+  /// Returns the raw JSON strings (one per notification) and clears the
+  /// buffer. Null when there is no host.
+  static Future<List<String>?> drainPendingNotifications() async {
+    if (!hasNativeHost) return null;
+    try {
+      final list = await _channel.invokeListMethod<String>(
+        'drainPendingNotifications',
+      );
+      return list;
+    } on PlatformException {
+      return null;
+    } on MissingPluginException {
+      return null;
+    }
+  }
+
+  /// Drains bank SMS buffered by [SpendStorySmsReceiver].
+  static Future<List<String>?> drainPendingSms() async {
+    if (!hasNativeHost) return null;
+    try {
+      final list = await _channel.invokeListMethod<String>('drainPendingSms');
+      return list;
+    } on PlatformException {
+      return null;
+    } on MissingPluginException {
+      return null;
+    }
+  }
+
+  /// Reads recent SMS from the device inbox (last 30 days by default).
+  static Future<List<String>?> readSmsInbox({int? sinceMs}) async {
+    if (!hasNativeHost) return null;
+    try {
+      final list = await _channel.invokeListMethod<String>(
+        'readSmsInbox',
+        <String, Object?>{'sinceMs': sinceMs},
+      );
+      return list;
+    } on PlatformException {
+      return null;
+    } on MissingPluginException {
+      return null;
+    }
+  }
+
   /// Posts one budget alert.
   ///
   /// False is a real answer, not an error: on the web, in `flutter test`, and
