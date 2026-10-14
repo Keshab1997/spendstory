@@ -27,7 +27,9 @@ import '../domain/models.dart';
 import '../domain/view_models.dart';
 import '../platform/native_bridge.dart';
 import '../capture/capture_service.dart';
+
 import 'dart:convert';
+
 import '../platform/permissions.dart';
 import '../pro/billing_client.dart';
 import '../ui/format.dart';
@@ -1164,7 +1166,8 @@ class CaptureRunner {
             packageName: (m['pkg'] ?? '') as String,
             title: (m['title'] ?? '') as String,
             body: (m['text'] ?? '') as String,
-            timestampMs: (m['postedAt'] as num?)?.toInt() ??
+            timestampMs:
+                (m['postedAt'] as num?)?.toInt() ??
                 DateTime.now().millisecondsSinceEpoch,
           );
         } catch (_) {
@@ -1180,7 +1183,8 @@ class CaptureRunner {
           await capture.handleSms(
             sender: (m['sender'] ?? '') as String,
             body: (m['body'] ?? '') as String,
-            timestampMs: (m['timestampMs'] as num?)?.toInt() ??
+            timestampMs:
+                (m['timestampMs'] as num?)?.toInt() ??
                 DateTime.now().millisecondsSinceEpoch,
           );
         } catch (_) {}
@@ -1199,7 +1203,8 @@ class CaptureRunner {
           await capture.handleSms(
             sender: (m['sender'] ?? '') as String,
             body: (m['body'] ?? '') as String,
-            timestampMs: (m['timestampMs'] as num?)?.toInt() ??
+            timestampMs:
+                (m['timestampMs'] as num?)?.toInt() ??
                 DateTime.now().millisecondsSinceEpoch,
           );
         } catch (_) {}
